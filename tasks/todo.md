@@ -9,11 +9,13 @@
 ## À faire
 
 ### Infrastructure
-- [ ] Configuration initiale Flutter (pubspec.yaml, l10n, structure dossiers)
-- [ ] Thème complet (AppColors, AppTheme, AppTypography avec Sora)
+- [x] Configuration initiale Flutter (pubspec.yaml, l10n, structure dossiers)
+- [x] Thème complet (AppColors, AppTheme, AppTypography avec Sora)
 - [ ] Configuration go_router avec guards par rôle
-- [ ] Configuration Supabase (tables core + RLS)
-- [ ] Configuration Drift (offline-first)
+- [x] Configuration Supabase (tables core + RLS)
+- [x] Configuration Drift (offline-first)
+- [x] DAOs Drift créés pour les 5 tables core
+- [x] SyncService complété avec synchronisation Drift → Supabase
 
 ### Auth
 - [ ] Écran Splash
@@ -24,8 +26,8 @@
 - [ ] Écran PIN Caisse (4 chiffres)
 
 ### Multi-utilisateurs & Rôles
-- [ ] Tables Supabase : users, stores, pos_devices, store_settings
-- [ ] Tables Drift correspondantes + DAO
+- [x] Tables Supabase : users, stores, pos_devices, store_settings
+- [x] Tables Drift correspondantes + DAO
 - [ ] Repository + BLoC pour auth
 - [ ] Système de rôles (OWNER/ADMIN/MANAGER/CASHIER)
 - [ ] Permissions configurables par rôle
@@ -52,6 +54,11 @@
 - [x] pubspec.yaml configuré avec toutes les dépendances
 - [x] Fichiers de localisation FR/MG initialisés
 - [x] Dossier tasks/ créé
+- [x] Migrations Supabase créées et déployées (8 migrations combinées)
+- [x] Schéma Drift créé avec 5 tables (.drift files)
+- [x] DAOs Drift implémentés (StoreDao, UserDao, StoreSettingsDao, CategoryDao, ItemDao)
+- [x] SyncService complété avec logique de synchronisation Drift → Supabase
+- [x] Code Drift généré avec build_runner (app_database.g.dart + tous les DAOs)
 
 ---
 

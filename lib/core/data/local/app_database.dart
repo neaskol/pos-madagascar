@@ -4,6 +4,13 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+// Import DAOs
+import 'daos/store_dao.dart';
+import 'daos/user_dao.dart';
+import 'daos/store_settings_dao.dart';
+import 'daos/category_dao.dart';
+import 'daos/item_dao.dart';
+
 part 'app_database.g.dart';
 
 @DriftDatabase(
@@ -14,6 +21,13 @@ part 'app_database.g.dart';
     'tables/categories.drift',
     'tables/items.drift',
   },
+  daos: [
+    StoreDao,
+    UserDao,
+    StoreSettingsDao,
+    CategoryDao,
+    ItemDao,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
