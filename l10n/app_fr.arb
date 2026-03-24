@@ -1,0 +1,11 @@
+{
+  "@@locale": "fr",
+  "appName": "POS Madagascar",
+  "@appName": {
+    "description": "Nom de l'application"
+  },
+  "appTagline": "Votre caisse dans votre poche",
+  "@appTagline": {
+    "description": "Slogan de l'application"
+  }
+}

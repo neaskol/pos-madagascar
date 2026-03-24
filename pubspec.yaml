@@ -1,0 +1,78 @@
+name: pos_madagascar
+description: "POS Madagascar — Système de caisse pour Madagascar"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # État & Navigation
+  flutter_bloc: ^8.1.0
+  equatable: ^2.0.0
+  go_router: ^14.0.0
+
+  # Backend Supabase
+  supabase_flutter: ^2.0.0
+
+  # Base de données locale (Offline-first)
+  drift: ^2.20.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.1.0
+  path: ^1.9.0
+
+  # UI & Design
+  google_fonts: ^6.0.0
+  shimmer: ^3.0.0
+  cached_network_image: ^3.4.0
+  image_picker: ^1.1.0
+  image_cropper: ^8.0.0
+
+  # Formatage & Localisation
+  intl: ^0.20.2
+
+  # Scan & Impression
+  mobile_scanner: ^5.0.0
+  printing: ^5.13.0
+  pdf: ^3.11.0
+
+  # Graphiques
+  fl_chart: ^0.69.0
+
+  # Export
+  excel: ^4.0.0
+
+  # Utils
+  url_launcher: ^6.3.0
+  share_plus: ^10.0.0
+  connectivity_plus: ^6.0.0
+  uuid: ^4.5.0
+  crypto: ^3.0.0
+  flutter_dotenv: ^5.1.0
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  # Build runners
+  build_runner: ^2.4.14
+  drift_dev: ^2.21.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - .env.local
+
+  # Police Sora via Google Fonts (chargée dynamiquement)

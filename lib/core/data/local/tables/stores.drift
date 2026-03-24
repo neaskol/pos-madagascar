@@ -1,0 +1,20 @@
+-- Table stores (magasins)
+CREATE TABLE stores (
+  id TEXT PRIMARY KEY NOT NULL,
+  name TEXT NOT NULL,
+  address TEXT,
+  phone TEXT,
+  logo_url TEXT,
+  currency TEXT NOT NULL DEFAULT 'MGA',
+  timezone TEXT NOT NULL DEFAULT 'Indian/Antananarivo',
+  synced INTEGER NOT NULL DEFAULT 0,
+  updated_at INTEGER NOT NULL,
+  deleted_at INTEGER
+) AS Store;
+
+CREATE INDEX idx_stores_synced ON stores(synced);
+
+-- Queries
+getAllStores: SELECT * FROM stores WHERE deleted_at IS NULL ORDER BY name;
+getStoreById: SELECT * FROM stores WHERE id = :id AND deleted_at IS NULL;
+getUnsyncedStores: SELECT * FROM stores WHERE synced = 0 AND deleted_at IS NULL;

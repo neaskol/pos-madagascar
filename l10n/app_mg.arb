@@ -1,0 +1,11 @@
+{
+  "@@locale": "mg",
+  "appName": "POS Madagascar",
+  "@appName": {
+    "description": "Anaran'ny application"
+  },
+  "appTagline": "Ny kasa ao anaty paosinao",
+  "@appTagline": {
+    "description": "Teny filamatra"
+  }
+}

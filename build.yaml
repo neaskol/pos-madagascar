@@ -1,0 +1,11 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # Stocker les DateTime comme INTEGER (Unix timestamp)
+          store_date_time_values_as_text: false
+          # Modules SQLite activés
+          sqlite_modules:
+            - json1
+            - fts5
