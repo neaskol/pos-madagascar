@@ -488,4 +488,23 @@ class AppLocalizationsFr extends AppLocalizations {
   String productNotFound(String barcode) {
     return 'Aucun produit trouvé avec le code: $barcode';
   }
+
+  @override
+  String get selectVariant => 'Choisir un variant';
+
+  @override
+  String get selectModifiers => 'Choisir les options';
+
+  @override
+  String get required => 'Obligatoire';
+
+  @override
+  String get noVariantSelected => 'Aucun variant sélectionné';
+
+  @override
+  String get modifierRequired =>
+      'Vous devez sélectionner une option obligatoire';
+
+  @override
+  String get addToCart => 'Ajouter au panier';
 }

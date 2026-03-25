@@ -182,5 +182,13 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "selectVariant": "Choisir un variant",
+  "selectModifiers": "Choisir les options",
+  "required": "Obligatoire",
+  "noVariantSelected": "Aucun variant sélectionné",
+  "modifierRequired": "Vous devez sélectionner une option obligatoire",
+  "addToCart": "Ajouter au panier",
+  "cancel": "Annuler"
 }

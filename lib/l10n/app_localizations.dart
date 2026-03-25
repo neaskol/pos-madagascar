@@ -1039,6 +1039,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Aucun produit trouvé avec le code: {barcode}'**
   String productNotFound(String barcode);
+
+  /// No description provided for @selectVariant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un variant'**
+  String get selectVariant;
+
+  /// No description provided for @selectModifiers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir les options'**
+  String get selectModifiers;
+
+  /// No description provided for @required.
+  ///
+  /// In fr, this message translates to:
+  /// **'Obligatoire'**
+  String get required;
+
+  /// No description provided for @noVariantSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun variant sélectionné'**
+  String get noVariantSelected;
+
+  /// No description provided for @modifierRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous devez sélectionner une option obligatoire'**
+  String get modifierRequired;
+
+  /// No description provided for @addToCart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter au panier'**
+  String get addToCart;
 }
 
 class _AppLocalizationsDelegate

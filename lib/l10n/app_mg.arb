@@ -182,5 +182,13 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "selectVariant": "Hifidy variant",
+  "selectModifiers": "Hifidy safidy",
+  "required": "Ilaina",
+  "noVariantSelected": "Tsy misy variant voafidy",
+  "modifierRequired": "Mila mifidy safidy ilaina ianao",
+  "addToCart": "Hampiana ao amin'ny panier",
+  "cancel": "Hanafoana"
 }

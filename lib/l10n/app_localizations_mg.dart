@@ -203,7 +203,7 @@ class AppLocalizationsMg extends AppLocalizations {
   String get errorNetworkFailed => 'Tsy misy connexion internet';
 
   @override
-  String get cancel => 'Aoka ihany';
+  String get cancel => 'Hanafoana';
 
   @override
   String get confirm => 'Hamarino';
@@ -489,4 +489,22 @@ class AppLocalizationsMg extends AppLocalizations {
   String productNotFound(String barcode) {
     return 'Tsy nahita vokatra amin\'ny code: $barcode';
   }
+
+  @override
+  String get selectVariant => 'Hifidy variant';
+
+  @override
+  String get selectModifiers => 'Hifidy safidy';
+
+  @override
+  String get required => 'Ilaina';
+
+  @override
+  String get noVariantSelected => 'Tsy misy variant voafidy';
+
+  @override
+  String get modifierRequired => 'Mila mifidy safidy ilaina ianao';
+
+  @override
+  String get addToCart => 'Hampiana ao amin\'ny panier';
 }
