@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/cart_bloc.dart';
 import '../screens/payment_screen.dart';
 import '../../domain/entities/cart_item.dart';
+import 'item_discount_dialog.dart';
+import 'cart_discount_dialog.dart';
 
 /// Panel affichant le panier et le bouton de paiement
 class CartPanel extends StatelessWidget {
@@ -57,24 +59,135 @@ class CartPanel extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    // Sous-total
+                    // Sous-total brut
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           'Sous-total',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 14),
                         ),
                         Text(
                           _formatPrice(state.grossSubtotal),
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
+
+                    // Remises items (si présentes)
+                    if (state.itemDiscountsTotal > 0) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Remises items',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                          Text(
+                            '- ${_formatPrice(state.itemDiscountsTotal)}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+
+                    // Remises panier (si présentes)
+                    if (state.cartDiscountAmount > 0) ...[
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Remise panier',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Icon(
+                                Icons.local_offer,
+                                size: 14,
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            '- ${_formatPrice(state.cartDiscountAmount)}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+
+                    // Bouton ajouter remise panier
                     const SizedBox(height: 8),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => BlocProvider.value(
+                            value: BlocProvider.of<CartBloc>(context),
+                            child: CartDiscountDialog(
+                              subtotal: state.subtotalAfterItemDiscounts,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.add, size: 16),
+                      label: const Text('Remise panier'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                      ),
+                    ),
+
+                    // Taxes (si présentes)
+                    if (state.totalTaxAmount > 0) ...[
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Taxes',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          Text(
+                            '+ ${_formatPrice(state.totalTaxAmount)}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+
+                    const SizedBox(height: 12),
+                    const Divider(height: 1),
+                    const SizedBox(height: 12),
+
                     // Total (en gros, en vert)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,6 +297,16 @@ class _CartItemTile extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
+          // Afficher dialog remise item
+          showDialog(
+            context: context,
+            builder: (context) => BlocProvider.value(
+              value: BlocProvider.of<CartBloc>(context),
+              child: ItemDiscountDialog(item: item),
+            ),
+          );
+        },
+        onLongPress: () {
           _showQuantityDialog(context, item);
         },
         child: Padding(

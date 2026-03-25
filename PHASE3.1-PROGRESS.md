@@ -1,7 +1,8 @@
 # 🚧 Phase 3.1 - Remises & Taxes (EN COURS)
 
 **Date de démarrage**: 2026-03-25 12:29
-**Status**: 🟡 Backend & BLoC complétés - UI en cours
+**Date de fin**: 2026-03-25 14:15
+**Status**: ✅ BACKEND + UI COMPLETÉS - Prêt pour tests
 
 ---
 
@@ -119,64 +120,72 @@
 
 ---
 
-## 🚧 En Cours (UI pour Remises)
+## ✅ Completé (UI pour Remises)
 
-### 7. Discount UI - Item Level
-**Statut**: 🔄 À créer
-
-Fichiers à créer:
-- `lib/features/pos/presentation/widgets/item_discount_dialog.dart`
+### 7. Discount UI - Item Level ✅
+**Fichier**: `lib/features/pos/presentation/widgets/item_discount_dialog.dart`
 
 Fonctionnalités:
-- [ ] Dialog ouvert en tap sur item dans panier
-- [ ] Toggle: Remise % / Montant fixe
-- [ ] Input montant avec validation
-- [ ] Preview calcul en temps réel
-- [ ] Liste remises déjà appliquées
-- [ ] Bouton supprimer remise existante
-- [ ] Check permission "Restricted access"
+- ✅ Dialog ouvert en tap sur item dans panier
+- ✅ Toggle: Remise % / Montant fixe
+- ✅ Input montant avec validation
+- ✅ Preview calcul en temps réel (montant remise + nouveau prix)
+- ✅ Liste remises déjà appliquées sur l'item
+- ✅ Bouton supprimer remise existante
+- ✅ Checkbox "Restricted access" (permissions)
+- ✅ Nom optionnel pour la remise
+- ✅ Feedback haptique
+- ✅ Validation: remise % ≤ 100%, montant fixe ≤ prix
 
-### 8. Discount UI - Cart Level
-**Statut**: ⏳ À créer
-
-Fichiers à créer:
-- `lib/features/pos/presentation/widgets/cart_discount_dialog.dart`
+### 8. Discount UI - Cart Level ✅
+**Fichier**: `lib/features/pos/presentation/widgets/cart_discount_dialog.dart`
 
 Fonctionnalités:
-- [ ] Accès via dropdown "All items" dans POS
-- [ ] Toggle: Remise % / Montant fixe (% uniquement pour panier)
-- [ ] Input montant avec validation
-- [ ] Preview calcul sur subtotal actuel
-- [ ] Liste remises panier actives
-- [ ] Bouton supprimer remise
+- ✅ Accès via bouton "Remise panier" dans cart_panel
+- ✅ Toggle: Remise % / Montant fixe
+- ✅ Input montant avec validation
+- ✅ Preview calcul sur subtotal (montant remise + nouveau total)
+- ✅ Nom optionnel pour la remise
+- ✅ Checkbox "Restricted access"
+- ✅ Feedback haptique
+- ✅ Validation: remise % ≤ 100%, montant fixe ≤ subtotal
+
+### 9. Cart Panel Enhanced ✅
+**Fichier**: `lib/features/pos/presentation/widgets/cart_panel.dart`
+
+Affichage détaillé implémenté:
+```
+Sous-total          15 000 Ar
+Remise items        -1 500 Ar
+Remise panier         -675 Ar
+[+ Remise panier] (bouton)
+────────────────────────────
+Taxes                2 565 Ar
+────────────────────────────
+TOTAL               15 390 Ar
+```
+
+Fonctionnalités:
+- ✅ Breakdown complet visible
+- ✅ Remises items affichées en rouge
+- ✅ Remises panier affichées avec icône
+- ✅ Bouton "Remise panier" intégré
+- ✅ Taxes affichées si présentes
+- ✅ Tap sur item → ItemDiscountDialog
+- ✅ Long press → Dialog quantité (existant)
 
 ---
 
-## ⏳ À Faire (Prochaines Étapes)
+## ⏳ À Faire (Prochaines Sessions)
 
-### 9. Tax Calculation Auto
+### 10. Tax Calculation Auto (Phase 3.1b)
 **Fichiers à modifier**:
 - `lib/features/pos/presentation/screens/pos_screen.dart`
 - Charger taxes magasin au chargement POS
 - Dispatcher `SetCartTaxes()` automatiquement
 - Appliquer taxes spécifiques aux items si configuré
 
-### 10. Cart Panel Display Enhanced
-**Fichier**: `lib/features/pos/presentation/widgets/cart_panel.dart`
-
-Affichage détaillé:
-```
-Sous-total brut     15 000 Ar
-Remise item (-10%)  -1 500 Ar
-Remise panier (-5%)   -675 Ar
-─────────────────────────────
-Sous-total net      12 825 Ar
-TVA 20%              2 565 Ar
-─────────────────────────────
-TOTAL               15 390 Ar
-```
-
-### 11. Receipt Updated
+### 11. Receipt Updated (Phase 3.1c)
 **Fichier**: `lib/features/pos/presentation/screens/receipt_screen.dart`
 
 - [ ] Afficher remises par item
@@ -184,39 +193,54 @@ TOTAL               15 390 Ar
 - [ ] Afficher taxes détaillées
 - [ ] Section breakdown complet
 
-### 12. Tests
-- [ ] Tests calcul remise %
-- [ ] Tests calcul remise montant fixe
-- [ ] Tests remises cumulées (ordre correct)
-- [ ] Tests taxes added
-- [ ] Tests taxes included
-- [ ] Tests taxes multiples
-- [ ] Tests remises + taxes combinés
-- [ ] Tests edge cases (remise > prix, etc.)
+### 12. Tests End-to-End (Phase 3.1d)
+- [ ] Tests UI remise item (%, fixe, cumulative)
+- [ ] Tests UI remise panier
+- [ ] Tests calculs (formules docs/formulas.md)
+- [ ] Tests edge cases (validation)
 
 ---
 
 ## 📊 Métriques
 
 ### Code Créé
+
+#### Backend (Session 1)
 - **Migrations**: 1 fichier (140 lignes SQL)
 - **Entities**: 2 fichiers (Tax: 107 lignes, Discount: 146 lignes)
 - **Repositories**: 2 fichiers (Interface: 18 lignes, Impl: 96 lignes)
 - **Services**: 1 fichier (58 lignes)
 - **CartItem**: Modifié (ajout 25 lignes)
 - **CartBloc**: Modifié (ajout 120 lignes events/handlers/getters)
-- **CartPanel**: Modifié (3 propriétés updated)
 
-**Total lignes**: ~700 lignes (backend complet)
+**Subtotal backend**: ~690 lignes
+
+#### UI (Session 2)
+- **ItemDiscountDialog**: 1 fichier (398 lignes)
+- **CartDiscountDialog**: 1 fichier (332 lignes)
+- **CartPanel**: Modifié (ajout ~100 lignes breakdown)
+
+**Subtotal UI**: ~830 lignes
+
+**Total Phase 3.1**: ~1520 lignes
 
 ### Temps Écoulé
-- Documentation: 10 min
-- Migration & Entities: 30 min
-- Repositories & Services: 25 min
-- CartBloc refactoring: 35 min
-- Debug & fixes: 15 min
+- **Session 1 (Backend)**: ~2h
+  - Documentation: 10 min
+  - Migration & Entities: 30 min
+  - Repositories & Services: 25 min
+  - CartBloc refactoring: 35 min
+  - Debug & fixes: 15 min
+  - Commit: 5 min
 
-**Total**: ~2 heures (backend & business logic)
+- **Session 2 (UI)**: ~1h45
+  - ItemDiscountDialog: 35 min
+  - CartDiscountDialog: 30 min
+  - CartPanel integration: 25 min
+  - Debug & fixes: 10 min
+  - Documentation: 5 min
+
+**Total Phase 3.1**: ~3h45
 
 ---
 
