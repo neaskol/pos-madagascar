@@ -1075,6 +1075,102 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ajouter au panier'**
   String get addToCart;
+
+  /// No description provided for @allProducts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les produits'**
+  String get allProducts;
+
+  /// No description provided for @customPages.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pages personnalisées'**
+  String get customPages;
+
+  /// No description provided for @createPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer une page'**
+  String get createPage;
+
+  /// No description provided for @editPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la page'**
+  String get editPage;
+
+  /// No description provided for @deletePage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer la page'**
+  String get deletePage;
+
+  /// No description provided for @pageName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom de la page'**
+  String get pageName;
+
+  /// No description provided for @pageNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex: Boissons, Snacks, Promos...'**
+  String get pageNameHint;
+
+  /// No description provided for @pageCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page créée'**
+  String get pageCreated;
+
+  /// No description provided for @pageUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page mise à jour'**
+  String get pageUpdated;
+
+  /// No description provided for @pageDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page supprimée'**
+  String get pageDeleted;
+
+  /// No description provided for @itemAlreadyOnPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet item est déjà sur cette page'**
+  String get itemAlreadyOnPage;
+
+  /// No description provided for @itemAddedToPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Item ajouté à la page'**
+  String get itemAddedToPage;
+
+  /// No description provided for @itemRemovedFromPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Item retiré de la page'**
+  String get itemRemovedFromPage;
+
+  /// No description provided for @pageCleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Page vidée'**
+  String get pageCleared;
+
+  /// No description provided for @confirmDeletePage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir supprimer cette page ?'**
+  String get confirmDeletePage;
+
+  /// No description provided for @cannotDeleteDefaultPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de supprimer la page par défaut'**
+  String get cannotDeleteDefaultPage;
 }
 
 class _AppLocalizationsDelegate

@@ -507,4 +507,54 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get addToCart => 'Ajouter au panier';
+
+  @override
+  String get allProducts => 'Tous les produits';
+
+  @override
+  String get customPages => 'Pages personnalisées';
+
+  @override
+  String get createPage => 'Créer une page';
+
+  @override
+  String get editPage => 'Modifier la page';
+
+  @override
+  String get deletePage => 'Supprimer la page';
+
+  @override
+  String get pageName => 'Nom de la page';
+
+  @override
+  String get pageNameHint => 'Ex: Boissons, Snacks, Promos...';
+
+  @override
+  String get pageCreated => 'Page créée';
+
+  @override
+  String get pageUpdated => 'Page mise à jour';
+
+  @override
+  String get pageDeleted => 'Page supprimée';
+
+  @override
+  String get itemAlreadyOnPage => 'Cet item est déjà sur cette page';
+
+  @override
+  String get itemAddedToPage => 'Item ajouté à la page';
+
+  @override
+  String get itemRemovedFromPage => 'Item retiré de la page';
+
+  @override
+  String get pageCleared => 'Page vidée';
+
+  @override
+  String get confirmDeletePage =>
+      'Êtes-vous sûr de vouloir supprimer cette page ?';
+
+  @override
+  String get cannotDeleteDefaultPage =>
+      'Impossible de supprimer la page par défaut';
 }

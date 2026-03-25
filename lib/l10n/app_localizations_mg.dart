@@ -507,4 +507,52 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get addToCart => 'Hampiana ao amin\'ny panier';
+
+  @override
+  String get allProducts => 'Vokatra rehetra';
+
+  @override
+  String get customPages => 'Pejy manokana';
+
+  @override
+  String get createPage => 'Mamorona pejy';
+
+  @override
+  String get editPage => 'Hanova ny pejy';
+
+  @override
+  String get deletePage => 'Hamafa ny pejy';
+
+  @override
+  String get pageName => 'Anaran\'ny pejy';
+
+  @override
+  String get pageNameHint => 'Ohatra: Zava-pisotro, Sakafo maivana, Promo...';
+
+  @override
+  String get pageCreated => 'Pejy voaforona';
+
+  @override
+  String get pageUpdated => 'Pejy novaina';
+
+  @override
+  String get pageDeleted => 'Pejy voafafa';
+
+  @override
+  String get itemAlreadyOnPage => 'Efa eo amin\'ity pejy ity io vokatra io';
+
+  @override
+  String get itemAddedToPage => 'Vokatra nampidirina tao amin\'ny pejy';
+
+  @override
+  String get itemRemovedFromPage => 'Vokatra nesorina tao amin\'ny pejy';
+
+  @override
+  String get pageCleared => 'Pejy voafafa daholo';
+
+  @override
+  String get confirmDeletePage => 'Azo antoka ve fa te hamafa ity pejy ity?';
+
+  @override
+  String get cannotDeleteDefaultPage => 'Tsy afaka mamafa ny pejy default';
 }

@@ -190,5 +190,22 @@
   "noVariantSelected": "Tsy misy variant voafidy",
   "modifierRequired": "Mila mifidy safidy ilaina ianao",
   "addToCart": "Hampiana ao amin'ny panier",
-  "cancel": "Hanafoana"
+  "cancel": "Hanafoana",
+
+  "allProducts": "Vokatra rehetra",
+  "customPages": "Pejy manokana",
+  "createPage": "Mamorona pejy",
+  "editPage": "Hanova ny pejy",
+  "deletePage": "Hamafa ny pejy",
+  "pageName": "Anaran'ny pejy",
+  "pageNameHint": "Ohatra: Zava-pisotro, Sakafo maivana, Promo...",
+  "pageCreated": "Pejy voaforona",
+  "pageUpdated": "Pejy novaina",
+  "pageDeleted": "Pejy voafafa",
+  "itemAlreadyOnPage": "Efa eo amin'ity pejy ity io vokatra io",
+  "itemAddedToPage": "Vokatra nampidirina tao amin'ny pejy",
+  "itemRemovedFromPage": "Vokatra nesorina tao amin'ny pejy",
+  "pageCleared": "Pejy voafafa daholo",
+  "confirmDeletePage": "Azo antoka ve fa te hamafa ity pejy ity?",
+  "cannotDeleteDefaultPage": "Tsy afaka mamafa ny pejy default"
 }

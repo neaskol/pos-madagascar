@@ -190,5 +190,22 @@
   "noVariantSelected": "Aucun variant sélectionné",
   "modifierRequired": "Vous devez sélectionner une option obligatoire",
   "addToCart": "Ajouter au panier",
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+
+  "allProducts": "Tous les produits",
+  "customPages": "Pages personnalisées",
+  "createPage": "Créer une page",
+  "editPage": "Modifier la page",
+  "deletePage": "Supprimer la page",
+  "pageName": "Nom de la page",
+  "pageNameHint": "Ex: Boissons, Snacks, Promos...",
+  "pageCreated": "Page créée",
+  "pageUpdated": "Page mise à jour",
+  "pageDeleted": "Page supprimée",
+  "itemAlreadyOnPage": "Cet item est déjà sur cette page",
+  "itemAddedToPage": "Item ajouté à la page",
+  "itemRemovedFromPage": "Item retiré de la page",
+  "pageCleared": "Page vidée",
+  "confirmDeletePage": "Êtes-vous sûr de vouloir supprimer cette page ?",
+  "cannotDeleteDefaultPage": "Impossible de supprimer la page par défaut"
 }
