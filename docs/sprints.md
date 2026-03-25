@@ -34,17 +34,26 @@ Charger ce fichier quand : démarrage d'un sprint, planification, `/start-sprint
 ### Sprint 2 — Produits, Taxes & Stock
 **Référence manuel** : p.13-25 (Items, Categories, Taxes), p.65-66 (Modifiers), p.86-100 (Variants, CSV)
 
-- [ ] CRUD items : nom, prix, coût, SKU (auto max 40 chars), barcode, catégorie
-- [ ] Coût en montant fixe OU en % du prix de vente — **gap Loyverse**
-- [ ] Champ "disponible à la vente" (masquer sans supprimer)
-- [ ] "Vendu au poids" ou "à la pièce"
-- [ ] Photos items : upload, crop carré auto, miniatures dans **liste stock** — **gap Loyverse**
-- [ ] Catégories avec couleurs
+**Phase 1 - Product Management UI** ✅ TERMINÉ (2026-03-25)
+- [x] CRUD items : nom, prix, coût, SKU (auto max 40 chars), barcode, catégorie
+- [x] Coût en montant fixe OU en % du prix de vente — **gap Loyverse**
+- [x] Champ "disponible à la vente" (masquer sans supprimer)
+- [x] "Vendu au poids" ou "à la pièce"
+- [x] Photos items : upload, crop carré auto, miniatures dans **liste stock** — **gap Loyverse**
+- [x] Catégories avec couleurs
+- [x] Suivi stock par item, seuil d'alerte
+- [x] Liste produits avec recherche/filtres
+- [x] Formulaire création/édition complet
+- [x] Upload photos vers Supabase Storage avec RLS
+- [x] Localisation FR/MG complète (57 nouvelles clés)
+- [x] Tests end-to-end préparés
+
+**Phase 2 - Taxes, Variants & Modifiers** 🔜 SUIVANT
 - [ ] Variants : jusqu'à 3 options, 200 combinaisons max, stock/prix/coût par variant
 - [ ] Modifiers : options avec prix additionnels, optionnels ET obligatoires — **gap Loyverse**
 - [ ] Taxes : incluse ou ajoutée au prix, par item, plusieurs taxes cumulables
 - [ ] Discounts configurables : % ou montant, sur ticket ou par article, accès restreint
-- [ ] Suivi stock par item, seuil d'alerte, notification push à seuil
+- [ ] Notification push à seuil stock bas
 
 ### Sprint 3 — Écran caisse
 **Référence manuel** : p.26-50 (Sales, Barcodes, Weight, Split Payment)

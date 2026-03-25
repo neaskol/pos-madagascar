@@ -8,10 +8,15 @@ import 'core/theme/app_theme.dart';
 import 'core/data/remote/supabase_client.dart';
 import 'core/data/local/app_database.dart';
 import 'core/router/app_router.dart';
+import 'core/services/storage_service.dart';
 import 'l10n/app_localizations.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/products/data/repositories/category_repository.dart';
+import 'features/products/data/repositories/item_repository.dart';
+import 'features/products/presentation/bloc/category_bloc.dart';
+import 'features/products/presentation/bloc/item_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,21 +30,37 @@ void main() async {
   // Initialiser la base de données locale (Drift)
   final database = AppDatabase();
 
+  // Initialiser le service de storage et s'assurer que les buckets existent
+  final storageService = StorageService(Supabase.instance.client);
+  await storageService.ensureBucketsExist();
+
   // Précharger la police Sora pour éviter le flash au premier lancement
   await GoogleFonts.pendingFonts([GoogleFonts.sora()]);
 
-  runApp(MyApp(database: database));
+  runApp(MyApp(
+    database: database,
+    storageService: storageService,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final AppDatabase database;
+  final StorageService storageService;
 
-  const MyApp({super.key, required this.database});
+  const MyApp({
+    super.key,
+    required this.database,
+    required this.storageService,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
+        // Service pour le storage (upload de photos)
+        RepositoryProvider<StorageService>(
+          create: (context) => storageService,
+        ),
         // Repository pour l'authentification
         RepositoryProvider<AuthRepository>(
           create: (context) => AuthRepository(
@@ -47,6 +68,14 @@ class MyApp extends StatelessWidget {
             userDao: database.userDao,
             storeDao: database.storeDao,
           ),
+        ),
+        // Repository pour les catégories
+        RepositoryProvider<CategoryRepository>(
+          create: (context) => CategoryRepository(database),
+        ),
+        // Repository pour les items (produits)
+        RepositoryProvider<ItemRepository>(
+          create: (context) => ItemRepository(database),
         ),
       ],
       child: MultiBlocProvider(
@@ -56,6 +85,18 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
             )..add(AuthCheckRequested()),
+          ),
+          // BLoC pour les catégories
+          BlocProvider<CategoryBloc>(
+            create: (context) => CategoryBloc(
+              context.read<CategoryRepository>(),
+            ),
+          ),
+          // BLoC pour les items (produits)
+          BlocProvider<ItemBloc>(
+            create: (context) => ItemBloc(
+              context.read<ItemRepository>(),
+            ),
           ),
         ],
         child: MaterialApp.router(

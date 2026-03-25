@@ -243,4 +243,189 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get no => 'Tsia';
+
+  @override
+  String get productsTitle => 'Vokatra';
+
+  @override
+  String get productsSearch => 'Mitady vokatra';
+
+  @override
+  String get productsFilterAll => 'Rehetra';
+
+  @override
+  String get productsFilterLowStock => 'Tahiry vitsy';
+
+  @override
+  String get productsFilterOutOfStock => 'Tsy misy';
+
+  @override
+  String get productsCategory => 'Sokajy';
+
+  @override
+  String get productsAllCategories => 'Sokajy rehetra';
+
+  @override
+  String get productsStock => 'Tahiry';
+
+  @override
+  String get productsPrice => 'Vidiny';
+
+  @override
+  String get productsNotAvailable => 'Tsy amidy';
+
+  @override
+  String get productsEmptyTitle => 'Tsy misy vokatra';
+
+  @override
+  String get productsEmptyDescription =>
+      'Atombohy amin\'ny fampidirana ny vokatr\'ny voalohany';
+
+  @override
+  String get productsAddProduct => 'Hanampy vokatra';
+
+  @override
+  String get productsInStock => 'misy tahiry';
+
+  @override
+  String get productsLowStock => 'tahiry vitsy';
+
+  @override
+  String get productsOutOfStock => 'tsy misy';
+
+  @override
+  String get productFormNewTitle => 'Vokatra vaovao';
+
+  @override
+  String get productFormEditTitle => 'Ovay';
+
+  @override
+  String get productFormSave => 'Tahiry';
+
+  @override
+  String get productFormDelete => 'Fafao';
+
+  @override
+  String get productFormDeleteConfirm => 'Tena hofafanao ve io vokatra io?';
+
+  @override
+  String get productFormPhotoSection => 'Sary';
+
+  @override
+  String get productFormSelectPhoto => 'Hisafidy sary';
+
+  @override
+  String get productFormColorFallback => 'Na hisafidy loko';
+
+  @override
+  String get productFormBasicSection => 'Fampahalalana fototra';
+
+  @override
+  String get productFormName => 'Anaran\'ny vokatra';
+
+  @override
+  String get productFormNameHint => 'Ohatra: Coca-Cola 1.5L';
+
+  @override
+  String get productFormNameRequired => 'Ilaina ny anarana';
+
+  @override
+  String get productFormCategory => 'Sokajy';
+
+  @override
+  String get productFormNoCategory => 'Tsy misy sokajy';
+
+  @override
+  String get productFormDescription => 'Famaritana';
+
+  @override
+  String get productFormDescriptionHint => 'Famaritana tsy voatery';
+
+  @override
+  String get productFormSKU => 'Kaody SKU';
+
+  @override
+  String get productFormSKUHint => 'Ho voasoratra ho azy raha tsy misy';
+
+  @override
+  String get productFormBarcode => 'Barcode';
+
+  @override
+  String get productFormBarcodeHint => 'Scan na ampidiro';
+
+  @override
+  String get productFormScanBarcode => 'Scan';
+
+  @override
+  String get productFormPricingSection => 'Vidiny';
+
+  @override
+  String get productFormSalePrice => 'Vidin\'ny fivarotana';
+
+  @override
+  String get productFormSalePriceHint => 'Vidiny amin\'ny Ariary';
+
+  @override
+  String get productFormSalePriceRequired => 'Ilaina ny vidiny';
+
+  @override
+  String get productFormCost => 'Vidin\'ny fividianana';
+
+  @override
+  String get productFormCostHint => 'Vidiny amin\'ny Ariary';
+
+  @override
+  String get productFormCostPercentage => 'Vidiny amin\'ny %';
+
+  @override
+  String get productFormMargin => 'Tombom-barotra';
+
+  @override
+  String get productFormMarginAmount => 'Tombom-barotra';
+
+  @override
+  String get productFormSalesSection => 'Varotra';
+
+  @override
+  String get productFormAvailableForSale => 'Azo amidy';
+
+  @override
+  String get productFormSoldByWeight => 'Amidy amin\'ny lanjany';
+
+  @override
+  String get productFormWeightUnit => 'Singa lanja';
+
+  @override
+  String get productFormWeightUnitHint => 'kg, g, l, ml...';
+
+  @override
+  String get productFormStockSection => 'Tahiry';
+
+  @override
+  String get productFormTrackStock => 'Manaraka tahiry';
+
+  @override
+  String get productFormCurrentStock => 'Tahiry ankehitriny';
+
+  @override
+  String get productFormCurrentStockHint => 'Isa misy';
+
+  @override
+  String get productFormLowStockThreshold =>
+      'Fetra fampitandremana tahiry vitsy';
+
+  @override
+  String get productFormLowStockThresholdHint => 'Default: 10';
+
+  @override
+  String get productFormTaxesSection => 'Hetra';
+
+  @override
+  String get productFormNoTaxes => 'Tsy misy hetra voaomana';
+
+  @override
+  String get productFormSaved => 'Voatahiry ny vokatra';
+
+  @override
+  String get productFormDeleted => 'Voafafa ny vokatra';
 }

@@ -559,6 +559,372 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Non'**
   String get no;
+
+  /// No description provided for @productsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Produits'**
+  String get productsTitle;
+
+  /// No description provided for @productsSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un produit'**
+  String get productsSearch;
+
+  /// No description provided for @productsFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get productsFilterAll;
+
+  /// No description provided for @productsFilterLowStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock bas'**
+  String get productsFilterLowStock;
+
+  /// No description provided for @productsFilterOutOfStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rupture'**
+  String get productsFilterOutOfStock;
+
+  /// No description provided for @productsCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get productsCategory;
+
+  /// No description provided for @productsAllCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les catégories'**
+  String get productsAllCategories;
+
+  /// No description provided for @productsStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock'**
+  String get productsStock;
+
+  /// No description provided for @productsPrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix'**
+  String get productsPrice;
+
+  /// No description provided for @productsNotAvailable.
+  ///
+  /// In fr, this message translates to:
+  /// **'Hors vente'**
+  String get productsNotAvailable;
+
+  /// No description provided for @productsEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun produit'**
+  String get productsEmptyTitle;
+
+  /// No description provided for @productsEmptyDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencez par ajouter vos premiers produits'**
+  String get productsEmptyDescription;
+
+  /// No description provided for @productsAddProduct.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un produit'**
+  String get productsAddProduct;
+
+  /// No description provided for @productsInStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'en stock'**
+  String get productsInStock;
+
+  /// No description provided for @productsLowStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'stock bas'**
+  String get productsLowStock;
+
+  /// No description provided for @productsOutOfStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'rupture'**
+  String get productsOutOfStock;
+
+  /// No description provided for @productFormNewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau produit'**
+  String get productFormNewTitle;
+
+  /// No description provided for @productFormEditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier'**
+  String get productFormEditTitle;
+
+  /// No description provided for @productFormSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer'**
+  String get productFormSave;
+
+  /// No description provided for @productFormDelete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get productFormDelete;
+
+  /// No description provided for @productFormDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voulez-vous vraiment supprimer ce produit ?'**
+  String get productFormDeleteConfirm;
+
+  /// No description provided for @productFormPhotoSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photo'**
+  String get productFormPhotoSection;
+
+  /// No description provided for @productFormSelectPhoto.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner une photo'**
+  String get productFormSelectPhoto;
+
+  /// No description provided for @productFormColorFallback.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ou choisir une couleur'**
+  String get productFormColorFallback;
+
+  /// No description provided for @productFormBasicSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Informations de base'**
+  String get productFormBasicSection;
+
+  /// No description provided for @productFormName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom du produit'**
+  String get productFormName;
+
+  /// No description provided for @productFormNameHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex: Coca-Cola 1.5L'**
+  String get productFormNameHint;
+
+  /// No description provided for @productFormNameRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom est obligatoire'**
+  String get productFormNameRequired;
+
+  /// No description provided for @productFormCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Catégorie'**
+  String get productFormCategory;
+
+  /// No description provided for @productFormNoCategory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune catégorie'**
+  String get productFormNoCategory;
+
+  /// No description provided for @productFormDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description'**
+  String get productFormDescription;
+
+  /// No description provided for @productFormDescriptionHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Description optionnelle du produit'**
+  String get productFormDescriptionHint;
+
+  /// No description provided for @productFormSKU.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code SKU'**
+  String get productFormSKU;
+
+  /// No description provided for @productFormSKUHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Auto-généré si vide'**
+  String get productFormSKUHint;
+
+  /// No description provided for @productFormBarcode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code-barre'**
+  String get productFormBarcode;
+
+  /// No description provided for @productFormBarcodeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scannez ou saisissez'**
+  String get productFormBarcodeHint;
+
+  /// No description provided for @productFormScanBarcode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner'**
+  String get productFormScanBarcode;
+
+  /// No description provided for @productFormPricingSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix'**
+  String get productFormPricingSection;
+
+  /// No description provided for @productFormSalePrice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix de vente'**
+  String get productFormSalePrice;
+
+  /// No description provided for @productFormSalePriceHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Prix en Ariary'**
+  String get productFormSalePriceHint;
+
+  /// No description provided for @productFormSalePriceRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le prix est obligatoire'**
+  String get productFormSalePriceRequired;
+
+  /// No description provided for @productFormCost.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coût d\'achat'**
+  String get productFormCost;
+
+  /// No description provided for @productFormCostHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coût en Ariary'**
+  String get productFormCostHint;
+
+  /// No description provided for @productFormCostPercentage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Coût en %'**
+  String get productFormCostPercentage;
+
+  /// No description provided for @productFormMargin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marge'**
+  String get productFormMargin;
+
+  /// No description provided for @productFormMarginAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Marge'**
+  String get productFormMarginAmount;
+
+  /// No description provided for @productFormSalesSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vente'**
+  String get productFormSalesSection;
+
+  /// No description provided for @productFormAvailableForSale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Disponible à la vente'**
+  String get productFormAvailableForSale;
+
+  /// No description provided for @productFormSoldByWeight.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vendu au poids'**
+  String get productFormSoldByWeight;
+
+  /// No description provided for @productFormWeightUnit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Unité de poids'**
+  String get productFormWeightUnit;
+
+  /// No description provided for @productFormWeightUnitHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'kg, g, l, ml...'**
+  String get productFormWeightUnitHint;
+
+  /// No description provided for @productFormStockSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock'**
+  String get productFormStockSection;
+
+  /// No description provided for @productFormTrackStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivre le stock'**
+  String get productFormTrackStock;
+
+  /// No description provided for @productFormCurrentStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock actuel'**
+  String get productFormCurrentStock;
+
+  /// No description provided for @productFormCurrentStockHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quantité en stock'**
+  String get productFormCurrentStockHint;
+
+  /// No description provided for @productFormLowStockThreshold.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuil d\'alerte stock bas'**
+  String get productFormLowStockThreshold;
+
+  /// No description provided for @productFormLowStockThresholdHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuil par défaut : 10'**
+  String get productFormLowStockThresholdHint;
+
+  /// No description provided for @productFormTaxesSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taxes'**
+  String get productFormTaxesSection;
+
+  /// No description provided for @productFormNoTaxes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune taxe configurée'**
+  String get productFormNoTaxes;
+
+  /// No description provided for @productFormSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Produit enregistré'**
+  String get productFormSaved;
+
+  /// No description provided for @productFormDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Produit supprimé'**
+  String get productFormDeleted;
 }
 
 class _AppLocalizationsDelegate

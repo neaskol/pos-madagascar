@@ -6,6 +6,8 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/setup_wizard_screen.dart';
 import '../../features/auth/presentation/screens/pin_screen.dart';
+import '../../features/products/presentation/screens/products_list_screen.dart';
+import '../../features/products/presentation/screens/product_form_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -53,10 +55,25 @@ class AppRouter {
         builder: (context, state) => const Placeholder(), // TODO
       ),
 
-      // Products - TODO: Implémenter les écrans
+      // Products - Liste des produits
       GoRoute(
         path: '/products',
-        builder: (context, state) => const Placeholder(), // TODO
+        builder: (context, state) => const ProductsListScreen(),
+      ),
+
+      // Products - Créer un nouveau produit
+      GoRoute(
+        path: '/products/new',
+        builder: (context, state) => const ProductFormScreen(),
+      ),
+
+      // Products - Éditer un produit
+      GoRoute(
+        path: '/products/:id/edit',
+        builder: (context, state) {
+          final itemId = state.pathParameters['id']!;
+          return ProductFormScreen(itemId: itemId);
+        },
       ),
 
       // Customers - TODO: Implémenter les écrans

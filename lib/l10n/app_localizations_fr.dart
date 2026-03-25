@@ -242,4 +242,189 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get no => 'Non';
+
+  @override
+  String get productsTitle => 'Produits';
+
+  @override
+  String get productsSearch => 'Rechercher un produit';
+
+  @override
+  String get productsFilterAll => 'Tous';
+
+  @override
+  String get productsFilterLowStock => 'Stock bas';
+
+  @override
+  String get productsFilterOutOfStock => 'Rupture';
+
+  @override
+  String get productsCategory => 'Catégorie';
+
+  @override
+  String get productsAllCategories => 'Toutes les catégories';
+
+  @override
+  String get productsStock => 'Stock';
+
+  @override
+  String get productsPrice => 'Prix';
+
+  @override
+  String get productsNotAvailable => 'Hors vente';
+
+  @override
+  String get productsEmptyTitle => 'Aucun produit';
+
+  @override
+  String get productsEmptyDescription =>
+      'Commencez par ajouter vos premiers produits';
+
+  @override
+  String get productsAddProduct => 'Ajouter un produit';
+
+  @override
+  String get productsInStock => 'en stock';
+
+  @override
+  String get productsLowStock => 'stock bas';
+
+  @override
+  String get productsOutOfStock => 'rupture';
+
+  @override
+  String get productFormNewTitle => 'Nouveau produit';
+
+  @override
+  String get productFormEditTitle => 'Modifier';
+
+  @override
+  String get productFormSave => 'Enregistrer';
+
+  @override
+  String get productFormDelete => 'Supprimer';
+
+  @override
+  String get productFormDeleteConfirm =>
+      'Voulez-vous vraiment supprimer ce produit ?';
+
+  @override
+  String get productFormPhotoSection => 'Photo';
+
+  @override
+  String get productFormSelectPhoto => 'Sélectionner une photo';
+
+  @override
+  String get productFormColorFallback => 'Ou choisir une couleur';
+
+  @override
+  String get productFormBasicSection => 'Informations de base';
+
+  @override
+  String get productFormName => 'Nom du produit';
+
+  @override
+  String get productFormNameHint => 'Ex: Coca-Cola 1.5L';
+
+  @override
+  String get productFormNameRequired => 'Le nom est obligatoire';
+
+  @override
+  String get productFormCategory => 'Catégorie';
+
+  @override
+  String get productFormNoCategory => 'Aucune catégorie';
+
+  @override
+  String get productFormDescription => 'Description';
+
+  @override
+  String get productFormDescriptionHint => 'Description optionnelle du produit';
+
+  @override
+  String get productFormSKU => 'Code SKU';
+
+  @override
+  String get productFormSKUHint => 'Auto-généré si vide';
+
+  @override
+  String get productFormBarcode => 'Code-barre';
+
+  @override
+  String get productFormBarcodeHint => 'Scannez ou saisissez';
+
+  @override
+  String get productFormScanBarcode => 'Scanner';
+
+  @override
+  String get productFormPricingSection => 'Prix';
+
+  @override
+  String get productFormSalePrice => 'Prix de vente';
+
+  @override
+  String get productFormSalePriceHint => 'Prix en Ariary';
+
+  @override
+  String get productFormSalePriceRequired => 'Le prix est obligatoire';
+
+  @override
+  String get productFormCost => 'Coût d\'achat';
+
+  @override
+  String get productFormCostHint => 'Coût en Ariary';
+
+  @override
+  String get productFormCostPercentage => 'Coût en %';
+
+  @override
+  String get productFormMargin => 'Marge';
+
+  @override
+  String get productFormMarginAmount => 'Marge';
+
+  @override
+  String get productFormSalesSection => 'Vente';
+
+  @override
+  String get productFormAvailableForSale => 'Disponible à la vente';
+
+  @override
+  String get productFormSoldByWeight => 'Vendu au poids';
+
+  @override
+  String get productFormWeightUnit => 'Unité de poids';
+
+  @override
+  String get productFormWeightUnitHint => 'kg, g, l, ml...';
+
+  @override
+  String get productFormStockSection => 'Stock';
+
+  @override
+  String get productFormTrackStock => 'Suivre le stock';
+
+  @override
+  String get productFormCurrentStock => 'Stock actuel';
+
+  @override
+  String get productFormCurrentStockHint => 'Quantité en stock';
+
+  @override
+  String get productFormLowStockThreshold => 'Seuil d\'alerte stock bas';
+
+  @override
+  String get productFormLowStockThresholdHint => 'Seuil par défaut : 10';
+
+  @override
+  String get productFormTaxesSection => 'Taxes';
+
+  @override
+  String get productFormNoTaxes => 'Aucune taxe configurée';
+
+  @override
+  String get productFormSaved => 'Produit enregistré';
+
+  @override
+  String get productFormDeleted => 'Produit supprimé';
 }
