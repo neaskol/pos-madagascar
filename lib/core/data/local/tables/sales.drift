@@ -1,0 +1,43 @@
+import 'stores.drift';
+import 'customers.drift';
+
+-- Ventes finalisées (offline-first)
+CREATE TABLE sales (
+  id TEXT NOT NULL PRIMARY KEY,
+  store_id TEXT NOT NULL,
+  pos_device_id TEXT,
+  receipt_number TEXT NOT NULL,
+  employee_id TEXT,
+  customer_id TEXT,
+  dining_option_id TEXT,
+  subtotal INTEGER NOT NULL DEFAULT 0,
+  tax_amount INTEGER NOT NULL DEFAULT 0,
+  discount_amount INTEGER NOT NULL DEFAULT 0,
+  total INTEGER NOT NULL,
+  change_due INTEGER NOT NULL DEFAULT 0,
+  note TEXT,
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  created_by TEXT,
+  deleted_at INTEGER,
+  FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE,
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_sales_store_id ON sales(store_id);
+CREATE INDEX idx_sales_employee_id ON sales(employee_id);
+CREATE INDEX idx_sales_customer_id ON sales(customer_id);
+CREATE INDEX idx_sales_receipt_number ON sales(store_id, receipt_number);
+CREATE INDEX idx_sales_created_at ON sales(created_at);
+CREATE INDEX idx_sales_synced ON sales(synced) WHERE synced = 0;
+
+-- Queries
+getSalesByStore: SELECT * FROM sales WHERE store_id = :storeId AND deleted_at IS NULL ORDER BY created_at DESC;
+getSaleById: SELECT * FROM sales WHERE id = :id AND deleted_at IS NULL;
+getSaleByReceipt: SELECT * FROM sales WHERE store_id = :storeId AND receipt_number = :receiptNumber AND deleted_at IS NULL;
+getSalesByEmployee: SELECT * FROM sales WHERE store_id = :storeId AND employee_id = :employeeId AND deleted_at IS NULL ORDER BY created_at DESC;
+getSalesByCustomer: SELECT * FROM sales WHERE customer_id = :customerId AND deleted_at IS NULL ORDER BY created_at DESC;
+getSalesByDateRange: SELECT * FROM sales WHERE store_id = :storeId AND created_at >= :startDate AND created_at <= :endDate AND deleted_at IS NULL ORDER BY created_at DESC;
+getUnsyncedSales: SELECT * FROM sales WHERE synced = 0 AND deleted_at IS NULL;
+getLastReceiptNumber: SELECT receipt_number FROM sales WHERE store_id = :storeId AND deleted_at IS NULL ORDER BY created_at DESC LIMIT 1;

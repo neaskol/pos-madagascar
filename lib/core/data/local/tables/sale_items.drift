@@ -1,0 +1,32 @@
+import 'sales.drift';
+import 'items.drift';
+
+-- Lignes d'une vente (offline-first)
+CREATE TABLE sale_items (
+  id TEXT NOT NULL PRIMARY KEY,
+  sale_id TEXT NOT NULL,
+  item_id TEXT,
+  item_variant_id TEXT,
+  item_name TEXT NOT NULL,
+  quantity REAL NOT NULL DEFAULT 1,
+  unit_price INTEGER NOT NULL,
+  cost INTEGER NOT NULL DEFAULT 0,
+  discount_amount INTEGER NOT NULL DEFAULT 0,
+  tax_amount INTEGER NOT NULL DEFAULT 0,
+  total INTEGER NOT NULL,
+  modifiers TEXT, -- JSON string des modifiers choisis
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE,
+  FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_sale_items_sale_id ON sale_items(sale_id);
+CREATE INDEX idx_sale_items_item_id ON sale_items(item_id);
+CREATE INDEX idx_sale_items_synced ON sale_items(synced) WHERE synced = 0;
+
+-- Queries
+getSaleItemsBySale: SELECT * FROM sale_items WHERE sale_id = :saleId;
+getSaleItemsByItem: SELECT * FROM sale_items WHERE item_id = :itemId;
+getUnsyncedSaleItems: SELECT * FROM sale_items WHERE synced = 0;

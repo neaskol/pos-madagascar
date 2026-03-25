@@ -1,0 +1,23 @@
+import 'stores.drift';
+
+-- Appareils POS / caisses (offline-first)
+CREATE TABLE pos_devices (
+  id TEXT NOT NULL PRIMARY KEY,
+  store_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  active INTEGER NOT NULL DEFAULT 1,
+  last_seen_at INTEGER,
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  created_by TEXT,
+  FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_pos_devices_store_id ON pos_devices(store_id);
+CREATE INDEX idx_pos_devices_synced ON pos_devices(synced) WHERE synced = 0;
+
+-- Queries
+getPosDevicesByStore: SELECT * FROM pos_devices WHERE store_id = :storeId AND active = 1 ORDER BY name;
+getPosDeviceById: SELECT * FROM pos_devices WHERE id = :id;
+getUnsyncedPosDevices: SELECT * FROM pos_devices WHERE synced = 0;

@@ -1,0 +1,23 @@
+import 'sales.drift';
+
+-- Paiements d'une vente (multi-paiement, offline-first)
+CREATE TABLE sale_payments (
+  id TEXT NOT NULL PRIMARY KEY,
+  sale_id TEXT NOT NULL,
+  payment_type TEXT NOT NULL, -- 'cash', 'card', 'mvola', 'orange_money', 'other'
+  payment_type_name TEXT,
+  amount INTEGER NOT NULL,
+  payment_reference TEXT, -- ref transaction Mobile Money
+  payment_status TEXT NOT NULL DEFAULT 'confirmed', -- 'pending', 'confirmed'
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_sale_payments_sale_id ON sale_payments(sale_id);
+CREATE INDEX idx_sale_payments_synced ON sale_payments(synced) WHERE synced = 0;
+
+-- Queries
+getPaymentsBySale: SELECT * FROM sale_payments WHERE sale_id = :saleId;
+getUnsyncedSalePayments: SELECT * FROM sale_payments WHERE synced = 0;

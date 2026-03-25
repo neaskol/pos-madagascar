@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import '../../../../core/data/local/app_database.dart';
+import '../../../../core/data/local/app_database.dart' hide Sale, SalePayment;
 import '../../domain/entities/cart_item.dart';
 import '../../domain/entities/sale.dart';
 import '../../presentation/bloc/sale_event.dart';

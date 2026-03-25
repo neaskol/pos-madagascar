@@ -1,0 +1,24 @@
+import 'stores.drift';
+
+-- Options de service / dining (offline-first)
+CREATE TABLE dining_options (
+  id TEXT NOT NULL PRIMARY KEY,
+  store_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  is_default INTEGER NOT NULL DEFAULT 0,
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  deleted_at INTEGER,
+  FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_dining_options_store_id ON dining_options(store_id);
+CREATE INDEX idx_dining_options_synced ON dining_options(synced) WHERE synced = 0;
+
+-- Queries
+getDiningOptionsByStore: SELECT * FROM dining_options WHERE store_id = :storeId AND deleted_at IS NULL ORDER BY sort_order;
+getDiningOptionById: SELECT * FROM dining_options WHERE id = :id AND deleted_at IS NULL;
+getDefaultDiningOption: SELECT * FROM dining_options WHERE store_id = :storeId AND is_default = 1 AND deleted_at IS NULL LIMIT 1;
+getUnsyncedDiningOptions: SELECT * FROM dining_options WHERE synced = 0 AND deleted_at IS NULL;

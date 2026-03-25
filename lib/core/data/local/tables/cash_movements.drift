@@ -1,0 +1,27 @@
+import 'shifts.drift';
+import 'stores.drift';
+
+-- Mouvements de caisse pendant un shift (offline-first)
+CREATE TABLE cash_movements (
+  id TEXT NOT NULL PRIMARY KEY,
+  shift_id TEXT NOT NULL,
+  store_id TEXT NOT NULL,
+  type TEXT NOT NULL, -- 'pay_in', 'pay_out'
+  amount INTEGER NOT NULL,
+  note TEXT,
+  employee_id TEXT,
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  FOREIGN KEY (shift_id) REFERENCES shifts(id) ON DELETE CASCADE,
+  FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_cash_movements_shift_id ON cash_movements(shift_id);
+CREATE INDEX idx_cash_movements_store_id ON cash_movements(store_id);
+CREATE INDEX idx_cash_movements_synced ON cash_movements(synced) WHERE synced = 0;
+
+-- Queries
+getCashMovementsByShift: SELECT * FROM cash_movements WHERE shift_id = :shiftId ORDER BY created_at;
+getCashMovementsByStore: SELECT * FROM cash_movements WHERE store_id = :storeId ORDER BY created_at DESC;
+getUnsyncedCashMovements: SELECT * FROM cash_movements WHERE synced = 0;

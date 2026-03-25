@@ -15,6 +15,12 @@ import 'daos/modifier_dao.dart';
 import 'daos/custom_page_dao.dart';
 import 'daos/customer_dao.dart';
 import 'daos/credit_dao.dart';
+import 'daos/sale_dao.dart';
+import 'daos/shift_dao.dart';
+import 'daos/open_ticket_dao.dart';
+import 'daos/refund_dao.dart';
+import 'daos/dining_option_dao.dart';
+import 'daos/pos_device_dao.dart';
 
 // Export DAOs for use in repositories
 export 'daos/store_dao.dart';
@@ -27,6 +33,12 @@ export 'daos/modifier_dao.dart';
 export 'daos/custom_page_dao.dart';
 export 'daos/customer_dao.dart';
 export 'daos/credit_dao.dart';
+export 'daos/sale_dao.dart';
+export 'daos/shift_dao.dart';
+export 'daos/open_ticket_dao.dart';
+export 'daos/refund_dao.dart';
+export 'daos/dining_option_dao.dart';
+export 'daos/pos_device_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -44,6 +56,15 @@ part 'app_database.g.dart';
     'tables/custom_pages.drift',
     'tables/customers.drift',
     'tables/credits.drift',
+    'tables/sales.drift',
+    'tables/sale_items.drift',
+    'tables/sale_payments.drift',
+    'tables/shifts.drift',
+    'tables/cash_movements.drift',
+    'tables/open_tickets.drift',
+    'tables/refunds.drift',
+    'tables/dining_options.drift',
+    'tables/pos_devices.drift',
   },
   daos: [
     StoreDao,
@@ -56,13 +77,19 @@ part 'app_database.g.dart';
     CustomPageDao,
     CustomerDao,
     CreditDao,
+    SaleDao,
+    ShiftDao,
+    OpenTicketDao,
+    RefundDao,
+    DiningOptionDao,
+    PosDeviceDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -70,7 +97,10 @@ class AppDatabase extends _$AppDatabase {
           await m.createAll();
         },
         onUpgrade: (Migrator m, int from, int to) async {
-          // Migrations futures ici
+          if (from < 2) {
+            // v2: Ajout des tables ventes, shifts, tickets, remboursements, dining, pos_devices
+            await m.createAll();
+          }
         },
         beforeOpen: (details) async {
           // Activer les foreign keys
