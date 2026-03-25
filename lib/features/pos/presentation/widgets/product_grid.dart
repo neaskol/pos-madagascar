@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../products/presentation/bloc/item_bloc.dart';
+import '../../../products/presentation/bloc/item_event.dart';
+import '../../../products/presentation/bloc/item_state.dart';
+import '../../../products/presentation/bloc/category_bloc.dart';
+import '../../../products/presentation/bloc/category_event.dart';
+import '../../../products/presentation/bloc/category_state.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/cart_bloc.dart';
 
 /// Widget affichant la grille des produits disponibles à la caisse
-/// Pour l'instant, affiche un placeholder - sera connecté au ProductsBloc plus tard
 class ProductGrid extends StatefulWidget {
   const ProductGrid({super.key});
 
@@ -14,46 +21,20 @@ class ProductGrid extends StatefulWidget {
 class _ProductGridState extends State<ProductGrid> {
   final TextEditingController _searchController = TextEditingController();
   String? _selectedCategoryId;
+  String _searchQuery = '';
 
-  // Données de démonstration pour Phase 2.1
-  final List<_DemoProduct> _demoProducts = [
-    _DemoProduct(
-      id: 'demo-1',
-      name: 'Coca-Cola 1.5L',
-      price: 2500,
-      cost: 1500,
-    ),
-    _DemoProduct(
-      id: 'demo-2',
-      name: 'Pain',
-      price: 1000,
-      cost: 600,
-    ),
-    _DemoProduct(
-      id: 'demo-3',
-      name: 'Riz (1kg)',
-      price: 3500,
-      cost: 2800,
-    ),
-    _DemoProduct(
-      id: 'demo-4',
-      name: 'Huile (1L)',
-      price: 5000,
-      cost: 4200,
-    ),
-    _DemoProduct(
-      id: 'demo-5',
-      name: 'Sucre (1kg)',
-      price: 4000,
-      cost: 3500,
-    ),
-    _DemoProduct(
-      id: 'demo-6',
-      name: 'Café',
-      price: 1500,
-      cost: 1000,
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // Charger les produits et catégories au démarrage avec storeId
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthAuthenticatedWithStore) {
+      context.read<ItemBloc>().add(LoadStoreItemsEvent(authState.storeId));
+      context
+          .read<CategoryBloc>()
+          .add(LoadStoreCategoriesEvent(authState.storeId));
+    }
+  }
 
   @override
   void dispose() {
@@ -86,26 +67,41 @@ class _ProductGridState extends State<ProductGrid> {
                     ),
                   ),
                   onChanged: (value) {
-                    // TODO: Recherche en temps réel
+                    setState(() {
+                      _searchQuery = value.toLowerCase();
+                    });
                   },
                 ),
               ),
               const SizedBox(width: 12),
-              // Dropdown catégorie (placeholder)
-              DropdownButton<String?>(
-                value: _selectedCategoryId,
-                hint: const Text('Toutes'),
-                items: const [
-                  DropdownMenuItem(
-                    value: null,
-                    child: Text('Toutes'),
-                  ),
-                  // TODO: Charger les catégories dynamiquement
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCategoryId = value;
-                  });
+              // Dropdown catégorie
+              BlocBuilder<CategoryBloc, CategoryState>(
+                builder: (context, categoriesState) {
+                  final categories = categoriesState is CategoriesLoaded
+                      ? categoriesState.categories
+                      : [];
+
+                  return DropdownButton<String?>(
+                    value: _selectedCategoryId,
+                    hint: const Text('Toutes'),
+                    items: [
+                      const DropdownMenuItem(
+                        value: null,
+                        child: Text('Toutes'),
+                      ),
+                      ...categories.map(
+                        (category) => DropdownMenuItem(
+                          value: category.id,
+                          child: Text(category.name),
+                        ),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategoryId = value;
+                      });
+                    },
+                  );
                 },
               ),
             ],
@@ -113,40 +109,134 @@ class _ProductGridState extends State<ProductGrid> {
         ),
         // Grille de produits
         Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:
-                  MediaQuery.of(context).size.width >= 600 ? 4 : 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.85,
-            ),
-            itemCount: _demoProducts.length,
-            itemBuilder: (context, index) {
-              final product = _demoProducts[index];
-              return _ProductCard(
-                name: product.name,
-                price: product.price,
-                onTap: () {
-                  // Ajouter au panier
-                  context.read<CartBloc>().add(
-                        AddItemToCart(
-                          itemId: product.id,
-                          name: product.name,
-                          unitPrice: product.price,
-                          cost: product.cost,
-                        ),
-                      );
+          child: BlocBuilder<ItemBloc, ItemState>(
+            builder: (context, state) {
+              if (state is ItemLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                  // Feedback visuel
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${product.name} ajouté au panier'),
-                      duration: const Duration(seconds: 1),
+              if (state is ItemError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 48,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        state.message,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              if (state is ItemsLoaded) {
+                // Filtrer les produits
+                var filteredProducts = state.items
+                    .where((p) => p.availableForSale == 1)
+                    .toList();
+
+                // Filtre par catégorie
+                if (_selectedCategoryId != null) {
+                  filteredProducts = filteredProducts
+                      .where((p) => p.categoryId == _selectedCategoryId)
+                      .toList();
+                }
+
+                // Filtre par recherche
+                if (_searchQuery.isNotEmpty) {
+                  filteredProducts = filteredProducts.where((p) {
+                    return p.name.toLowerCase().contains(_searchQuery) ||
+                        (p.sku?.toLowerCase().contains(_searchQuery) ?? false) ||
+                        (p.barcode?.toLowerCase().contains(_searchQuery) ??
+                            false);
+                  }).toList();
+                }
+
+                if (filteredProducts.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          size: 64,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _searchQuery.isNotEmpty
+                              ? 'Aucun produit trouvé pour "$_searchQuery"'
+                              : 'Aucun produit disponible',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   );
-                },
+                }
+
+                return GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:
+                        MediaQuery.of(context).size.width >= 600 ? 4 : 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.85,
+                  ),
+                  itemCount: filteredProducts.length,
+                  itemBuilder: (context, index) {
+                    final product = filteredProducts[index];
+                    return _ProductCard(
+                      name: product.name,
+                      price: product.price,
+                      imageUrl: product.imageUrl,
+                      inStock: product.trackStock == 1
+                          ? product.inStock
+                          : null, // null = pas de suivi
+                      onTap: () {
+                        // Ajouter au panier
+                        context.read<CartBloc>().add(
+                              AddItemToCart(
+                                itemId: product.id,
+                                name: product.name,
+                                unitPrice: product.price,
+                                cost: product.cost,
+                                imageUrl: product.imageUrl,
+                              ),
+                            );
+
+                        // Feedback visuel
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${product.name} ajouté au panier'),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              }
+
+              return const Center(
+                child: Text('Chargement des produits...'),
               );
             },
           ),
@@ -156,30 +246,19 @@ class _ProductGridState extends State<ProductGrid> {
   }
 }
 
-/// Classe de démonstration pour Phase 2.1
-class _DemoProduct {
-  final String id;
-  final String name;
-  final int price;
-  final int cost;
-
-  _DemoProduct({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.cost,
-  });
-}
-
 /// Carte représentant un produit dans la grille
 class _ProductCard extends StatelessWidget {
   final String name;
   final int price;
+  final String? imageUrl;
+  final int? inStock; // null = pas de suivi de stock
   final VoidCallback onTap;
 
   const _ProductCard({
     required this.name,
     required this.price,
+    this.imageUrl,
+    this.inStock,
     required this.onTap,
   });
 
@@ -192,15 +271,47 @@ class _ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Placeholder pour image
+            // Image ou placeholder
             Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                child: Icon(
-                  Icons.shopping_bag,
-                  size: 48,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  imageUrl != null && imageUrl!.isNotEmpty
+                      ? Image.network(
+                          imageUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return _buildPlaceholder(context);
+                          },
+                        )
+                      : _buildPlaceholder(context),
+                  // Badge stock si suivi activé
+                  if (inStock != null)
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: inStock! > 0
+                              ? Colors.green.withOpacity(0.9)
+                              : Colors.red.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '$inStock',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
             // Nom et prix
@@ -232,6 +343,17 @@ class _ProductCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      child: Icon(
+        Icons.shopping_bag,
+        size: 48,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }
