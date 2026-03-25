@@ -1,0 +1,26 @@
+-- Modifier Options table (offline-first with Drift)
+-- Correspond à la table modifier_options dans Supabase
+
+import 'modifiers.drift';
+
+CREATE TABLE modifier_options (
+  id TEXT NOT NULL PRIMARY KEY,
+  modifier_id TEXT NOT NULL REFERENCES modifiers(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+
+  -- Prix additionnel en Ariary
+  price_addition INTEGER NOT NULL DEFAULT 0,
+
+  -- Ordre d'affichage
+  sort_order INTEGER NOT NULL DEFAULT 0,
+
+  -- Métadonnées offline
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+
+-- Index pour performance
+CREATE INDEX idx_modifier_options_modifier_id ON modifier_options(modifier_id);
+CREATE INDEX idx_modifier_options_sort ON modifier_options(modifier_id, sort_order);
+CREATE INDEX idx_modifier_options_synced ON modifier_options(synced) WHERE synced = 0;

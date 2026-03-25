@@ -1,0 +1,48 @@
+-- Item Variants table (offline-first with Drift)
+-- Correspond à la table item_variants dans Supabase
+
+import 'items.drift';
+
+CREATE TABLE item_variants (
+  id TEXT NOT NULL PRIMARY KEY,
+  item_id TEXT NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+  store_id TEXT NOT NULL,
+
+  -- Option 1 (ex: Taille)
+  option1_name TEXT,
+  option1_value TEXT,
+
+  -- Option 2 (ex: Couleur)
+  option2_name TEXT,
+  option2_value TEXT,
+
+  -- Option 3 (ex: Matériau)
+  option3_name TEXT,
+  option3_value TEXT,
+
+  -- SKU et barcode spécifiques
+  sku TEXT UNIQUE,
+  barcode TEXT,
+
+  -- Prix et coût (null = hérite du parent)
+  price INTEGER,
+  cost INTEGER,
+
+  -- Stock
+  in_stock INTEGER NOT NULL DEFAULT 0,
+  low_stock_threshold INTEGER NOT NULL DEFAULT 0,
+
+  -- Image
+  image_url TEXT,
+
+  -- Métadonnées offline
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  created_by TEXT
+);
+
+-- Index pour performance
+CREATE INDEX idx_item_variants_item_id ON item_variants(item_id);
+CREATE INDEX idx_item_variants_store_id ON item_variants(store_id);
+CREATE INDEX idx_item_variants_synced ON item_variants(synced) WHERE synced = 0;

@@ -27,6 +27,10 @@ part 'app_database.g.dart';
     'tables/store_settings.drift',
     'tables/categories.drift',
     'tables/items.drift',
+    'tables/item_variants.drift',
+    'tables/modifiers.drift',
+    'tables/modifier_options.drift',
+    'tables/item_modifiers.drift',
   },
   daos: [
     StoreDao,
