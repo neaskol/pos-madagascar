@@ -228,6 +228,26 @@ class ThermalPrinterService {
         _printer.printNewLine();
       }
 
+      // Note (if present)
+      if (sale.note != null && sale.note!.isNotEmpty) {
+        _printer.printCustom(
+          '-' * maxChars,
+          sizeNormal,
+          alignCenter,
+        );
+        _printer.printCustom(
+          'Note',
+          sizeMedium,
+          alignLeft,
+        );
+        _printer.printCustom(
+          sale.note!,
+          sizeNormal,
+          alignLeft,
+        );
+        _printer.printNewLine();
+      }
+
       // Ligne de séparation finale
       _printer.printCustom(
         '=' * maxChars,

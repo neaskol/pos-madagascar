@@ -49,6 +49,14 @@ class ReceiptPdfService {
                 _buildChange(sale),
               ],
 
+              // Note (if present)
+              if (sale.note != null && sale.note!.isNotEmpty) ...[
+                pw.SizedBox(height: 16),
+                pw.Divider(),
+                pw.SizedBox(height: 16),
+                _buildNote(sale),
+              ],
+
               pw.Spacer(),
               pw.SizedBox(height: 24),
               pw.Divider(),
@@ -330,6 +338,34 @@ class ReceiptPdfService {
               fontSize: 16,
               fontWeight: pw.FontWeight.bold,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  pw.Widget _buildNote(Sale sale) {
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(12),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.blue50,
+        border: pw.Border.all(color: PdfColors.blue200, width: 1),
+        borderRadius: const pw.BorderRadius.all(pw.Radius.circular(8)),
+      ),
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            'Note',
+            style: pw.TextStyle(
+              fontSize: 12,
+              fontWeight: pw.FontWeight.bold,
+            ),
+          ),
+          pw.SizedBox(height: 6),
+          pw.Text(
+            sale.note!,
+            style: const pw.TextStyle(fontSize: 11),
           ),
         ],
       ),

@@ -63,9 +63,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
   // État pour mode split (multi-paiement)
   final List<PartialPayment> _partialPayments = [];
 
+  // Note optionnelle pour la vente
+  final TextEditingController _noteController = TextEditingController();
+
   @override
   void dispose() {
     _amountController.dispose();
+    _noteController.dispose();
     super.dispose();
   }
 
@@ -319,6 +323,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
           ],
         ],
+
+        // Note optionnelle (en bas, pour tous types de paiement)
+        const SizedBox(height: 24),
+        const Divider(),
+        const SizedBox(height: 16),
+        Text(
+          'Note (optionnel)',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _noteController,
+          maxLines: 3,
+          maxLength: 200,
+          decoration: InputDecoration(
+            hintText: 'Ajouter une note à cette vente...',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            helperText: 'Cette note apparaîtra sur le reçu',
+          ),
+        ),
       ],
     );
   }
@@ -442,6 +468,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ],
             ),
           ),
+
+        // Note optionnelle (en bas, pour tous modes)
+        const SizedBox(height: 24),
+        const Divider(),
+        const SizedBox(height: 16),
+        Text(
+          'Note (optionnel)',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _noteController,
+          maxLines: 3,
+          maxLength: 200,
+          decoration: InputDecoration(
+            hintText: 'Ajouter une note à cette vente...',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            helperText: 'Cette note apparaîtra sur le reçu',
+          ),
+        ),
       ],
     );
   }
@@ -719,6 +767,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
       return;
     }
 
+    // Récupérer la note (vide si non renseignée)
+    final note = _noteController.text.trim().isEmpty ? null : _noteController.text.trim();
+
     if (_paymentMode == PaymentMode.single) {
       // Mode single payment (comportement original)
       context.read<SaleBloc>().add(
@@ -732,6 +783,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               total: widget.total,
               paymentType: _selectedPaymentType,
               amountReceived: _amountReceived,
+              note: note,
             ),
           );
     } else {
@@ -754,6 +806,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               discountAmount: widget.discountAmount,
               total: widget.total,
               payments: paymentDataList,
+              note: note,
             ),
           );
     }

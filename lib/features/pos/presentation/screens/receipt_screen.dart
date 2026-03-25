@@ -121,6 +121,14 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                       _buildChange(context),
                     ],
 
+                    // Note (if present)
+                    if (widget.sale.note != null && widget.sale.note!.isNotEmpty) ...[
+                      const SizedBox(height: 16),
+                      const Divider(),
+                      const SizedBox(height: 16),
+                      _buildNote(context),
+                    ],
+
                     const SizedBox(height: 24),
                     const Divider(),
                     const SizedBox(height: 16),
@@ -546,6 +554,48 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     );
   }
 
+  Widget _buildNote(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.blue[50],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.blue[200]!, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.note_outlined,
+                size: 18,
+                color: Colors.blue[700],
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Note',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[900],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.sale.note!,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.blue[900],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildFooter(BuildContext context) {
     return Column(
       children: [
@@ -732,6 +782,7 @@ ${widget.sale.payments.map((p) {
         return '*$type:* ${_formatPrice(p.amount)}';
       }).join('\n')}
 ${widget.sale.changeDue > 0 ? '\n💵 *Monnaie rendue:* ${_formatPrice(widget.sale.changeDue)}' : ''}
+${widget.sale.note != null && widget.sale.note!.isNotEmpty ? '\n📝 *Note:* ${widget.sale.note}' : ''}
 
 Merci de votre visite ! 🙏
 ''';
