@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../domain/entities/custom_product_page.dart';
 import 'package:drift/drift.dart' as drift;
+import 'dart:developer' as developer;
 
 /// Repository pour gérer les pages personnalisées de produits
 /// Pattern: Local-first avec synchronisation Supabase en arrière-plan
@@ -264,7 +265,7 @@ class CustomPageRepositoryImpl {
       await _database.customPageDao.markPageAsSynced(pageId);
     } catch (e) {
       // Ignorer les erreurs offline - sera synchronisé plus tard
-      print('Erreur sync page: $e');
+      developer.log('Erreur sync page: $e', name: 'CustomPageRepository');
     }
   }
 
@@ -289,7 +290,7 @@ class CustomPageRepositoryImpl {
       // Marquer comme synchronisés
       await _database.customPageDao.markPageItemsAsSynced(pageId);
     } catch (e) {
-      print('Erreur sync page items: $e');
+      developer.log('Erreur sync page items: $e', name: 'CustomPageRepository');
     }
   }
 
@@ -314,7 +315,7 @@ class CustomPageRepositoryImpl {
       // Marquer comme synchronisés
       await _database.customPageDao.markPageCategoryGridsAsSynced(pageId);
     } catch (e) {
-      print('Erreur sync category grids: $e');
+      developer.log('Erreur sync category grids: $e', name: 'CustomPageRepository');
     }
   }
 

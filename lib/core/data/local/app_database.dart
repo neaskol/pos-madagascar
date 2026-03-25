@@ -13,6 +13,8 @@ import 'daos/item_dao.dart';
 import 'daos/item_variant_dao.dart';
 import 'daos/modifier_dao.dart';
 import 'daos/custom_page_dao.dart';
+import 'daos/customer_dao.dart';
+import 'daos/credit_dao.dart';
 
 // Export DAOs for use in repositories
 export 'daos/store_dao.dart';
@@ -23,6 +25,8 @@ export 'daos/item_dao.dart';
 export 'daos/item_variant_dao.dart';
 export 'daos/modifier_dao.dart';
 export 'daos/custom_page_dao.dart';
+export 'daos/customer_dao.dart';
+export 'daos/credit_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -38,6 +42,8 @@ part 'app_database.g.dart';
     'tables/modifier_options.drift',
     'tables/item_modifiers.drift',
     'tables/custom_pages.drift',
+    'tables/customers.drift',
+    'tables/credits.drift',
   },
   daos: [
     StoreDao,
@@ -48,6 +54,8 @@ part 'app_database.g.dart';
     ItemVariantDao,
     ModifierDao,
     CustomPageDao,
+    CustomerDao,
+    CreditDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -81,8 +89,9 @@ class AppDatabase extends _$AppDatabase {
         },
       );
 
-  // Debug mode - à désactiver en prod
-  bool get logStatements => true;
+  // Debug mode - désactivé en production
+  // Pour activer les logs en développement, passer à true
+  bool get logStatements => false;
 }
 
 LazyDatabase _openConnection() {

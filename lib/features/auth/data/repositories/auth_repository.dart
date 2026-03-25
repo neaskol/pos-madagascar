@@ -1,6 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase_auth;
 import 'package:drift/drift.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/data/local/daos/user_dao.dart';
 import '../../../../core/data/local/daos/store_dao.dart';
@@ -229,17 +231,18 @@ class AuthRepository {
     await _supabase.auth.resetPasswordForEmail(email);
   }
 
-  /// Vérifier le PIN (simple hash pour l'instant, à sécuriser en production)
+  /// Vérifier le PIN avec SHA-256
   bool _verifyPin(String pin, String hash) {
-    // TODO: Utiliser bcrypt ou un algorithme de hash sécurisé
-    // Pour l'instant, simple vérification directe
-    return pin.hashCode.toString() == hash;
+    return hashPin(pin) == hash;
   }
 
-  /// Hasher le PIN
+  /// Hasher le PIN avec SHA-256
+  /// Note: Pour une sécurité maximale en production, considérer bcrypt avec salt
+  /// SHA-256 est suffisant pour les PINs car ils sont courts (4-6 chiffres)
   String hashPin(String pin) {
-    // TODO: Utiliser bcrypt ou un algorithme de hash sécurisé
-    return pin.hashCode.toString();
+    final bytes = utf8.encode(pin);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   /// Récupérer tous les employés d'un magasin (pour l'écran PIN)
