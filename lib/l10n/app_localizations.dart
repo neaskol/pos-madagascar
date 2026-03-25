@@ -1003,6 +1003,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'PAYER'**
   String get pay;
+
+  /// No description provided for @scanBarcode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner code-barres'**
+  String get scanBarcode;
+
+  /// No description provided for @scanBarcodeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner un code-barres'**
+  String get scanBarcodeTitle;
+
+  /// No description provided for @scanBarcodeInstructions.
+  ///
+  /// In fr, this message translates to:
+  /// **'Placez le code-barres dans le cadre'**
+  String get scanBarcodeInstructions;
+
+  /// No description provided for @scanBarcodeFormats.
+  ///
+  /// In fr, this message translates to:
+  /// **'EAN-13, EAN-8, UPC-A, Code 128, Code 39, QR'**
+  String get scanBarcodeFormats;
+
+  /// No description provided for @productsNotLoaded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Produits non chargés'**
+  String get productsNotLoaded;
+
+  /// No description provided for @productNotFound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun produit trouvé avec le code: {barcode}'**
+  String productNotFound(String barcode);
 }
 
 class _AppLocalizationsDelegate

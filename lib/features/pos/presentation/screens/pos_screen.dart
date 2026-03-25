@@ -7,6 +7,9 @@ import '../widgets/cart_panel.dart';
 import '../../data/repositories/tax_repository_impl.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../products/presentation/bloc/item_bloc.dart';
+import '../../../products/presentation/bloc/item_state.dart';
+import 'barcode_scanner_screen.dart';
 
 /// Écran principal de la caisse (POS)
 /// Layout: Produits à gauche (ou en haut), Panier à droite (ou en bas)
@@ -45,12 +48,12 @@ class _PosScreenContent extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Caisse'),
         actions: [
-          // Bouton scan barcode (placeholder)
+          // Bouton scan barcode
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
             tooltip: 'Scanner code-barres',
             onPressed: () {
-              _showBarcodeScannerPlaceholder(context);
+              _openBarcodeScanner(context);
             },
           ),
           // Bouton open tickets (placeholder)
@@ -161,38 +164,61 @@ class _PosScreenContent extends StatelessWidget {
     );
   }
 
-  void _showBarcodeScannerPlaceholder(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        icon: const Icon(Icons.qr_code_scanner, size: 48),
-        title: const Text('Scanner Code-Barres'),
-        content: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Fonctionnalité à venir',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 12),
-            Text(
-              'Le scanner de code-barres permettra d\'ajouter rapidement des produits au panier en scannant leur code-barres.',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 12),
-            Text(
-              'Pour l\'instant, utilisez la recherche ou sélectionnez directement les produits.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Compris'),
-          ),
-        ],
+  Future<void> _openBarcodeScanner(BuildContext context) async {
+    final String? barcode = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (context) => const BarcodeScannerScreen(),
+      ),
+    );
+
+    if (barcode == null || !context.mounted) return;
+
+    // Rechercher le produit par barcode
+    final itemState = context.read<ItemBloc>().state;
+
+    if (itemState is! ItemsLoaded) {
+      _showMessage(context, 'Produits non chargés');
+      return;
+    }
+
+    // Chercher produit avec ce barcode
+    final product = itemState.items.where((item) {
+      final itemBarcode = item.barcode;
+      return itemBarcode != null &&
+             itemBarcode.isNotEmpty &&
+             itemBarcode == barcode;
+    }).firstOrNull;
+
+    if (product == null) {
+      _showMessage(
+        context,
+        'Aucun produit trouvé avec le code: $barcode',
+        isError: true,
+      );
+      return;
+    }
+
+    // Ajouter au panier
+    context.read<CartBloc>().add(AddItemToCart(
+      itemId: product.id,
+      name: product.name,
+      unitPrice: product.price,
+      cost: product.cost,
+    ));
+
+    _showMessage(
+      context,
+      '${product.name} ajouté au panier',
+      isError: false,
+    );
+  }
+
+  void _showMessage(BuildContext context, String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        duration: const Duration(seconds: 2),
       ),
     );
   }

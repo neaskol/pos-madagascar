@@ -168,5 +168,19 @@
   "emptyCart": "Panier vide",
   "subtotal": "Sous-total",
   "total": "TOTAL",
-  "pay": "PAYER"
+  "pay": "PAYER",
+
+  "scanBarcode": "Scanner code-barres",
+  "scanBarcodeTitle": "Scanner un code-barres",
+  "scanBarcodeInstructions": "Placez le code-barres dans le cadre",
+  "scanBarcodeFormats": "EAN-13, EAN-8, UPC-A, Code 128, Code 39, QR",
+  "productsNotLoaded": "Produits non chargés",
+  "productNotFound": "Aucun produit trouvé avec le code: {barcode}",
+  "@productNotFound": {
+    "placeholders": {
+      "barcode": {
+        "type": "String"
+      }
+    }
+  }
 }

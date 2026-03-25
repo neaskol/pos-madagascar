@@ -467,4 +467,26 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get pay => 'MANDOAVA';
+
+  @override
+  String get scanBarcode => 'Scan barcode';
+
+  @override
+  String get scanBarcodeTitle => 'Scan barcode';
+
+  @override
+  String get scanBarcodeInstructions =>
+      'Apetraho eo anatin\'ny efijery ny barcode';
+
+  @override
+  String get scanBarcodeFormats =>
+      'EAN-13, EAN-8, UPC-A, Code 128, Code 39, QR';
+
+  @override
+  String get productsNotLoaded => 'Tsy mbola nalaina ny vokatra';
+
+  @override
+  String productNotFound(String barcode) {
+    return 'Tsy nahita vokatra amin\'ny code: $barcode';
+  }
 }

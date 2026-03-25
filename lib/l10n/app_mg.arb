@@ -168,5 +168,19 @@
   "emptyCart": "Panier foana",
   "subtotal": "Isa",
   "total": "TOTALIN'NY",
-  "pay": "MANDOAVA"
+  "pay": "MANDOAVA",
+
+  "scanBarcode": "Scan barcode",
+  "scanBarcodeTitle": "Scan barcode",
+  "scanBarcodeInstructions": "Apetraho eo anatin'ny efijery ny barcode",
+  "scanBarcodeFormats": "EAN-13, EAN-8, UPC-A, Code 128, Code 39, QR",
+  "productsNotLoaded": "Tsy mbola nalaina ny vokatra",
+  "productNotFound": "Tsy nahita vokatra amin'ny code: {barcode}",
+  "@productNotFound": {
+    "placeholders": {
+      "barcode": {
+        "type": "String"
+      }
+    }
+  }
 }

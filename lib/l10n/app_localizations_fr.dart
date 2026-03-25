@@ -467,4 +467,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pay => 'PAYER';
+
+  @override
+  String get scanBarcode => 'Scanner code-barres';
+
+  @override
+  String get scanBarcodeTitle => 'Scanner un code-barres';
+
+  @override
+  String get scanBarcodeInstructions => 'Placez le code-barres dans le cadre';
+
+  @override
+  String get scanBarcodeFormats =>
+      'EAN-13, EAN-8, UPC-A, Code 128, Code 39, QR';
+
+  @override
+  String get productsNotLoaded => 'Produits non chargés';
+
+  @override
+  String productNotFound(String barcode) {
+    return 'Aucun produit trouvé avec le code: $barcode';
+  }
 }
