@@ -362,7 +362,7 @@ class ReceiptScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Paiement',
+          sale.payments.length > 1 ? 'Paiements' : 'Paiement',
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -370,44 +370,108 @@ class ReceiptScreen extends StatelessWidget {
         const SizedBox(height: 8),
         ...sale.payments.map((payment) {
           String paymentTypeLabel;
+          IconData? paymentIcon;
+
           switch (payment.paymentType) {
             case PaymentType.cash:
               paymentTypeLabel = 'Espèces';
+              paymentIcon = Icons.payments;
               break;
             case PaymentType.card:
               paymentTypeLabel = 'Carte bancaire';
+              paymentIcon = Icons.credit_card;
               break;
             case PaymentType.mvola:
               paymentTypeLabel = 'MVola';
+              paymentIcon = Icons.phone_android;
               break;
             case PaymentType.orangeMoney:
               paymentTypeLabel = 'Orange Money';
+              paymentIcon = Icons.phone_iphone;
               break;
             case PaymentType.custom:
               paymentTypeLabel = 'Autre';
+              paymentIcon = Icons.payment;
               break;
           }
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  paymentTypeLabel,
-                  style: const TextStyle(fontSize: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        if (sale.payments.length > 1) ...[
+                          Icon(
+                            paymentIcon,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                        Text(
+                          paymentTypeLabel,
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      _formatPrice(payment.amount),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  _formatPrice(payment.amount),
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                // Show reference if available (for MVola, Orange Money, Card)
+                if (payment.paymentReference != null &&
+                    payment.paymentReference!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24, top: 2),
+                    child: Text(
+                      'Réf: ${payment.paymentReference}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
           );
         }),
+        // Show total if multiple payments
+        if (sale.payments.length > 1) ...[
+          const SizedBox(height: 8),
+          const Divider(),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Total payé',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                _formatPrice(
+                  sale.payments.fold(0, (sum, p) => sum + p.amount),
+                ),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }

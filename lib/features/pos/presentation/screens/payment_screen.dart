@@ -8,9 +8,29 @@ import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/sale_bloc.dart';
 import '../bloc/sale_event.dart';
 import '../bloc/sale_state.dart';
+import '../widgets/add_payment_dialog.dart';
 import 'receipt_screen.dart';
 
-/// Écran de paiement - Phase 2.3 (Cash uniquement)
+/// Mode de paiement
+enum PaymentMode {
+  single, // Paiement unique (comportement par défaut)
+  split,  // Multi-paiement (division en plusieurs méthodes)
+}
+
+/// Représente un paiement partiel dans le mode split
+class PartialPayment {
+  final PaymentType type;
+  final int amount;
+  final String? reference;
+
+  const PartialPayment({
+    required this.type,
+    required this.amount,
+    this.reference,
+  });
+}
+
+/// Écran de paiement - Phase 3.2 (Multi-paiement)
 class PaymentScreen extends StatefulWidget {
   final List<CartItem> items;
   final int subtotal;
@@ -32,9 +52,16 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  // Mode de paiement (single/split)
+  PaymentMode _paymentMode = PaymentMode.single;
+
+  // État pour mode single (paiement unique)
   PaymentType _selectedPaymentType = PaymentType.cash;
   int _amountReceived = 0;
   final TextEditingController _amountController = TextEditingController();
+
+  // État pour mode split (multi-paiement)
+  final List<PartialPayment> _partialPayments = [];
 
   @override
   void dispose() {
@@ -42,7 +69,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
     super.dispose();
   }
 
+  // Calculs pour mode single
   int get _changeDue => _amountReceived - widget.total;
+
+  // Calculs pour mode split
+  int get _totalPaid => _partialPayments.fold(
+        0,
+        (sum, payment) => sum + payment.amount,
+      );
+
+  int get _remainingAmount => widget.total - _totalPaid;
+
+  bool get _isSplitPaymentComplete => _remainingAmount == 0;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +106,49 @@ class _PaymentScreenState extends State<PaymentScreen> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.pop(),
           ),
+          actions: [
+            // Dropdown pour choisir le mode de paiement
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: DropdownButton<PaymentMode>(
+                value: _paymentMode,
+                underline: const SizedBox(),
+                items: const [
+                  DropdownMenuItem(
+                    value: PaymentMode.single,
+                    child: Row(
+                      children: [
+                        Icon(Icons.payment, size: 20),
+                        SizedBox(width: 8),
+                        Text('Paiement unique'),
+                      ],
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: PaymentMode.split,
+                    child: Row(
+                      children: [
+                        Icon(Icons.splitscreen, size: 20),
+                        SizedBox(width: 8),
+                        Text('Multi-paiement'),
+                      ],
+                    ),
+                  ),
+                ],
+                onChanged: (mode) {
+                  if (mode != null) {
+                    setState(() {
+                      _paymentMode = mode;
+                      // Reset state when switching modes
+                      _amountReceived = 0;
+                      _amountController.clear();
+                      _partialPayments.clear();
+                    });
+                  }
+                },
+              ),
+            ),
+          ],
         ),
         body: Column(
           children: [
@@ -97,92 +178,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Section type de paiement
-                    Text(
-                      'Type de paiement',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 12),
-                    _buildPaymentTypeGrid(),
-
-                    const SizedBox(height: 24),
-
-                    // Section Cash (si sélectionné)
-                    if (_selectedPaymentType == PaymentType.cash) ...[
-                      Text(
-                        'Montant reçu',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 12),
-                      _buildCashSuggestedAmounts(),
-                      const SizedBox(height: 12),
-                      _buildCustomAmountInput(),
-                      const SizedBox(height: 24),
-
-                      // Monnaie à rendre
-                      if (_amountReceived > 0) ...[
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: _changeDue >= 0
-                                ? Colors.green.withOpacity(0.1)
-                                : Colors.red.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: _changeDue >= 0
-                                  ? Colors.green
-                                  : Colors.red,
-                              width: 2,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Monnaie à rendre',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                      color: _changeDue >= 0
-                                          ? Colors.green[900]
-                                          : Colors.red[900],
-                                    ),
-                              ),
-                              Text(
-                                _formatPrice(_changeDue.abs()),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: _changeDue >= 0
-                                          ? Colors.green[900]
-                                          : Colors.red[900],
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        if (_changeDue < 0)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              'Montant insuffisant',
-                              style: TextStyle(
-                                color: Colors.red[900],
-                                fontSize: 14,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                      ],
-                    ],
-                  ],
-                ),
+                child: _paymentMode == PaymentMode.single
+                    ? _buildSinglePaymentUI()
+                    : _buildSplitPaymentUI(),
               ),
             ),
 
@@ -202,8 +200,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
               child: BlocBuilder<SaleBloc, SaleState>(
                 builder: (context, state) {
                   final isProcessing = state is SaleCreating;
-                  final canPay = _selectedPaymentType == PaymentType.cash &&
-                      _amountReceived >= widget.total;
+
+                  // Validation différente selon le mode
+                  final canPay = _paymentMode == PaymentMode.single
+                      ? _selectedPaymentType == PaymentType.cash &&
+                          _amountReceived >= widget.total
+                      : _isSplitPaymentComplete;
 
                   return FilledButton(
                     onPressed: canPay && !isProcessing
@@ -240,6 +242,250 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
+  // UI pour mode single (paiement unique)
+  Widget _buildSinglePaymentUI() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Section type de paiement
+        Text(
+          'Type de paiement',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 12),
+        _buildPaymentTypeGrid(),
+        const SizedBox(height: 24),
+
+        // Section Cash (si sélectionné)
+        if (_selectedPaymentType == PaymentType.cash) ...[
+          Text(
+            'Montant reçu',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 12),
+          _buildCashSuggestedAmounts(),
+          const SizedBox(height: 12),
+          _buildCustomAmountInput(),
+          const SizedBox(height: 24),
+
+          // Monnaie à rendre
+          if (_amountReceived > 0) ...[
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: _changeDue >= 0
+                    ? Colors.green.withOpacity(0.1)
+                    : Colors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: _changeDue >= 0 ? Colors.green : Colors.red,
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Monnaie à rendre',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: _changeDue >= 0
+                              ? Colors.green[900]
+                              : Colors.red[900],
+                        ),
+                  ),
+                  Text(
+                    _formatPrice(_changeDue.abs()),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: _changeDue >= 0
+                              ? Colors.green[900]
+                              : Colors.red[900],
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            if (_changeDue < 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  'Montant insuffisant',
+                  style: TextStyle(
+                    color: Colors.red[900],
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+          ],
+        ],
+      ],
+    );
+  }
+
+  // UI pour mode split (multi-paiement)
+  Widget _buildSplitPaymentUI() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Montant restant (grand, visible)
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: _remainingAmount > 0
+                ? Colors.orange.withOpacity(0.1)
+                : Colors.green.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: _remainingAmount > 0 ? Colors.orange : Colors.green,
+              width: 2,
+            ),
+          ),
+          child: Column(
+            children: [
+              Text(
+                _remainingAmount > 0 ? 'Montant restant' : 'Paiement complet',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _formatPrice(_remainingAmount),
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: _remainingAmount > 0
+                          ? Colors.orange[900]
+                          : Colors.green[900],
+                    ),
+              ),
+              if (_totalPaid > 0) ...[
+                const SizedBox(height: 4),
+                Text(
+                  'Payé: ${_formatPrice(_totalPaid)} / ${_formatPrice(widget.total)}',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // Liste des paiements partiels
+        if (_partialPayments.isNotEmpty) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Paiements ajoutés',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Text(
+                '${_partialPayments.length} paiement${_partialPayments.length > 1 ? 's' : ''}',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ..._partialPayments.asMap().entries.map((entry) {
+            final index = entry.key;
+            final payment = entry.value;
+            return _buildPartialPaymentCard(payment, index);
+          }),
+          const SizedBox(height: 24),
+        ],
+
+        // Bouton ajouter paiement
+        if (_remainingAmount > 0)
+          OutlinedButton.icon(
+            onPressed: () => _showAddPaymentDialog(),
+            icon: const Icon(Icons.add),
+            label: const Text('Ajouter un paiement'),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 48),
+            ),
+          ),
+
+        // Message si aucun paiement
+        if (_partialPayments.isEmpty)
+          Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.splitscreen,
+                  size: 64,
+                  color: Colors.grey[400],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Divisez le paiement en plusieurs méthodes',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Espèces, Carte, MVola, Orange Money',
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  // Card pour afficher un paiement partiel
+  Widget _buildPartialPaymentCard(PartialPayment payment, int index) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        leading: Icon(
+          _getPaymentTypeIcon(payment.type),
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        title: Text(_getPaymentTypeLabel(payment.type)),
+        subtitle: payment.reference != null
+            ? Text(
+                'Réf: ${payment.reference}',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 12,
+                ),
+              )
+            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _formatPrice(payment.amount),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              icon: const Icon(Icons.close, size: 20),
+              onPressed: () => _removePartialPayment(index),
+              color: Colors.red,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildPaymentTypeGrid() {
     return GridView.count(
       crossAxisCount: 2,
@@ -258,19 +504,19 @@ class _PaymentScreenState extends State<PaymentScreen> {
           type: PaymentType.card,
           label: 'Carte bancaire',
           icon: Icons.credit_card,
-          enabled: false, // Phase future
+          enabled: true, // Phase 3.2 - Activé
         ),
         _buildPaymentTypeCard(
           type: PaymentType.mvola,
           label: 'MVola',
           icon: Icons.phone_android,
-          enabled: false, // Phase future
+          enabled: true, // Phase 3.2 - Activé
         ),
         _buildPaymentTypeCard(
           type: PaymentType.orangeMoney,
           label: 'Orange Money',
           icon: Icons.phone_iphone,
-          enabled: false, // Phase future
+          enabled: true, // Phase 3.2 - Activé
         ),
       ],
     );
@@ -403,6 +649,66 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
+  // Afficher le dialog pour ajouter un paiement partiel
+  void _showAddPaymentDialog() {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AddPaymentDialog(
+        remainingAmount: _remainingAmount,
+        onAdd: (type, amount, reference) {
+          setState(() {
+            _partialPayments.add(
+              PartialPayment(
+                type: type,
+                amount: amount,
+                reference: reference,
+              ),
+            );
+          });
+        },
+      ),
+    );
+  }
+
+  // Retirer un paiement partiel
+  void _removePartialPayment(int index) {
+    setState(() {
+      _partialPayments.removeAt(index);
+    });
+  }
+
+  // Obtenir le label d'un type de paiement
+  String _getPaymentTypeLabel(PaymentType type) {
+    switch (type) {
+      case PaymentType.cash:
+        return 'Espèces';
+      case PaymentType.card:
+        return 'Carte bancaire';
+      case PaymentType.mvola:
+        return 'MVola';
+      case PaymentType.orangeMoney:
+        return 'Orange Money';
+      case PaymentType.custom:
+        return 'Autre';
+    }
+  }
+
+  // Obtenir l'icône d'un type de paiement
+  IconData _getPaymentTypeIcon(PaymentType type) {
+    switch (type) {
+      case PaymentType.cash:
+        return Icons.payments;
+      case PaymentType.card:
+        return Icons.credit_card;
+      case PaymentType.mvola:
+        return Icons.phone_android;
+      case PaymentType.orangeMoney:
+        return Icons.phone_iphone;
+      case PaymentType.custom:
+        return Icons.payment;
+    }
+  }
+
   void _processPayment(BuildContext context) {
     final authState = context.read<AuthBloc>().state;
 
@@ -413,20 +719,44 @@ class _PaymentScreenState extends State<PaymentScreen> {
       return;
     }
 
-    // Créer la vente
-    context.read<SaleBloc>().add(
-          CreateSaleEvent(
-            storeId: authState.storeId,
-            employeeId: authState.user.id,
-            items: widget.items,
-            subtotal: widget.subtotal,
-            taxAmount: widget.taxAmount,
-            discountAmount: widget.discountAmount,
-            total: widget.total,
-            paymentType: _selectedPaymentType,
-            amountReceived: _amountReceived,
-          ),
-        );
+    if (_paymentMode == PaymentMode.single) {
+      // Mode single payment (comportement original)
+      context.read<SaleBloc>().add(
+            CreateSaleEvent(
+              storeId: authState.storeId,
+              employeeId: authState.user.id,
+              items: widget.items,
+              subtotal: widget.subtotal,
+              taxAmount: widget.taxAmount,
+              discountAmount: widget.discountAmount,
+              total: widget.total,
+              paymentType: _selectedPaymentType,
+              amountReceived: _amountReceived,
+            ),
+          );
+    } else {
+      // Mode multi-payment (nouveau)
+      final paymentDataList = _partialPayments
+          .map((p) => PaymentData(
+                type: p.type,
+                amount: p.amount,
+                reference: p.reference,
+              ))
+          .toList();
+
+      context.read<SaleBloc>().add(
+            CreateSaleEvent(
+              storeId: authState.storeId,
+              employeeId: authState.user.id,
+              items: widget.items,
+              subtotal: widget.subtotal,
+              taxAmount: widget.taxAmount,
+              discountAmount: widget.discountAmount,
+              total: widget.total,
+              payments: paymentDataList,
+            ),
+          );
+    }
   }
 
   void _showPaymentSuccessDialog(BuildContext context, Sale sale) {

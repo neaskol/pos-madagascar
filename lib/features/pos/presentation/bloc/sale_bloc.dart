@@ -28,9 +28,12 @@ class SaleBloc extends Bloc<SaleEvent, SaleState> {
         taxAmount: event.taxAmount,
         discountAmount: event.discountAmount,
         total: event.total,
+        // Single payment (rétrocompatibilité)
         paymentType: event.paymentType,
         amountReceived: event.amountReceived,
         paymentReference: event.paymentReference,
+        // Multi-payment (nouveau)
+        payments: event.payments,
         customerId: event.customerId,
         note: event.note,
       );

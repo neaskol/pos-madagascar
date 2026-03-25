@@ -10,6 +10,19 @@ abstract class SaleEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+/// Représente un paiement dans le CreateSaleEvent
+class PaymentData {
+  final PaymentType type;
+  final int amount;
+  final String? reference;
+
+  const PaymentData({
+    required this.type,
+    required this.amount,
+    this.reference,
+  });
+}
+
 /// Créer une vente (paiement)
 class CreateSaleEvent extends SaleEvent {
   final String storeId;
@@ -19,9 +32,15 @@ class CreateSaleEvent extends SaleEvent {
   final int taxAmount;
   final int discountAmount;
   final int total;
-  final PaymentType paymentType;
-  final int amountReceived; // montant reçu du client
+
+  // Mode single payment (rétrocompatibilité)
+  final PaymentType? paymentType;
+  final int? amountReceived; // montant reçu du client
   final String? paymentReference; // pour MVola/Orange Money
+
+  // Mode multi-payment (nouveau)
+  final List<PaymentData>? payments;
+
   final String? customerId;
   final String? note;
 
@@ -33,9 +52,12 @@ class CreateSaleEvent extends SaleEvent {
     required this.taxAmount,
     required this.discountAmount,
     required this.total,
-    required this.paymentType,
-    required this.amountReceived,
+    // Single payment
+    this.paymentType,
+    this.amountReceived,
     this.paymentReference,
+    // Multi-payment
+    this.payments,
     this.customerId,
     this.note,
   });
@@ -52,6 +74,7 @@ class CreateSaleEvent extends SaleEvent {
         paymentType,
         amountReceived,
         paymentReference,
+        payments,
         customerId,
         note,
       ];
