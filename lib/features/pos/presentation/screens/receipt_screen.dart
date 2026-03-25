@@ -8,9 +8,11 @@ import 'dart:io';
 import '../../domain/entities/sale.dart';
 import '../../domain/entities/discount.dart';
 import '../../data/services/receipt_pdf_service.dart';
+import '../../data/services/thermal_printer_service.dart';
+import '../widgets/printer_selection_dialog.dart';
 
-/// Écran d'affichage du reçu - Phase 2.4
-class ReceiptScreen extends StatelessWidget {
+/// Écran d'affichage du reçu - Phase 2.4 / Phase 3.3
+class ReceiptScreen extends StatefulWidget {
   final Sale sale;
 
   const ReceiptScreen({
@@ -19,21 +21,57 @@ class ReceiptScreen extends StatelessWidget {
   });
 
   @override
+  State<ReceiptScreen> createState() => _ReceiptScreenState();
+}
+
+class _ReceiptScreenState extends State<ReceiptScreen> {
+  final ThermalPrinterService _thermalPrinterService =
+      ThermalPrinterService();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text('Reçu ${sale.receiptNumber}'),
+        title: Text('Reçu ${widget.sale.receiptNumber}'),
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () => _shareReceipt(context),
             tooltip: 'Partager',
           ),
-          IconButton(
+          PopupMenuButton<String>(
             icon: const Icon(Icons.print),
-            onPressed: () => _printReceipt(context),
             tooltip: 'Imprimer',
+            onSelected: (value) {
+              if (value == 'pdf') {
+                _printReceipt(context);
+              } else if (value == 'thermal') {
+                _printThermalReceipt(context);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'pdf',
+                child: Row(
+                  children: [
+                    Icon(Icons.picture_as_pdf),
+                    SizedBox(width: 12),
+                    Text('Imprimer PDF'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'thermal',
+                child: Row(
+                  children: [
+                    Icon(Icons.receipt_long),
+                    SizedBox(width: 12),
+                    Text('Imprimante thermique'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -78,7 +116,7 @@ class ReceiptScreen extends StatelessWidget {
                     // Paiements
                     _buildPayments(context),
 
-                    if (sale.changeDue > 0) ...[
+                    if (widget.sale.changeDue > 0) ...[
                       const SizedBox(height: 16),
                       _buildChange(context),
                     ],
@@ -140,8 +178,8 @@ class ReceiptScreen extends StatelessWidget {
 
     return Column(
       children: [
-        _buildInfoRow('Reçu N°', sale.receiptNumber),
-        _buildInfoRow('Date', dateFormat.format(sale.createdAt)),
+        _buildInfoRow('Reçu N°', widget.sale.receiptNumber),
+        _buildInfoRow('Date', dateFormat.format(widget.sale.createdAt)),
         _buildInfoRow('Caissier', 'Employé'), // TODO: Récupérer nom employé
       ],
     );
@@ -183,7 +221,7 @@ class ReceiptScreen extends StatelessWidget {
               ),
         ),
         const SizedBox(height: 12),
-        ...sale.items.map((item) => _buildItemRow(item)),
+        ...widget.sale.items.map((item) => _buildItemRow(item)),
       ],
     );
   }
@@ -287,10 +325,10 @@ class ReceiptScreen extends StatelessWidget {
   Widget _buildTotals(BuildContext context) {
     // Calculate detailed breakdown
     final grossSubtotal =
-        sale.items.fold(0, (sum, item) => sum + item.subtotal);
+        widget.sale.items.fold(0, (sum, item) => sum + item.subtotal);
     final itemDiscountsTotal =
-        sale.items.fold(0, (sum, item) => sum + item.totalDiscountAmount);
-    final cartDiscountAmount = sale.discountAmount - itemDiscountsTotal;
+        widget.sale.items.fold(0, (sum, item) => sum + item.totalDiscountAmount);
+    final cartDiscountAmount = widget.sale.discountAmount - itemDiscountsTotal;
 
     return Column(
       children: [
@@ -316,15 +354,15 @@ class ReceiptScreen extends StatelessWidget {
           ),
 
         // Taxes
-        if (sale.taxAmount > 0)
-          _buildTotalRow('Taxes', sale.taxAmount, false),
+        if (widget.sale.taxAmount > 0)
+          _buildTotalRow('Taxes', widget.sale.taxAmount, false),
 
         const SizedBox(height: 8),
         const Divider(),
         const SizedBox(height: 8),
 
         // Final total
-        _buildTotalRow('TOTAL', sale.total, true),
+        _buildTotalRow('TOTAL', widget.sale.total, true),
       ],
     );
   }
@@ -362,13 +400,13 @@ class ReceiptScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          sale.payments.length > 1 ? 'Paiements' : 'Paiement',
+          widget.sale.payments.length > 1 ? 'Paiements' : 'Paiement',
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),
         const SizedBox(height: 8),
-        ...sale.payments.map((payment) {
+        ...widget.sale.payments.map((payment) {
           String paymentTypeLabel;
           IconData? paymentIcon;
 
@@ -405,7 +443,7 @@ class ReceiptScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        if (sale.payments.length > 1) ...[
+                        if (widget.sale.payments.length > 1) ...[
                           Icon(
                             paymentIcon,
                             size: 16,
@@ -446,7 +484,7 @@ class ReceiptScreen extends StatelessWidget {
           );
         }),
         // Show total if multiple payments
-        if (sale.payments.length > 1) ...[
+        if (widget.sale.payments.length > 1) ...[
           const SizedBox(height: 8),
           const Divider(),
           const SizedBox(height: 4),
@@ -462,7 +500,7 @@ class ReceiptScreen extends StatelessWidget {
               ),
               Text(
                 _formatPrice(
-                  sale.payments.fold(0, (sum, p) => sum + p.amount),
+                  widget.sale.payments.fold(0, (sum, p) => sum + p.amount),
                 ),
                 style: const TextStyle(
                   fontSize: 15,
@@ -496,7 +534,7 @@ class ReceiptScreen extends StatelessWidget {
             ),
           ),
           Text(
-            _formatPrice(sale.changeDue),
+            _formatPrice(widget.sale.changeDue),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -569,21 +607,65 @@ class ReceiptScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _printThermalReceipt(BuildContext context) async {
+    try {
+      // Vérifier si déjà connecté
+      final isConnected = await _thermalPrinterService.isConnected;
+
+      if (!isConnected && context.mounted) {
+        // Afficher le dialogue de sélection
+        final device = await showDialog(
+          context: context,
+          builder: (context) => PrinterSelectionDialog(
+            printerService: _thermalPrinterService,
+          ),
+        );
+
+        if (device == null) return; // Utilisateur a annulé
+      }
+
+      // Imprimer le reçu
+      await _thermalPrinterService.printReceipt(
+        widget.sale,
+        paperWidth: 80, // TODO: Récupérer depuis les réglages
+        storeName: 'Nom du Magasin', // TODO: Récupérer depuis StoreSettings
+        storeAddress: 'Adresse du magasin',
+        storePhone: 'Téléphone',
+        cashierName: 'Employé', // TODO: Récupérer nom réel
+      );
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Reçu imprimé avec succès'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur d\'impression thermique: $e')),
+        );
+      }
+    }
+  }
+
   Future<void> _shareReceipt(BuildContext context) async {
     try {
       final pdfService = ReceiptPdfService();
-      final pdfBytes = await pdfService.generateReceiptPdf(sale);
+      final pdfBytes = await pdfService.generateReceiptPdf(widget.sale);
 
       // Sauvegarder le PDF temporairement
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/receipt_${sale.receiptNumber}.pdf');
+      final file = File('${tempDir.path}/receipt_${widget.sale.receiptNumber}.pdf');
       await file.writeAsBytes(pdfBytes);
 
       // Partager via share_plus
       await Share.shareXFiles(
         [XFile(file.path)],
-        subject: 'Reçu ${sale.receiptNumber}',
-        text: 'Reçu de vente ${sale.receiptNumber} - Total: ${_formatPrice(sale.total)}',
+        subject: 'Reçu ${widget.sale.receiptNumber}',
+        text: 'Reçu de vente ${widget.sale.receiptNumber} - Total: ${_formatPrice(widget.sale.total)}',
       );
     } catch (e) {
       if (context.mounted) {
@@ -597,12 +679,12 @@ class ReceiptScreen extends StatelessWidget {
   Future<void> _printReceipt(BuildContext context) async {
     try {
       final pdfService = ReceiptPdfService();
-      final pdfBytes = await pdfService.generateReceiptPdf(sale);
+      final pdfBytes = await pdfService.generateReceiptPdf(widget.sale);
 
       // Ouvrir le dialogue d'impression natif
       await Printing.layoutPdf(
         onLayout: (format) async => pdfBytes,
-        name: 'receipt_${sale.receiptNumber}.pdf',
+        name: 'receipt_${widget.sale.receiptNumber}.pdf',
       );
     } catch (e) {
       if (context.mounted) {
@@ -618,17 +700,17 @@ class ReceiptScreen extends StatelessWidget {
       // Générer le texte du reçu pour WhatsApp
       final dateFormat = DateFormat('dd/MM/yyyy HH:mm', 'fr');
       final message = '''
-🧾 *Reçu ${sale.receiptNumber}*
-📅 ${dateFormat.format(sale.createdAt)}
+🧾 *Reçu ${widget.sale.receiptNumber}*
+📅 ${dateFormat.format(widget.sale.createdAt)}
 
 *Articles:*
-${sale.items.map((item) => '• ${item.name} x${item.quantity} = ${_formatPrice(item.lineTotal)}').join('\n')}
+${widget.sale.items.map((item) => '• ${item.name} x${item.quantity} = ${_formatPrice(item.lineTotal)}').join('\n')}
 
-*Sous-total:* ${_formatPrice(sale.subtotal)}
-${sale.taxAmount > 0 ? '*Taxes:* ${_formatPrice(sale.taxAmount)}\n' : ''}${sale.discountAmount > 0 ? '*Remise:* -${_formatPrice(sale.discountAmount)}\n' : ''}
-*TOTAL:* ${_formatPrice(sale.total)}
+*Sous-total:* ${_formatPrice(widget.sale.subtotal)}
+${widget.sale.taxAmount > 0 ? '*Taxes:* ${_formatPrice(widget.sale.taxAmount)}\n' : ''}${widget.sale.discountAmount > 0 ? '*Remise:* -${_formatPrice(widget.sale.discountAmount)}\n' : ''}
+*TOTAL:* ${_formatPrice(widget.sale.total)}
 
-${sale.payments.map((p) {
+${widget.sale.payments.map((p) {
         String type;
         switch (p.paymentType) {
           case PaymentType.cash:
@@ -649,7 +731,7 @@ ${sale.payments.map((p) {
         }
         return '*$type:* ${_formatPrice(p.amount)}';
       }).join('\n')}
-${sale.changeDue > 0 ? '\n💵 *Monnaie rendue:* ${_formatPrice(sale.changeDue)}' : ''}
+${widget.sale.changeDue > 0 ? '\n💵 *Monnaie rendue:* ${_formatPrice(widget.sale.changeDue)}' : ''}
 
 Merci de votre visite ! 🙏
 ''';

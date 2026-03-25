@@ -41,6 +41,10 @@ dependencies:
   printing: ^5.13.0
   pdf: ^3.11.0
 
+  # Thermal Printing (ESC/POS)
+  blue_thermal_printer: ^1.2.0
+  image: ^4.3.0
+
   # Graphiques
   fl_chart: ^0.69.0
 
