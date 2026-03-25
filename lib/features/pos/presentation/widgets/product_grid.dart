@@ -10,6 +10,7 @@ import '../../../products/presentation/bloc/category_state.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/cart_bloc.dart';
+import '../helpers/variant_modifier_helper.dart';
 
 /// Widget affichant la grille des produits disponibles à la caisse
 class ProductGrid extends StatefulWidget {
@@ -211,19 +212,63 @@ class _ProductGridState extends State<ProductGrid> {
                       inStock: product.trackStock == 1
                           ? product.inStock
                           : null, // null = pas de suivi
-                      onTap: () {
+                      onTap: () async {
                         // Feedback haptique
                         HapticFeedback.lightImpact();
-                        // Ajouter au panier
-                        context.read<CartBloc>().add(
-                              AddItemToCart(
-                                itemId: product.id,
-                                name: product.name,
-                                unitPrice: product.price,
-                                cost: product.cost,
-                                imageUrl: product.imageUrl,
-                              ),
-                            );
+
+                        // TODO Phase 3.6: Récupérer variants et modifiers depuis DAOs
+                        // final variantDao = context.read<AppDatabase>().itemVariantDao;
+                        // final modifierDao = context.read<AppDatabase>().modifierDao;
+                        // final variants = await variantDao.getVariantsByItemId(product.id);
+                        // final modifiers = await modifierDao.getModifiersForItem(product.id);
+
+                        // Simuler absence de variants/modifiers pour l'instant
+                        final List<dynamic>? variants = null;
+                        final List<dynamic>? modifiers = null;
+
+                        // Vérifier si produit a variants ou modifiers
+                        if ((variants != null && variants.isNotEmpty) ||
+                            (modifiers != null && modifiers.isNotEmpty)) {
+                          // Afficher dialogs de sélection
+                          final selection =
+                              await VariantModifierHelper.showSelectionDialogs(
+                            context: context,
+                            itemName: product.name,
+                            // variants: variants, // Décommenter quand DAOs connectés
+                            // modifiers: modifiers, // Décommenter quand DAOs connectés
+                          );
+
+                          // Annulation
+                          if (selection == null || !context.mounted) return;
+
+                          // Ajouter au panier avec variant/modifiers
+                          context.read<CartBloc>().add(
+                                AddItemToCart(
+                                  itemId: product.id,
+                                  name: product.name,
+                                  unitPrice: selection.variantPrice ??
+                                      product.price +
+                                          selection.modifiersPriceAddition,
+                                  cost: product.cost,
+                                  imageUrl: product.imageUrl,
+                                  itemVariantId: selection.variantId,
+                                  modifiers: selection.modifiersJson,
+                                ),
+                              );
+                        } else {
+                          // Pas de variants/modifiers, ajout direct
+                          context.read<CartBloc>().add(
+                                AddItemToCart(
+                                  itemId: product.id,
+                                  name: product.name,
+                                  unitPrice: product.price,
+                                  cost: product.cost,
+                                  imageUrl: product.imageUrl,
+                                ),
+                              );
+                        }
+
+                        if (!context.mounted) return;
 
                         // Feedback visuel
                         ScaffoldMessenger.of(context).showSnackBar(

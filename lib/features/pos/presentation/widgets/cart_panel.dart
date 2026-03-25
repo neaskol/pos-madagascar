@@ -343,6 +343,31 @@ class _CartItemTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  // Afficher variant si présent
+                  if (item.itemVariantId != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Variant: ${item.itemVariantId}', // TODO: Afficher displayLabel depuis DAO
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                  // Afficher modifiers si présents
+                  if (item.modifiers != null && item.modifiers!.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      _formatModifiers(item.modifiers!),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                   const SizedBox(height: 8),
                   // Contrôles quantité (+ / TextField / -)
                   Row(
@@ -505,5 +530,21 @@ class _CartItemTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Formate les modifiers pour affichage
+  /// Ex: "Grande • Lait entier (+500 Ar)"
+  String _formatModifiers(Map<String, dynamic> modifiers) {
+    if (modifiers['selected_options'] == null) return '';
+
+    final options = modifiers['selected_options'] as List;
+    return options.map((opt) {
+      final name = opt['option_name'] as String;
+      final priceAddition = opt['price_addition'] as int? ?? 0;
+      if (priceAddition > 0) {
+        return '$name (+${_formatPrice(priceAddition)})';
+      }
+      return name;
+    }).join(' • ');
   }
 }
