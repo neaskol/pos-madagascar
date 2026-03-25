@@ -11,29 +11,29 @@
 ### Infrastructure
 - [x] Configuration initiale Flutter (pubspec.yaml, l10n, structure dossiers)
 - [x] Thème complet (AppColors, AppTheme, AppTypography avec Sora)
-- [ ] Configuration go_router avec guards par rôle
+- [x] Configuration go_router avec guards par rôle
 - [x] Configuration Supabase (tables core + RLS)
 - [x] Configuration Drift (offline-first)
 - [x] DAOs Drift créés pour les 5 tables core
 - [x] SyncService complété avec synchronisation Drift → Supabase
 
 ### Auth
-- [ ] Écran Splash
-- [ ] Écran Onboarding (3 slides)
-- [ ] Écran Login (email/password)
-- [ ] Écran Inscription
-- [ ] Setup Wizard magasin (4 étapes)
-- [ ] Écran PIN Caisse (4 chiffres)
+- [x] Écran Splash
+- [x] Écran Onboarding (3 slides)
+- [x] Écran Login (email/password)
+- [x] Écran Inscription
+- [x] Setup Wizard magasin (4 étapes)
+- [x] Écran PIN Caisse (4 chiffres)
 
 ### Multi-utilisateurs & Rôles
 - [x] Tables Supabase : users, stores, pos_devices, store_settings
 - [x] Tables Drift correspondantes + DAO
 - [x] Repositories créés (Store, User, StoreSettings, Category, Item)
 - [x] BLoCs créés avec Events et States (Store, User, StoreSettings, Category, Item)
-- [ ] Repository + BLoC pour auth
-- [ ] Système de rôles (OWNER/ADMIN/MANAGER/CASHIER)
-- [ ] Permissions configurables par rôle
-- [ ] Changer d'utilisateur sans fermer la session
+- [x] Repository + BLoC pour auth
+- [x] Système de rôles (OWNER/ADMIN/MANAGER/CASHIER)
+- [ ] Permissions configurables par rôle (à implémenter dans les écrans réglages)
+- [x] Changer d'utilisateur sans fermer la session (via écran PIN)
 
 ### Vérifications
 - [ ] Fonctionne online
@@ -65,6 +65,16 @@
 - [x] BLoCs créés avec Events et States pour les 5 entités core
 - [x] Correction des signatures de méthodes Drift (Selectable vs Future)
 - [x] Code compile sans erreur (5 suggestions de style uniquement)
+- [x] Repository AuthRepository créé avec login/register/PIN/setup wizard
+- [x] BLoC d'authentification avec Events et States complets
+- [x] Écran Splash avec redirection automatique
+- [x] Écran Onboarding avec 3 slides (PageView + dots)
+- [x] Écran Login avec validation formulaire
+- [x] Écran Inscription avec confirmation mot de passe
+- [x] Setup Wizard 4 étapes (infos magasin, devise/arrondi, langues, type commerce)
+- [x] Écran PIN avec grille employés et pavé numérique 4 chiffres
+- [x] Configuration go_router avec toutes les routes auth
+- [x] Fichiers de localisation FR/MG avec toutes les traductions auth
 
 ---
 
