@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/cart_bloc.dart';
 import '../screens/payment_screen.dart';
@@ -102,6 +103,8 @@ class CartPanel extends StatelessWidget {
                       height: 56,
                       child: FilledButton(
                         onPressed: () {
+                          // Feedback haptique
+                          HapticFeedback.mediumImpact();
                           // Naviguer vers écran paiement
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -161,7 +164,14 @@ class _CartItemTile extends StatelessWidget {
       key: Key(item.id),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
+        HapticFeedback.mediumImpact();
         context.read<CartBloc>().add(RemoveItemFromCart(item.id));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${item.name} retiré du panier'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
       },
       background: Container(
         color: Theme.of(context).colorScheme.error,

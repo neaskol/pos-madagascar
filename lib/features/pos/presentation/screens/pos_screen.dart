@@ -32,13 +32,9 @@ class _PosScreenContent extends StatelessWidget {
           // Bouton scan barcode (placeholder)
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
+            tooltip: 'Scanner code-barres',
             onPressed: () {
-              // TODO: Implémenter scan barcode
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('À venir'),
-                ),
-              );
+              _showBarcodeScannerPlaceholder(context);
             },
           ),
           // Bouton open tickets (placeholder)
@@ -143,6 +139,42 @@ class _PosScreenContent extends StatelessWidget {
               Navigator.of(dialogContext).pop();
             },
             child: const Text('Confirmer'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showBarcodeScannerPlaceholder(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        icon: const Icon(Icons.qr_code_scanner, size: 48),
+        title: const Text('Scanner Code-Barres'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Fonctionnalité à venir',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 12),
+            Text(
+              'Le scanner de code-barres permettra d\'ajouter rapidement des produits au panier en scannant leur code-barres.',
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 12),
+            Text(
+              'Pour l\'instant, utilisez la recherche ou sélectionnez directement les produits.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Compris'),
           ),
         ],
       ),

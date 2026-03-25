@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../products/presentation/bloc/item_bloc.dart';
 import '../../../products/presentation/bloc/item_event.dart';
@@ -211,6 +212,8 @@ class _ProductGridState extends State<ProductGrid> {
                           ? product.inStock
                           : null, // null = pas de suivi
                       onTap: () {
+                        // Feedback haptique
+                        HapticFeedback.lightImpact();
                         // Ajouter au panier
                         context.read<CartBloc>().add(
                               AddItemToCart(
@@ -227,6 +230,7 @@ class _ProductGridState extends State<ProductGrid> {
                           SnackBar(
                             content: Text('${product.name} ajouté au panier'),
                             duration: const Duration(seconds: 1),
+                            behavior: SnackBarBehavior.floating,
                           ),
                         );
                       },
