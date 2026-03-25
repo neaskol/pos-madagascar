@@ -9,6 +9,7 @@ import '../../domain/entities/sale.dart';
 import '../../domain/entities/discount.dart';
 import '../../data/services/receipt_pdf_service.dart';
 import '../../data/services/thermal_printer_service.dart';
+import '../../../../core/services/mobile_money_service.dart';
 import '../widgets/printer_selection_dialog.dart';
 
 /// Écran d'affichage du reçu - Phase 2.4 / Phase 3.3
@@ -27,6 +28,7 @@ class ReceiptScreen extends StatefulWidget {
 class _ReceiptScreenState extends State<ReceiptScreen> {
   final ThermalPrinterService _thermalPrinterService =
       ThermalPrinterService();
+  final MobileMoneyService _mobileMoneyService = MobileMoneyService();
 
   @override
   Widget build(BuildContext context) {
@@ -435,6 +437,10 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
               paymentTypeLabel = 'Orange Money';
               paymentIcon = Icons.phone_iphone;
               break;
+            case PaymentType.credit:
+              paymentTypeLabel = 'Crédit';
+              paymentIcon = Icons.account_balance_wallet;
+              break;
             case PaymentType.custom:
               paymentTypeLabel = 'Autre';
               paymentIcon = Icons.payment;
@@ -480,7 +486,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 24, top: 2),
                     child: Text(
-                      'Réf: ${payment.paymentReference}',
+                      'Réf: ${_formatPaymentReference(payment.paymentType, payment.paymentReference!)}',
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],
@@ -775,11 +781,19 @@ ${widget.sale.payments.map((p) {
           case PaymentType.orangeMoney:
             type = 'Orange Money';
             break;
+          case PaymentType.credit:
+            type = 'Crédit';
+            break;
           case PaymentType.custom:
             type = 'Autre';
             break;
         }
-        return '*$type:* ${_formatPrice(p.amount)}';
+        final paymentLine = '*$type:* ${_formatPrice(p.amount)}';
+        if (p.paymentReference != null && p.paymentReference!.isNotEmpty) {
+          final formattedRef = _formatPaymentReference(p.paymentType, p.paymentReference!);
+          return '$paymentLine\n  Réf: $formattedRef';
+        }
+        return paymentLine;
       }).join('\n')}
 ${widget.sale.changeDue > 0 ? '\n💵 *Monnaie rendue:* ${_formatPrice(widget.sale.changeDue)}' : ''}
 ${widget.sale.note != null && widget.sale.note!.isNotEmpty ? '\n📝 *Note:* ${widget.sale.note}' : ''}
@@ -813,5 +827,16 @@ Merci de votre visite ! 🙏
           (match) => '${match[1]} ',
         );
     return '$formatted Ar';
+  }
+
+  String _formatPaymentReference(PaymentType paymentType, String reference) {
+    switch (paymentType) {
+      case PaymentType.mvola:
+        return _mobileMoneyService.formatMVolaReference(reference);
+      case PaymentType.orangeMoney:
+        return _mobileMoneyService.formatOrangeMoneyReference(reference);
+      default:
+        return reference;
+    }
   }
 }

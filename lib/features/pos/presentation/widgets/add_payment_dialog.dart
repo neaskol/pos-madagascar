@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/sale.dart';
+import '../../../store/presentation/bloc/store_settings_bloc.dart';
+import '../../../store/presentation/bloc/store_settings_state.dart';
+import 'mobile_money_payment_dialog.dart';
 
 /// Dialog pour ajouter un paiement partiel dans le mode multi-paiement
 class AddPaymentDialog extends StatefulWidget {
@@ -60,6 +64,8 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
         return 'MVola';
       case PaymentType.orangeMoney:
         return 'Orange Money';
+      case PaymentType.credit:
+        return 'Crédit';
       case PaymentType.custom:
         return 'Autre';
     }
@@ -75,6 +81,8 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
         return Icons.phone_android;
       case PaymentType.orangeMoney:
         return Icons.phone_iphone;
+      case PaymentType.credit:
+        return Icons.account_balance_wallet;
       case PaymentType.custom:
         return Icons.payment;
     }
@@ -240,15 +248,71 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
                   const SizedBox(width: 12),
                   FilledButton.icon(
                     onPressed: _canAdd
-                        ? () {
+                        ? () async {
                             HapticFeedback.mediumImpact();
-                            final reference = _referenceController.text.trim();
-                            widget.onAdd(
-                              _selectedType,
-                              _amount,
-                              reference.isEmpty ? null : reference,
-                            );
-                            Navigator.of(context).pop();
+
+                            // Si c'est MVola ou Orange Money, utiliser le dialog dédié
+                            if (_selectedType == PaymentType.mvola ||
+                                _selectedType == PaymentType.orangeMoney) {
+                              final settingsState = context.read<StoreSettingsBloc>().state;
+
+                              if (settingsState is! StoreSettingsLoaded) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Erreur: impossible de charger les réglages'),
+                                    ),
+                                  );
+                                }
+                                return;
+                              }
+
+                              final merchantNumber = _selectedType == PaymentType.mvola
+                                  ? settingsState.settings.mvolaMerchantNumber
+                                  : settingsState.settings.orangeMoneyMerchantNumber;
+
+                              if (merchantNumber == null || merchantNumber.isEmpty) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        _selectedType == PaymentType.mvola
+                                            ? 'Numéro marchand MVola non configuré'
+                                            : 'Numéro marchand Orange Money non configuré',
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return;
+                              }
+
+                              // Afficher le dialog mobile money
+                              final reference = await showDialog<String>(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => MobileMoneyPaymentDialog(
+                                  paymentType: _selectedType == PaymentType.mvola
+                                      ? 'mvola'
+                                      : 'orange_money',
+                                  merchantNumber: merchantNumber,
+                                  amount: _amount,
+                                ),
+                              );
+
+                              if (reference != null && mounted) {
+                                widget.onAdd(_selectedType, _amount, reference);
+                                Navigator.of(context).pop();
+                              }
+                            } else {
+                              // Autres types de paiement
+                              final reference = _referenceController.text.trim();
+                              widget.onAdd(
+                                _selectedType,
+                                _amount,
+                                reference.isEmpty ? null : reference,
+                              );
+                              Navigator.of(context).pop();
+                            }
                           }
                         : null,
                     icon: const Icon(Icons.add),

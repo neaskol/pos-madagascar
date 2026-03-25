@@ -5,10 +5,13 @@ import '../../domain/entities/cart_item.dart';
 import '../../domain/entities/sale.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../store/presentation/bloc/store_settings_bloc.dart';
+import '../../../store/presentation/bloc/store_settings_state.dart';
 import '../bloc/sale_bloc.dart';
 import '../bloc/sale_event.dart';
 import '../bloc/sale_state.dart';
 import '../widgets/add_payment_dialog.dart';
+import '../widgets/mobile_money_payment_dialog.dart';
 import 'receipt_screen.dart';
 
 /// Mode de paiement
@@ -736,6 +739,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
         return 'MVola';
       case PaymentType.orangeMoney:
         return 'Orange Money';
+      case PaymentType.credit:
+        return 'Crédit';
       case PaymentType.custom:
         return 'Autre';
     }
@@ -752,12 +757,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
         return Icons.phone_android;
       case PaymentType.orangeMoney:
         return Icons.phone_iphone;
+      case PaymentType.credit:
+        return Icons.account_balance_wallet;
       case PaymentType.custom:
         return Icons.payment;
     }
   }
 
-  void _processPayment(BuildContext context) {
+  Future<void> _processPayment(BuildContext context) async {
     final authState = context.read<AuthBloc>().state;
 
     if (authState is! AuthAuthenticatedWithStore) {
@@ -771,21 +778,91 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final note = _noteController.text.trim().isEmpty ? null : _noteController.text.trim();
 
     if (_paymentMode == PaymentMode.single) {
-      // Mode single payment (comportement original)
-      context.read<SaleBloc>().add(
-            CreateSaleEvent(
-              storeId: authState.storeId,
-              employeeId: authState.user.id,
-              items: widget.items,
-              subtotal: widget.subtotal,
-              taxAmount: widget.taxAmount,
-              discountAmount: widget.discountAmount,
-              total: widget.total,
-              paymentType: _selectedPaymentType,
-              amountReceived: _amountReceived,
-              note: note,
+      // Vérifier si c'est un paiement mobile money
+      if (_selectedPaymentType == PaymentType.mvola ||
+          _selectedPaymentType == PaymentType.orangeMoney) {
+        // Récupérer les réglages du magasin pour le merchant number
+        final settingsState = context.read<StoreSettingsBloc>().state;
+
+        if (settingsState is! StoreSettingsLoaded) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Erreur: impossible de charger les réglages du magasin')),
+          );
+          return;
+        }
+
+        final merchantNumber = _selectedPaymentType == PaymentType.mvola
+            ? settingsState.settings.mvolaMerchantNumber
+            : settingsState.settings.orangeMoneyMerchantNumber;
+
+        if (merchantNumber == null || merchantNumber.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                _selectedPaymentType == PaymentType.mvola
+                    ? 'Erreur: numéro marchand MVola non configuré'
+                    : 'Erreur: numéro marchand Orange Money non configuré',
+              ),
+              action: SnackBarAction(
+                label: 'Configurer',
+                onPressed: () {
+                  // TODO: Navigation vers les réglages (Phase 3.8 - Settings screen)
+                },
+              ),
             ),
           );
+          return;
+        }
+
+        // Afficher le dialog mobile money
+        final reference = await showDialog<String>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => MobileMoneyPaymentDialog(
+            paymentType: _selectedPaymentType == PaymentType.mvola ? 'mvola' : 'orange_money',
+            merchantNumber: merchantNumber,
+            amount: widget.total,
+          ),
+        );
+
+        // Si l'utilisateur annule, ne pas créer la vente
+        if (reference == null) return;
+
+        // Créer la vente avec la référence de transaction
+        if (context.mounted) {
+          context.read<SaleBloc>().add(
+                CreateSaleEvent(
+                  storeId: authState.storeId,
+                  employeeId: authState.user.id,
+                  items: widget.items,
+                  subtotal: widget.subtotal,
+                  taxAmount: widget.taxAmount,
+                  discountAmount: widget.discountAmount,
+                  total: widget.total,
+                  paymentType: _selectedPaymentType,
+                  amountReceived: widget.total, // Montant exact pour mobile money
+                  paymentReference: reference,
+                  note: note,
+                ),
+              );
+        }
+      } else {
+        // Mode single payment normal (cash, card, etc.)
+        context.read<SaleBloc>().add(
+              CreateSaleEvent(
+                storeId: authState.storeId,
+                employeeId: authState.user.id,
+                items: widget.items,
+                subtotal: widget.subtotal,
+                taxAmount: widget.taxAmount,
+                discountAmount: widget.discountAmount,
+                total: widget.total,
+                paymentType: _selectedPaymentType,
+                amountReceived: _amountReceived,
+                note: note,
+              ),
+            );
+      }
     } else {
       // Mode multi-payment (nouveau)
       final paymentDataList = _partialPayments

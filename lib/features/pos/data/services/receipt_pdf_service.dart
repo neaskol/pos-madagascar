@@ -3,9 +3,11 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:intl/intl.dart';
 import '../../domain/entities/sale.dart';
+import '../../../../core/services/mobile_money_service.dart';
 
 /// Service pour générer des PDF de reçus - Phase 2.4
 class ReceiptPdfService {
+  final MobileMoneyService _mobileMoneyService = MobileMoneyService();
   /// Génère un PDF pour un reçu de vente
   Future<Uint8List> generateReceiptPdf(Sale sale) async {
     final pdf = pw.Document();
@@ -286,29 +288,49 @@ class ReceiptPdfService {
             case PaymentType.orangeMoney:
               paymentTypeLabel = 'Orange Money';
               break;
+            case PaymentType.credit:
+              paymentTypeLabel = 'Crédit';
+              break;
             case PaymentType.custom:
               paymentTypeLabel = 'Autre';
               break;
           }
 
-          return pw.Padding(
-            padding: const pw.EdgeInsets.only(bottom: 4),
-            child: pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Text(
-                  paymentTypeLabel,
-                  style: const pw.TextStyle(fontSize: 11),
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+            children: [
+              pw.Padding(
+                padding: const pw.EdgeInsets.only(bottom: 4),
+                child: pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text(
+                      paymentTypeLabel,
+                      style: const pw.TextStyle(fontSize: 11),
+                    ),
+                    pw.Text(
+                      _formatPrice(payment.amount),
+                      style: pw.TextStyle(
+                        fontSize: 11,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                pw.Text(
-                  _formatPrice(payment.amount),
-                  style: pw.TextStyle(
-                    fontSize: 11,
-                    fontWeight: pw.FontWeight.bold,
+              ),
+              if (payment.paymentReference != null &&
+                  payment.paymentReference!.isNotEmpty)
+                pw.Padding(
+                  padding: const pw.EdgeInsets.only(left: 12, bottom: 4),
+                  child: pw.Text(
+                    'Réf: ${_formatPaymentReference(payment.paymentType, payment.paymentReference!)}',
+                    style: pw.TextStyle(
+                      fontSize: 9,
+                      color: PdfColors.grey700,
+                    ),
                   ),
                 ),
-              ],
-            ),
+            ],
           );
         }),
       ],
@@ -399,5 +421,16 @@ class ReceiptPdfService {
           (match) => '${match[1]} ',
         );
     return '$formatted Ar';
+  }
+
+  String _formatPaymentReference(PaymentType paymentType, String reference) {
+    switch (paymentType) {
+      case PaymentType.mvola:
+        return _mobileMoneyService.formatMVolaReference(reference);
+      case PaymentType.orangeMoney:
+        return _mobileMoneyService.formatOrangeMoneyReference(reference);
+      default:
+        return reference;
+    }
   }
 }

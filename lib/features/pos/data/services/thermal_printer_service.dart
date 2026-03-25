@@ -1,10 +1,12 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:intl/intl.dart';
 import '../../domain/entities/sale.dart';
+import '../../../../core/services/mobile_money_service.dart';
 
 /// Service d'impression thermique ESC/POS - Phase 3.3
 class ThermalPrinterService {
   final BlueThermalPrinter _printer = BlueThermalPrinter.instance;
+  final MobileMoneyService _mobileMoneyService = MobileMoneyService();
 
   // Constantes pour les tailles de texte
   static const int sizeNormal = 0;
@@ -212,12 +214,27 @@ class ThermalPrinterService {
           case PaymentType.orangeMoney:
             paymentTypeLabel = 'Orange Money';
             break;
+          case PaymentType.credit:
+            paymentTypeLabel = 'Crédit';
+            break;
           case PaymentType.custom:
             paymentTypeLabel = 'Autre';
             break;
         }
 
         _printLine('  $paymentTypeLabel', _formatPrice(payment.amount));
+
+        // Print reference if available
+        if (payment.paymentReference != null &&
+            payment.paymentReference!.isNotEmpty) {
+          final formattedRef =
+              _formatPaymentReference(payment.paymentType, payment.paymentReference!);
+          _printer.printCustom(
+            '    Ref: $formattedRef',
+            sizeNormal,
+            alignLeft,
+          );
+        }
       }
 
       _printer.printNewLine();
@@ -328,5 +345,16 @@ class ThermalPrinterService {
           (match) => '${match[1]} ',
         );
     return '$formatted Ar';
+  }
+
+  String _formatPaymentReference(PaymentType paymentType, String reference) {
+    switch (paymentType) {
+      case PaymentType.mvola:
+        return _mobileMoneyService.formatMVolaReference(reference);
+      case PaymentType.orangeMoney:
+        return _mobileMoneyService.formatOrangeMoneyReference(reference);
+      default:
+        return reference;
+    }
   }
 }
