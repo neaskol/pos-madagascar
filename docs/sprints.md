@@ -19,17 +19,17 @@ Charger ce fichier quand : démarrage d'un sprint, planification, `/start-sprint
 ### Sprint 1 — Fondation
 **Référence manuel** : p.9-12 (Getting Started), p.139-149 (Employees), p.236-242 (Multi-stores)
 
-- [ ] Projet Flutter : structure dossiers, pubspec.yaml, thème, go_router
-- [ ] Supabase : tables `stores`, `users`, `pos_devices`, `store_settings`
-- [ ] Auth : inscription email, connexion, session persistante
-- [ ] PIN caisse : connexion rapide par PIN 4 chiffres à la caisse
-- [ ] Setup magasin guidé : nom, devise (Ariary), langue (FR/MG), logo
-- [ ] Multi-utilisateurs + rôles (OWNER/ADMIN/MANAGER/CASHIER) — **GRATUIT**
-- [ ] Permissions configurables par rôle (toutes les permissions du manuel p.143-145)
-- [ ] Changer d'utilisateur sans fermer la session (juste saisir son PIN)
-- [ ] Multi-magasins sous un compte
-- [ ] Architecture modulaire : `StoreSettings` avec tous les toggles
-- [ ] Navigation go_router avec guards par rôle
+- [x] Projet Flutter : structure dossiers, pubspec.yaml, thème, go_router
+- [x] Supabase : tables `stores`, `users`, `pos_devices`, `store_settings`
+- [x] Auth : inscription email, connexion, session persistante
+- [x] PIN caisse : connexion rapide par PIN 4 chiffres à la caisse
+- [x] Setup magasin guidé : nom, devise (Ariary), langue (FR/MG), logo
+- [x] Multi-utilisateurs + rôles (OWNER/ADMIN/MANAGER/CASHIER) — **GRATUIT**
+- [x] Permissions configurables par rôle (toutes les permissions du manuel p.143-145)
+- [x] Changer d'utilisateur sans fermer la session (juste saisir son PIN)
+- [x] Multi-magasins sous un compte
+- [x] Architecture modulaire : `StoreSettings` avec tous les toggles
+- [x] Navigation go_router avec guards par rôle
 
 ### Sprint 2 — Produits, Taxes & Stock
 **Référence manuel** : p.13-25 (Items, Categories, Taxes), p.65-66 (Modifiers), p.86-100 (Variants, CSV)
@@ -48,42 +48,41 @@ Charger ce fichier quand : démarrage d'un sprint, planification, `/start-sprint
 - [x] Localisation FR/MG complète (57 nouvelles clés)
 - [x] Tests end-to-end préparés
 
-**Phase 2 - Taxes, Variants & Modifiers** 🔜 SUIVANT
-- [ ] Variants : jusqu'à 3 options, 200 combinaisons max, stock/prix/coût par variant
-- [ ] Modifiers : options avec prix additionnels, optionnels ET obligatoires — **gap Loyverse**
-- [ ] Taxes : incluse ou ajoutée au prix, par item, plusieurs taxes cumulables
-- [ ] Discounts configurables : % ou montant, sur ticket ou par article, accès restreint
+**Phase 2 - Taxes, Variants & Modifiers**
+- [x] Variants : jusqu'à 3 options, 200 combinaisons max, stock/prix/coût par variant
+- [x] Modifiers : options avec prix additionnels, optionnels ET obligatoires — **gap Loyverse**
+- [x] Taxes : incluse ou ajoutée au prix, par item, plusieurs taxes cumulables
+- [x] Discounts configurables : % ou montant, sur ticket ou par article, accès restreint
 - [ ] Notification push à seuil stock bas
 
 ### Sprint 3 — Écran caisse
 **Référence manuel** : p.26-50 (Sales, Barcodes, Weight, Split Payment)
 
-- [ ] Grille caisse : pages personnalisées, drag & drop, vue grille/liste
-- [ ] Recherche + filtre catégorie + navigation pages
-- [ ] Panier : ajout, modifier quantité, supprimer (swipe gauche), vider ticket
-- [ ] Remises pendant la vente (ticket ou par article, restreintes ou non)
+- [x] Grille caisse : pages personnalisées, recherche + filtre catégorie + navigation pages
+- [x] Panier : ajout, modifier quantité, supprimer, vider ticket
+- [x] Remises pendant la vente (ticket ou par article, restreintes ou non)
 - [ ] Alerte stock négatif avec possibilité de forcer
-- [ ] Types de paiement configurables dans réglages
-- [ ] Paiement cash : montants suggérés, calcul monnaie rendue
-- [ ] Split payment : N paiements partiels, type différent par part
-- [ ] **MVola & Orange Money** (deep links + référence transaction) — **exclusif Madagascar**
-- [ ] Reçus Bluetooth ESC/POS
-- [ ] Envoi reçu WhatsApp — **gap Loyverse**
-- [ ] Scan barcode caméra (UPC-A, EAN-8, EAN-13, Code 39, Code 128, QR)
+- [ ] Types de paiement configurables dans réglages (infrastructure ready)
+- [x] Paiement cash : montants suggérés, calcul monnaie rendue
+- [x] Split payment : N paiements partiels, type différent par part
+- [x] **MVola & Orange Money** (deep links + référence transaction) — **exclusif Madagascar**
+- [x] Reçus Bluetooth ESC/POS
+- [x] Envoi reçu WhatsApp — **gap Loyverse**
+- [x] Scan barcode caméra (UPC-A, EAN-8, EAN-13, Code 39, Code 128, QR)
 
 ### Sprint 4 — Opérations
 **Référence manuel** : p.51-73 (Open Tickets, Shifts), p.159-175 (Customers, Loyalty), p.67-68 (Refunds)
 
-- [ ] Open tickets : sauvegarder, nommer, commenter, reprendre
+- [ ] Open tickets : sauvegarder, nommer, commenter, reprendre (table exists, no UI)
 - [ ] Tickets prédéfinis : noms de tables pour restaurants
 - [ ] Impression de l'addition (Bill) — distinct du reçu (pas de numéro, titre "BILL")
 - [ ] Remboursements depuis l'historique — **offline aussi** — **gap Loyverse**
-- [ ] Shifts : ouverture, Pay In/Out, fermeture avec montant réel vs attendu
+- [ ] Shifts : ouverture, Pay In/Out, fermeture avec montant réel vs attendu (table exists, no UI)
 - [ ] Rapport de shift depuis le POS
-- [ ] Clients : inscription à la caisse, identification par téléphone
+- [ ] Clients : inscription à la caisse, identification par téléphone (backend done, no UI)
 - [ ] Programme de fidélité : points, conversion en remise, cartes barcode
-- [ ] Envoi reçu par email + WhatsApp
-- [ ] Enregistrement client offline — **gap Loyverse** (p.81)
+- [ ] Envoi reçu par email + WhatsApp (WhatsApp done, email not done)
+- [x] Enregistrement client offline — **gap Loyverse** (backend done)
 - [ ] Logo magasin sur les reçus (manuel p.243)
 
 ---

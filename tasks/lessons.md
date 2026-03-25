@@ -87,6 +87,59 @@ Après chaque correction ou bug résolu, ajouter une entrée ici pour éviter de
 
 ---
 
+## 2026-03-25 — Phase 3 Development (10 sub-phases in 1 day)
+
+**Contexte** : Développement rapide des features avancées POS en 10 sous-phases.
+
+**Erreurs trouvées** :
+- Mobile Money merchant numbers non configurées par défaut — il faut un UI Settings pour les saisir
+- Phase 3.9 (Customers/Credits) démarré backend-first sans UI — backend prêt mais inutilisable sans écrans
+- Compilation errors accumulées sur Phases 3.8 & 3.9 (37 erreurs) — correction en batch nécessaire
+
+**Règle** :
+- TOUJOURS créer au minimum un écran UI basique pour chaque feature backend, même un placeholder
+- TOUJOURS compiler après chaque phase, pas attendre d'avoir accumulé plusieurs phases
+- Pour les services de paiement tiers (MVola, Orange Money) : toujours prévoir un fallback USSD
+- Les deep links peuvent ne pas être installés — toujours avoir un fallback (web URL ou USSD)
+- Les références de transaction mobile money doivent être validées côté client (format uniquement)
+- Les taxes "added" vs "included" ont des formules différentes (voir docs/formulas.md)
+- Les modifiers obligatoires (forced) doivent bloquer la validation du panier si non sélectionnés
+- Les variants max 3 options, 200 combinaisons — limite Loyverse à respecter
+- Les custom pages sont liées au store_id — ne jamais oublier cette FK
+
+---
+
+## 2026-03-25 — Build Android Release impossible
+
+**Contexte** : `flutter build apk --release` échoue avec erreur CMake/NDK.
+
+**Erreur** : Incompatibilité NDK 28.x / CMake 3.22.1, aggravée par les espaces dans le chemin du projet ("AGENTIC WORKFLOW").
+
+**Solution** : Utiliser `flutter build apk --debug` en attendant. 3 options pour fix permanent :
+1. Renommer le dossier sans espaces
+2. Downgrade NDK vers 25.x ou 26.x
+3. Upgrade CMake vers 3.28+
+
+**Règle** :
+- JAMAIS d'espaces dans les chemins de projets Flutter/Android
+- NDK 28.x est trop récent pour Flutter 3.x — rester sur 25.x ou 26.x
+- Toujours tester `--release` build tôt dans le projet
+
+---
+
+## 2026-03-25 — Supabase port 5432 bloqué
+
+**Contexte** : `supabase db push` échoue — port PostgreSQL 5432 bloqué par le réseau.
+
+**Solution** : Utiliser l'API Management Supabase (HTTPS 443) pour toutes les opérations SQL. Ne jamais perdre de temps avec les connexions directes PostgreSQL.
+
+**Règle** :
+- Sur les réseaux restreints, utiliser l'API Management Supabase via HTTPS (port 443)
+- Ne JAMAIS attendre que le port 5432 soit débloqué — contourner immédiatement
+- Les migrations peuvent être appliquées via le SQL Editor du dashboard ou l'API REST
+
+---
+
 ## Leçons à venir...
 
-Les prochaines leçons seront ajoutées ici au fur et à mesure du développement.
+Phase 3 complétée (10 sous-phases). Les prochaines leçons seront ajoutées au fil de la Phase 4 et au-delà.

@@ -23,6 +23,12 @@ import 'features/pos/data/repositories/custom_page_repository_impl.dart';
 import 'features/pos/presentation/bloc/sale_bloc.dart';
 import 'features/pos/presentation/bloc/custom_page_bloc.dart';
 import 'features/pos/presentation/bloc/custom_page_event.dart';
+import 'features/customers/data/repositories/customer_repository.dart';
+import 'features/customers/data/repositories/credit_repository.dart';
+import 'features/customers/presentation/bloc/customer_bloc.dart';
+import 'features/customers/presentation/bloc/credit_bloc.dart';
+import 'features/store/data/repositories/store_settings_repository.dart';
+import 'features/store/presentation/bloc/store_settings_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -94,6 +100,18 @@ class MyApp extends StatelessWidget {
             supabase: Supabase.instance.client,
           ),
         ),
+        // Repository pour les clients
+        RepositoryProvider<CustomerRepository>(
+          create: (context) => CustomerRepository(database: database),
+        ),
+        // Repository pour les crédits
+        RepositoryProvider<CreditRepository>(
+          create: (context) => CreditRepository(database: database),
+        ),
+        // Repository pour les réglages magasin
+        RepositoryProvider<StoreSettingsRepository>(
+          create: (context) => StoreSettingsRepository(database),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -119,6 +137,24 @@ class MyApp extends StatelessWidget {
           BlocProvider<SaleBloc>(
             create: (context) => SaleBloc(
               context.read<SaleRepository>(),
+            ),
+          ),
+          // BLoC pour les clients
+          BlocProvider<CustomerBloc>(
+            create: (context) => CustomerBloc(
+              context.read<CustomerRepository>(),
+            ),
+          ),
+          // BLoC pour les crédits
+          BlocProvider<CreditBloc>(
+            create: (context) => CreditBloc(
+              context.read<CreditRepository>(),
+            ),
+          ),
+          // BLoC pour les réglages magasin
+          BlocProvider<StoreSettingsBloc>(
+            create: (context) => StoreSettingsBloc(
+              context.read<StoreSettingsRepository>(),
             ),
           ),
           // BLoC pour les pages personnalisées

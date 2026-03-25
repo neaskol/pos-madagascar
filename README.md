@@ -81,22 +81,26 @@ Toute la documentation est dans le dossier [`docs/`](docs/) :
 ```
 lib/
 ├── core/
-│   ├── theme/          # AppColors, AppTheme, AppTypography, theme_ext
-│   ├── config/         # Configuration Supabase, Drift
-│   ├── utils/          # Formatters (Ariary), helpers
-│   └── constants/
-├── data/
-│   ├── models/         # Models Drift + JSON
-│   ├── datasources/    # LocalDataSource (Drift) + RemoteDataSource (Supabase)
-│   └── repositories/   # Repository pattern
-├── domain/
-│   ├── entities/
-│   ├── repositories/
-│   └── usecases/
-└── presentation/
-    ├── bloc/           # BLoC (state management)
-    ├── screens/        # 65 écrans
-    └── widgets/        # Composants réutilisables
+│   ├── theme/          # AppColors, AppTheme, AppTypography
+│   ├── config/         # Supabase, Drift configuration
+│   ├── router/         # GoRouter avec guards par rôle
+│   ├── services/       # MobileMoneyService, StorageService
+│   ├── data/
+│   │   ├── local/
+│   │   │   ├── tables/     # 18+ tables Drift (.drift files)
+│   │   │   ├── daos/       # 10 DAOs (Store, User, Item, Sale...)
+│   │   │   └── app_database.dart
+│   │   └── remote/
+│   │       └── sync_service.dart
+│   └── utils/          # Formatters (Ariary), helpers
+├── features/
+│   ├── auth/           # Splash, Login, Register, PIN, Setup Wizard
+│   ├── pos/            # POS screen, Payment, Receipt, Cart, Scanner
+│   ├── products/       # Products list, form, variants, modifiers
+│   ├── customers/      # Customer & credit repositories
+│   ├── store/          # Store settings, BLoC
+│   └── user/           # User management
+└── l10n/               # app_fr.arb, app_mg.arb
 ```
 
 ---
@@ -157,7 +161,9 @@ syncService.syncSale(sale); // async, non bloquant
 
 ## 🎯 Sprint actuel
 
-**Sprint 1 — Fondation** (en cours)
+**Sprints 1-3 — TERMINÉS** | **Phase 3 — 90% complète**
+
+7/10 différenciants implémentés. Prêt pour tests utilisateur.
 
 Voir [`tasks/todo.md`](tasks/todo.md) pour les tâches détaillées.
 

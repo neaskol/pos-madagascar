@@ -622,4 +622,222 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get cannotDeleteDefaultPage =>
       'Impossible de supprimer la page par défaut';
+
+  @override
+  String get customersTitle => 'Clients';
+
+  @override
+  String get customersSearch => 'Rechercher un client';
+
+  @override
+  String get customersEmptyTitle => 'Aucun client';
+
+  @override
+  String get customersEmptyDescription =>
+      'Ajoutez vos premiers clients pour suivre leurs achats et crédits';
+
+  @override
+  String get customersAddCustomer => 'Ajouter un client';
+
+  @override
+  String get customerName => 'Nom du client';
+
+  @override
+  String get customerNameRequired => 'Le nom est obligatoire';
+
+  @override
+  String get customerPhone => 'Téléphone';
+
+  @override
+  String get customerPhoneHint => 'Ex: 034 12 345 67';
+
+  @override
+  String get customerEmail => 'Email';
+
+  @override
+  String get customerEmailHint => 'Ex: client@email.com';
+
+  @override
+  String get customerLoyaltyCard => 'Carte de fidélité';
+
+  @override
+  String get customerNotes => 'Notes';
+
+  @override
+  String get customerNotesHint => 'Notes sur le client';
+
+  @override
+  String get customerCreated => 'Client créé';
+
+  @override
+  String get customerUpdated => 'Client mis à jour';
+
+  @override
+  String get customerDeleted => 'Client supprimé';
+
+  @override
+  String get customerDeleteConfirm =>
+      'Voulez-vous vraiment supprimer ce client ?';
+
+  @override
+  String get customerTotalSpent => 'Total dépensé';
+
+  @override
+  String get customerTotalVisits => 'Visites';
+
+  @override
+  String get customerLoyaltyPoints => 'Points fidélité';
+
+  @override
+  String get customerLastVisit => 'Dernière visite';
+
+  @override
+  String get customerCreditBalance => 'Solde crédit';
+
+  @override
+  String get customerNewCustomer => 'Nouveau client';
+
+  @override
+  String get customerEditCustomer => 'Modifier le client';
+
+  @override
+  String get customerDetail => 'Fiche client';
+
+  @override
+  String get customerPurchaseHistory => 'Historique achats';
+
+  @override
+  String get customerCredits => 'Crédits';
+
+  @override
+  String get customerNoCredits => 'Aucun crédit en cours';
+
+  @override
+  String get customerFilterAll => 'Tous';
+
+  @override
+  String get customerFilterWithCredit => 'Avec crédit';
+
+  @override
+  String get creditTitle => 'Ventes à crédit';
+
+  @override
+  String get creditTotalOwed => 'Total dû';
+
+  @override
+  String get creditOverdue => 'En retard';
+
+  @override
+  String get creditPending => 'En attente';
+
+  @override
+  String get creditPartial => 'Partiel';
+
+  @override
+  String get creditPaid => 'Payé';
+
+  @override
+  String get creditAmount => 'Montant';
+
+  @override
+  String get creditAmountTotal => 'Montant total';
+
+  @override
+  String get creditAmountPaid => 'Montant payé';
+
+  @override
+  String get creditAmountRemaining => 'Reste à payer';
+
+  @override
+  String get creditDueDate => 'Date limite';
+
+  @override
+  String get creditNoDueDate => 'Sans échéance';
+
+  @override
+  String get creditRecordPayment => 'Enregistrer un paiement';
+
+  @override
+  String get creditPaymentAmount => 'Montant du paiement';
+
+  @override
+  String get creditPaymentAmountRequired => 'Le montant est obligatoire';
+
+  @override
+  String get creditPaymentAmountExceeds =>
+      'Le montant ne peut pas dépasser le reste dû';
+
+  @override
+  String get creditPaymentType => 'Type de paiement';
+
+  @override
+  String get creditPaymentCash => 'Espèces';
+
+  @override
+  String get creditPaymentCard => 'Carte';
+
+  @override
+  String get creditPaymentMvola => 'MVola';
+
+  @override
+  String get creditPaymentOrangeMoney => 'Orange Money';
+
+  @override
+  String get creditPaymentReference => 'Référence';
+
+  @override
+  String get creditPaymentReferenceHint => 'Référence transaction';
+
+  @override
+  String get creditPaymentRecorded => 'Paiement enregistré';
+
+  @override
+  String get creditPaymentHistory => 'Historique paiements';
+
+  @override
+  String get creditNoPayments => 'Aucun paiement enregistré';
+
+  @override
+  String get creditWhatsAppReminder => 'Rappel WhatsApp';
+
+  @override
+  String creditCreatedOn(String date) {
+    return 'Créé le $date';
+  }
+
+  @override
+  String creditDueOn(String date) {
+    return 'Échéance : $date';
+  }
+
+  @override
+  String get mobileMoneySettings => 'Paiements Mobile Money';
+
+  @override
+  String get mobileMoneyEnabled => 'Activer Mobile Money';
+
+  @override
+  String get mobileMoneyEnabledDescription =>
+      'Acceptez MVola et Orange Money à la caisse';
+
+  @override
+  String get mvolaMerchantNumber => 'Numéro marchand MVola';
+
+  @override
+  String get mvolaMerchantNumberHint => 'Ex: 034 12 345 67';
+
+  @override
+  String get orangeMoneyMerchantNumber => 'Numéro marchand Orange Money';
+
+  @override
+  String get orangeMoneyMerchantNumberHint => 'Ex: 032 12 345 67';
+
+  @override
+  String get mobileMoneySettingsSaved => 'Réglages Mobile Money enregistrés';
+
+  @override
+  String get settingsTitle => 'Réglages';
+
+  @override
+  String get settingsPaymentTypes => 'Types de paiement';
 }

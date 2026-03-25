@@ -1285,6 +1285,426 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Impossible de supprimer la page par défaut'**
   String get cannotDeleteDefaultPage;
+
+  /// No description provided for @customersTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clients'**
+  String get customersTitle;
+
+  /// No description provided for @customersSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un client'**
+  String get customersSearch;
+
+  /// No description provided for @customersEmptyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun client'**
+  String get customersEmptyTitle;
+
+  /// No description provided for @customersEmptyDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez vos premiers clients pour suivre leurs achats et crédits'**
+  String get customersEmptyDescription;
+
+  /// No description provided for @customersAddCustomer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un client'**
+  String get customersAddCustomer;
+
+  /// No description provided for @customerName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nom du client'**
+  String get customerName;
+
+  /// No description provided for @customerNameRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom est obligatoire'**
+  String get customerNameRequired;
+
+  /// No description provided for @customerPhone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Téléphone'**
+  String get customerPhone;
+
+  /// No description provided for @customerPhoneHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex: 034 12 345 67'**
+  String get customerPhoneHint;
+
+  /// No description provided for @customerEmail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Email'**
+  String get customerEmail;
+
+  /// No description provided for @customerEmailHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex: client@email.com'**
+  String get customerEmailHint;
+
+  /// No description provided for @customerLoyaltyCard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Carte de fidélité'**
+  String get customerLoyaltyCard;
+
+  /// No description provided for @customerNotes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes'**
+  String get customerNotes;
+
+  /// No description provided for @customerNotesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes sur le client'**
+  String get customerNotesHint;
+
+  /// No description provided for @customerCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Client créé'**
+  String get customerCreated;
+
+  /// No description provided for @customerUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Client mis à jour'**
+  String get customerUpdated;
+
+  /// No description provided for @customerDeleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Client supprimé'**
+  String get customerDeleted;
+
+  /// No description provided for @customerDeleteConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voulez-vous vraiment supprimer ce client ?'**
+  String get customerDeleteConfirm;
+
+  /// No description provided for @customerTotalSpent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total dépensé'**
+  String get customerTotalSpent;
+
+  /// No description provided for @customerTotalVisits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Visites'**
+  String get customerTotalVisits;
+
+  /// No description provided for @customerLoyaltyPoints.
+  ///
+  /// In fr, this message translates to:
+  /// **'Points fidélité'**
+  String get customerLoyaltyPoints;
+
+  /// No description provided for @customerLastVisit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière visite'**
+  String get customerLastVisit;
+
+  /// No description provided for @customerCreditBalance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Solde crédit'**
+  String get customerCreditBalance;
+
+  /// No description provided for @customerNewCustomer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau client'**
+  String get customerNewCustomer;
+
+  /// No description provided for @customerEditCustomer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le client'**
+  String get customerEditCustomer;
+
+  /// No description provided for @customerDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fiche client'**
+  String get customerDetail;
+
+  /// No description provided for @customerPurchaseHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique achats'**
+  String get customerPurchaseHistory;
+
+  /// No description provided for @customerCredits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédits'**
+  String get customerCredits;
+
+  /// No description provided for @customerNoCredits.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun crédit en cours'**
+  String get customerNoCredits;
+
+  /// No description provided for @customerFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get customerFilterAll;
+
+  /// No description provided for @customerFilterWithCredit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avec crédit'**
+  String get customerFilterWithCredit;
+
+  /// No description provided for @creditTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ventes à crédit'**
+  String get creditTitle;
+
+  /// No description provided for @creditTotalOwed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total dû'**
+  String get creditTotalOwed;
+
+  /// No description provided for @creditOverdue.
+  ///
+  /// In fr, this message translates to:
+  /// **'En retard'**
+  String get creditOverdue;
+
+  /// No description provided for @creditPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente'**
+  String get creditPending;
+
+  /// No description provided for @creditPartial.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partiel'**
+  String get creditPartial;
+
+  /// No description provided for @creditPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Payé'**
+  String get creditPaid;
+
+  /// No description provided for @creditAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant'**
+  String get creditAmount;
+
+  /// No description provided for @creditAmountTotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant total'**
+  String get creditAmountTotal;
+
+  /// No description provided for @creditAmountPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant payé'**
+  String get creditAmountPaid;
+
+  /// No description provided for @creditAmountRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reste à payer'**
+  String get creditAmountRemaining;
+
+  /// No description provided for @creditDueDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date limite'**
+  String get creditDueDate;
+
+  /// No description provided for @creditNoDueDate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans échéance'**
+  String get creditNoDueDate;
+
+  /// No description provided for @creditRecordPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer un paiement'**
+  String get creditRecordPayment;
+
+  /// No description provided for @creditPaymentAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant du paiement'**
+  String get creditPaymentAmount;
+
+  /// No description provided for @creditPaymentAmountRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le montant est obligatoire'**
+  String get creditPaymentAmountRequired;
+
+  /// No description provided for @creditPaymentAmountExceeds.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le montant ne peut pas dépasser le reste dû'**
+  String get creditPaymentAmountExceeds;
+
+  /// No description provided for @creditPaymentType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de paiement'**
+  String get creditPaymentType;
+
+  /// No description provided for @creditPaymentCash.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espèces'**
+  String get creditPaymentCash;
+
+  /// No description provided for @creditPaymentCard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Carte'**
+  String get creditPaymentCard;
+
+  /// No description provided for @creditPaymentMvola.
+  ///
+  /// In fr, this message translates to:
+  /// **'MVola'**
+  String get creditPaymentMvola;
+
+  /// No description provided for @creditPaymentOrangeMoney.
+  ///
+  /// In fr, this message translates to:
+  /// **'Orange Money'**
+  String get creditPaymentOrangeMoney;
+
+  /// No description provided for @creditPaymentReference.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence'**
+  String get creditPaymentReference;
+
+  /// No description provided for @creditPaymentReferenceHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Référence transaction'**
+  String get creditPaymentReferenceHint;
+
+  /// No description provided for @creditPaymentRecorded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement enregistré'**
+  String get creditPaymentRecorded;
+
+  /// No description provided for @creditPaymentHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique paiements'**
+  String get creditPaymentHistory;
+
+  /// No description provided for @creditNoPayments.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun paiement enregistré'**
+  String get creditNoPayments;
+
+  /// No description provided for @creditWhatsAppReminder.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rappel WhatsApp'**
+  String get creditWhatsAppReminder;
+
+  /// No description provided for @creditCreatedOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créé le {date}'**
+  String creditCreatedOn(String date);
+
+  /// No description provided for @creditDueOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Échéance : {date}'**
+  String creditDueOn(String date);
+
+  /// No description provided for @mobileMoneySettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiements Mobile Money'**
+  String get mobileMoneySettings;
+
+  /// No description provided for @mobileMoneyEnabled.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer Mobile Money'**
+  String get mobileMoneyEnabled;
+
+  /// No description provided for @mobileMoneyEnabledDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Acceptez MVola et Orange Money à la caisse'**
+  String get mobileMoneyEnabledDescription;
+
+  /// No description provided for @mvolaMerchantNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro marchand MVola'**
+  String get mvolaMerchantNumber;
+
+  /// No description provided for @mvolaMerchantNumberHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex: 034 12 345 67'**
+  String get mvolaMerchantNumberHint;
+
+  /// No description provided for @orangeMoneyMerchantNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro marchand Orange Money'**
+  String get orangeMoneyMerchantNumber;
+
+  /// No description provided for @orangeMoneyMerchantNumberHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ex: 032 12 345 67'**
+  String get orangeMoneyMerchantNumberHint;
+
+  /// No description provided for @mobileMoneySettingsSaved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages Mobile Money enregistrés'**
+  String get mobileMoneySettingsSaved;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsPaymentTypes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Types de paiement'**
+  String get settingsPaymentTypes;
 }
 
 class _AppLocalizationsDelegate

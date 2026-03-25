@@ -619,4 +619,221 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get cannotDeleteDefaultPage => 'Tsy afaka mamafa ny pejy default';
+
+  @override
+  String get customersTitle => 'Mpanjifa';
+
+  @override
+  String get customersSearch => 'Mitady mpanjifa';
+
+  @override
+  String get customersEmptyTitle => 'Tsy misy mpanjifa';
+
+  @override
+  String get customersEmptyDescription =>
+      'Ampio ny mpanjifa voalohany mba hanaraha-maso ny fividianany sy ny trosany';
+
+  @override
+  String get customersAddCustomer => 'Hanampy mpanjifa';
+
+  @override
+  String get customerName => 'Anaran\'ny mpanjifa';
+
+  @override
+  String get customerNameRequired => 'Ilaina ny anarana';
+
+  @override
+  String get customerPhone => 'Telefaonina';
+
+  @override
+  String get customerPhoneHint => 'Ohatra: 034 12 345 67';
+
+  @override
+  String get customerEmail => 'Email';
+
+  @override
+  String get customerEmailHint => 'Ohatra: mpanjifa@email.com';
+
+  @override
+  String get customerLoyaltyCard => 'Karatra fidelite';
+
+  @override
+  String get customerNotes => 'Fanamarihana';
+
+  @override
+  String get customerNotesHint => 'Fanamarihana momba ny mpanjifa';
+
+  @override
+  String get customerCreated => 'Mpanjifa voaforona';
+
+  @override
+  String get customerUpdated => 'Mpanjifa novaina';
+
+  @override
+  String get customerDeleted => 'Mpanjifa voafafa';
+
+  @override
+  String get customerDeleteConfirm => 'Tena hofafanao ve io mpanjifa io?';
+
+  @override
+  String get customerTotalSpent => 'Totaliny lany';
+
+  @override
+  String get customerTotalVisits => 'Fitsidihana';
+
+  @override
+  String get customerLoyaltyPoints => 'Isa fidelite';
+
+  @override
+  String get customerLastVisit => 'Fitsidihana farany';
+
+  @override
+  String get customerCreditBalance => 'Solan-trosa';
+
+  @override
+  String get customerNewCustomer => 'Mpanjifa vaovao';
+
+  @override
+  String get customerEditCustomer => 'Hanova mpanjifa';
+
+  @override
+  String get customerDetail => 'Pejin\'ny mpanjifa';
+
+  @override
+  String get customerPurchaseHistory => 'Tantaran\'ny fividianana';
+
+  @override
+  String get customerCredits => 'Trosa';
+
+  @override
+  String get customerNoCredits => 'Tsy misy trosa ankehitriny';
+
+  @override
+  String get customerFilterAll => 'Rehetra';
+
+  @override
+  String get customerFilterWithCredit => 'Misy trosa';
+
+  @override
+  String get creditTitle => 'Varotra amin\'ny trosa';
+
+  @override
+  String get creditTotalOwed => 'Totaliny tokony aloa';
+
+  @override
+  String get creditOverdue => 'Tara';
+
+  @override
+  String get creditPending => 'Miandry';
+
+  @override
+  String get creditPartial => 'Ampahany';
+
+  @override
+  String get creditPaid => 'Voaloa';
+
+  @override
+  String get creditAmount => 'Vola';
+
+  @override
+  String get creditAmountTotal => 'Vola rehetra';
+
+  @override
+  String get creditAmountPaid => 'Vola efa naloa';
+
+  @override
+  String get creditAmountRemaining => 'Sisa aloa';
+
+  @override
+  String get creditDueDate => 'Fetr\'andro';
+
+  @override
+  String get creditNoDueDate => 'Tsy misy fetr\'andro';
+
+  @override
+  String get creditRecordPayment => 'Handray fandoavana';
+
+  @override
+  String get creditPaymentAmount => 'Vola aloa';
+
+  @override
+  String get creditPaymentAmountRequired => 'Ilaina ny vola';
+
+  @override
+  String get creditPaymentAmountExceeds =>
+      'Ny vola tsy tokony mihoatra ny sisa aloa';
+
+  @override
+  String get creditPaymentType => 'Karazana fandoavana';
+
+  @override
+  String get creditPaymentCash => 'Vola madinika';
+
+  @override
+  String get creditPaymentCard => 'Karatra';
+
+  @override
+  String get creditPaymentMvola => 'MVola';
+
+  @override
+  String get creditPaymentOrangeMoney => 'Orange Money';
+
+  @override
+  String get creditPaymentReference => 'Referansa';
+
+  @override
+  String get creditPaymentReferenceHint => 'Referansan\'ny fandoavana';
+
+  @override
+  String get creditPaymentRecorded => 'Fandoavana voatahiry';
+
+  @override
+  String get creditPaymentHistory => 'Tantaran\'ny fandoavana';
+
+  @override
+  String get creditNoPayments => 'Tsy misy fandoavana voatahiry';
+
+  @override
+  String get creditWhatsAppReminder => 'Fampahatsiahivana WhatsApp';
+
+  @override
+  String creditCreatedOn(String date) {
+    return 'Noforonina tamin\'ny $date';
+  }
+
+  @override
+  String creditDueOn(String date) {
+    return 'Fetr\'andro : $date';
+  }
+
+  @override
+  String get mobileMoneySettings => 'Fandoavana Mobile Money';
+
+  @override
+  String get mobileMoneyEnabled => 'Hamelona Mobile Money';
+
+  @override
+  String get mobileMoneyEnabledDescription =>
+      'Mandray MVola sy Orange Money amin\'ny kaisa';
+
+  @override
+  String get mvolaMerchantNumber => 'Laharan\'ny mpivarotra MVola';
+
+  @override
+  String get mvolaMerchantNumberHint => 'Ohatra: 034 12 345 67';
+
+  @override
+  String get orangeMoneyMerchantNumber => 'Laharan\'ny mpivarotra Orange Money';
+
+  @override
+  String get orangeMoneyMerchantNumberHint => 'Ohatra: 032 12 345 67';
+
+  @override
+  String get mobileMoneySettingsSaved => 'Fandaminana Mobile Money voatahiry';
+
+  @override
+  String get settingsTitle => 'Fandaminana';
+
+  @override
+  String get settingsPaymentTypes => 'Karazana fandoavana';
 }

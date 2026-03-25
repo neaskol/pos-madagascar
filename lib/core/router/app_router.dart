@@ -13,6 +13,10 @@ import '../../features/auth/presentation/screens/pin_screen.dart';
 import '../../features/products/presentation/screens/products_list_screen.dart';
 import '../../features/products/presentation/screens/product_form_screen.dart';
 import '../../features/pos/presentation/screens/pos_screen.dart';
+import '../../features/customers/presentation/screens/customer_list_screen.dart';
+import '../../features/customers/presentation/screens/customer_form_screen.dart';
+import '../../features/customers/presentation/screens/customer_detail_screen.dart';
+import '../../features/store/presentation/screens/payment_settings_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -131,19 +135,49 @@ class AppRouter {
         },
       ),
 
-      // Customers - TODO: Implémenter les écrans
+      // Customers - Liste des clients
       GoRoute(
         path: '/customers',
-        builder: (context, state) => const Placeholder(),
+        builder: (context, state) => const CustomerListScreen(),
       ),
 
-      // Reports - TODO: Implémenter les écrans
+      // Customers - Nouveau client
+      GoRoute(
+        path: '/customers/new',
+        builder: (context, state) => const CustomerFormScreen(),
+      ),
+
+      // Customers - Détail client
+      GoRoute(
+        path: '/customers/:id',
+        builder: (context, state) {
+          final customerId = state.pathParameters['id']!;
+          return CustomerDetailScreen(customerId: customerId);
+        },
+      ),
+
+      // Customers - Éditer client
+      GoRoute(
+        path: '/customers/:id/edit',
+        builder: (context, state) {
+          final customerId = state.pathParameters['id']!;
+          return CustomerFormScreen(customerId: customerId);
+        },
+      ),
+
+      // Reports - TODO: Sprint 5
       GoRoute(
         path: '/reports',
         builder: (context, state) => const Placeholder(),
       ),
 
-      // Settings - TODO: Implémenter les écrans
+      // Settings - Payment Types (Mobile Money)
+      GoRoute(
+        path: '/settings/payment-types',
+        builder: (context, state) => const PaymentSettingsScreen(),
+      ),
+
+      // Settings - TODO: Sprint 6
       GoRoute(
         path: '/settings',
         builder: (context, state) => const Placeholder(),

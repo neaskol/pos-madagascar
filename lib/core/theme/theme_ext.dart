@@ -14,4 +14,7 @@ extension ThemeContextExt on BuildContext {
   Color get danger   => isDark ? AppColors.dangerDark        : AppColors.dangerLight;
   Color get warning  => isDark ? AppColors.warningDark       : AppColors.warningLight;
   Color get success  => isDark ? AppColors.successDark       : AppColors.successLight;
+  Color get dangerBg => isDark ? AppColors.dangerBgDark      : AppColors.dangerBgLight;
+  Color get warningBg => isDark ? AppColors.warningBgDark    : AppColors.warningBgLight;
+  Color get successBg => isDark ? AppColors.successBgDark    : AppColors.successBgLight;
 }
