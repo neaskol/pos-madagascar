@@ -8,6 +8,7 @@ import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/sale_bloc.dart';
 import '../bloc/sale_event.dart';
 import '../bloc/sale_state.dart';
+import 'receipt_screen.dart';
 
 /// Écran de paiement - Phase 2.3 (Cash uniquement)
 class PaymentScreen extends StatefulWidget {
@@ -467,9 +468,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           FilledButton(
             onPressed: () {
-              // TODO: Afficher reçu
+              // Fermer le dialog et afficher le reçu
               Navigator.of(dialogContext).pop();
-              context.go('/pos');
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => ReceiptScreen(sale: sale),
+                ),
+              );
             },
             child: const Text('Voir reçu'),
           ),
