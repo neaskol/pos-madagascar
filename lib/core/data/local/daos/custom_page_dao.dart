@@ -4,11 +4,7 @@ import '../app_database.dart';
 part 'custom_page_dao.g.dart';
 
 /// DAO pour gérer les pages personnalisées de produits
-@DriftAccessor(tables: [
-  CustomProductPages,
-  CustomPageItems,
-  CustomPageCategoryGrids,
-])
+@DriftAccessor(include: {'../tables/custom_pages.drift'})
 class CustomPageDao extends DatabaseAccessor<AppDatabase>
     with _$CustomPageDaoMixin {
   CustomPageDao(AppDatabase db) : super(db);
@@ -37,30 +33,43 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
   }
 
   /// Créer une nouvelle page personnalisée
-  Future<String> createPage(CustomProductPagesCompanion page) async {
+  Future<int> createPage(CustomProductPagesCompanion page) async {
     return await into(customProductPages).insert(page);
   }
 
   /// Mettre à jour une page
   Future<bool> updatePage(CustomProductPagesCompanion page) async {
-    return await update(customProductPages).replace(page);
+    final rowsAffected = await (update(customProductPages)
+          ..where((tbl) => tbl.id.equals(page.id.value)))
+        .write(page.copyWith(
+      synced: const Value(0),
+      updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+    ));
+    return rowsAffected > 0;
   }
 
   /// Supprimer une page (cascade supprime les items et grilles associés)
   Future<int> deletePage(String pageId) async {
+    // Supprimer les items de la page
+    await (delete(customPageItems)..where((i) => i.pageId.equals(pageId))).go();
+
+    // Supprimer les grilles de catégories de la page
+    await (delete(customPageCategoryGrids)..where((g) => g.pageId.equals(pageId))).go();
+
+    // Supprimer la page elle-même
     return await (delete(customProductPages)
           ..where((p) => p.id.equals(pageId)))
         .go();
   }
 
   /// Créer la page par défaut "All Products" pour un nouveau magasin
-  Future<String> createDefaultPage(String storeId, String name) async {
+  Future<int> createDefaultPage(String storeId, String name) async {
     final pageId = DateTime.now().millisecondsSinceEpoch.toString();
     final now = DateTime.now().millisecondsSinceEpoch;
 
     return await into(customProductPages).insert(
       CustomProductPagesCompanion.insert(
-        id: Value(pageId),
+        id: pageId,
         storeId: storeId,
         name: name,
         sortOrder: const Value(0),
@@ -83,7 +92,7 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
   }
 
   /// Ajouter un item à une page
-  Future<String> addItemToPage({
+  Future<int> addItemToPage({
     required String pageId,
     required String itemId,
     required int position,
@@ -93,7 +102,7 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
 
     return await into(customPageItems).insert(
       CustomPageItemsCompanion.insert(
-        id: Value(itemPageId),
+        id: itemPageId,
         pageId: pageId,
         itemId: itemId,
         position: position,
@@ -119,9 +128,13 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
     required String itemId,
     required int newPosition,
   }) async {
-    return await (update(customPageItems)
+    final rowsAffected = await (update(customPageItems)
           ..where((i) => i.pageId.equals(pageId) & i.itemId.equals(itemId)))
-        .write(CustomPageItemsCompanion(position: Value(newPosition)));
+        .write(CustomPageItemsCompanion(
+          position: Value(newPosition),
+          synced: const Value(0),
+        ));
+    return rowsAffected > 0;
   }
 
   /// Réorganiser tous les items d'une page (pour drag & drop)
@@ -158,7 +171,7 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
   }
 
   /// Ajouter une grille de catégorie à une page
-  Future<String> addCategoryGridToPage({
+  Future<int> addCategoryGridToPage({
     required String pageId,
     required String categoryId,
     required int position,
@@ -168,7 +181,7 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
 
     return await into(customPageCategoryGrids).insert(
       CustomPageCategoryGridsCompanion.insert(
-        id: Value(gridId),
+        id: gridId,
         pageId: pageId,
         categoryId: categoryId,
         position: position,
@@ -232,8 +245,8 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
       ..where(customPageItems.pageId.equals(pageId))
       ..addColumns([customPageItems.id.count()]);
 
-    final result = await countQuery.getSingle();
-    return result.read(customPageItems.id.count()) ?? 0;
+    final result = await countQuery.getSingleOrNull();
+    return result?.read(customPageItems.id.count()) ?? 0;
   }
 
   /// Obtenir le nombre total de pages d'un magasin
@@ -242,8 +255,8 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
       ..where(customProductPages.storeId.equals(storeId))
       ..addColumns([customProductPages.id.count()]);
 
-    final result = await countQuery.getSingle();
-    return result.read(customProductPages.id.count()) ?? 0;
+    final result = await countQuery.getSingleOrNull();
+    return result?.read(customProductPages.id.count()) ?? 0;
   }
 
   /// Vérifier si un item est déjà sur une page
@@ -267,5 +280,35 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
               (g) => g.pageId.equals(pageId) & g.categoryId.equals(categoryId)))
         .getSingleOrNull();
     return result != null;
+  }
+
+  /// Stream pour écouter les pages d'un magasin
+  Stream<List<CustomProductPage>> watchStorePages(String storeId) {
+    return (select(customProductPages)
+          ..where((p) => p.storeId.equals(storeId))
+          ..orderBy([(p) => OrderingTerm.asc(p.sortOrder)]))
+        .watch();
+  }
+
+  /// Stream pour écouter une page spécifique
+  Stream<CustomProductPage?> watchPageById(String pageId) {
+    return (select(customProductPages)..where((p) => p.id.equals(pageId)))
+        .watchSingleOrNull();
+  }
+
+  /// Stream pour écouter les items d'une page
+  Stream<List<CustomPageItem>> watchPageItems(String pageId) {
+    return (select(customPageItems)
+          ..where((i) => i.pageId.equals(pageId))
+          ..orderBy([(i) => OrderingTerm.asc(i.position)]))
+        .watch();
+  }
+
+  /// Stream pour écouter les grilles de catégories d'une page
+  Stream<List<CustomPageCategoryGrid>> watchPageCategoryGrids(String pageId) {
+    return (select(customPageCategoryGrids)
+          ..where((g) => g.pageId.equals(pageId))
+          ..orderBy([(g) => OrderingTerm.asc(g.position)]))
+        .watch();
   }
 }

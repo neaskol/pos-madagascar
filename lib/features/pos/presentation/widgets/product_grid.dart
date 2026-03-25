@@ -10,9 +10,9 @@ import '../../../products/presentation/bloc/category_state.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/cart_bloc.dart';
-// import '../bloc/custom_page_bloc.dart'; // TODO: Reactivate when DAO is fixed
-// import '../bloc/custom_page_event.dart';
-// import '../bloc/custom_page_state.dart';
+import '../bloc/custom_page_bloc.dart';
+import '../bloc/custom_page_event.dart';
+import '../bloc/custom_page_state.dart';
 import '../helpers/variant_modifier_helper.dart';
 
 /// Widget affichant la grille des produits disponibles à la caisse
@@ -51,52 +51,51 @@ class _ProductGridState extends State<ProductGrid> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // TODO: Réactiver navigation par pages personnalisées quand DAO sera corrigé
         // Navigation par pages personnalisées
-        // BlocBuilder<CustomPageBloc, CustomPageState>(
-        //   builder: (context, pageState) {
-        //     if (pageState is CustomPagesLoaded && pageState.pages.length > 1) {
-        //       return Container(
-        //         height: 48,
-        //         color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        //         child: ListView.builder(
-        //           scrollDirection: Axis.horizontal,
-        //           padding: const EdgeInsets.symmetric(horizontal: 8),
-        //           itemCount: pageState.pages.length,
-        //           itemBuilder: (context, index) {
-        //             final page = pageState.pages[index];
-        //             final isSelected = pageState.selectedPage?.id == page.id;
-        //
-        //             return Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 4,
-        //                 vertical: 6,
-        //               ),
-        //               child: ChoiceChip(
-        //                 label: Text(page.name),
-        //                 selected: isSelected,
-        //                 onSelected: (selected) {
-        //                   if (selected) {
-        //                     context
-        //                         .read<CustomPageBloc>()
-        //                         .add(SelectPage(page.id));
-        //                   }
-        //                 },
-        //                 selectedColor: Theme.of(context).colorScheme.primary,
-        //                 labelStyle: TextStyle(
-        //                   color: isSelected
-        //                       ? Theme.of(context).colorScheme.onPrimary
-        //                       : null,
-        //                 ),
-        //               ),
-        //             );
-        //           },
-        //         ),
-        //       );
-        //     }
-        //     return const SizedBox.shrink();
-        //   },
-        // ),
+        BlocBuilder<CustomPageBloc, CustomPageState>(
+          builder: (context, pageState) {
+            if (pageState is CustomPagesLoaded && pageState.pages.length > 1) {
+              return Container(
+                height: 48,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  itemCount: pageState.pages.length,
+                  itemBuilder: (context, index) {
+                    final page = pageState.pages[index];
+                    final isSelected = pageState.selectedPage?.id == page.id;
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 6,
+                      ),
+                      child: ChoiceChip(
+                        label: Text(page.name),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          if (selected) {
+                            context
+                                .read<CustomPageBloc>()
+                                .add(SelectPage(page.id));
+                          }
+                        },
+                        selectedColor: Theme.of(context).colorScheme.primary,
+                        labelStyle: TextStyle(
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : null,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
         // Barre de recherche et filtre
         Padding(
           padding: const EdgeInsets.all(16.0),

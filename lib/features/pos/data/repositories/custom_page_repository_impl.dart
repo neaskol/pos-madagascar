@@ -40,7 +40,7 @@ class CustomPageRepositoryImpl {
     final now = DateTime.now().millisecondsSinceEpoch;
 
     final companion = CustomProductPagesCompanion.insert(
-      id: drift.Value(pageId),
+      id: pageId,
       storeId: storeId,
       name: name,
       sortOrder: drift.Value(sortOrder),
@@ -69,9 +69,10 @@ class CustomPageRepositoryImpl {
     final page = await _database.customPageDao.getPageById(pageId);
     if (page == null) throw Exception('Page not found');
 
-    final companion = page.copyWith(
-      name: drift.Value(name ?? page.name),
-      sortOrder: drift.Value(sortOrder ?? page.sortOrder),
+    final companion = CustomProductPagesCompanion(
+      id: drift.Value(pageId),
+      name: name != null ? drift.Value(name) : drift.Value.absent(),
+      sortOrder: sortOrder != null ? drift.Value(sortOrder) : drift.Value.absent(),
       updatedAt: drift.Value(DateTime.now().millisecondsSinceEpoch),
       synced: const drift.Value(0),
     );

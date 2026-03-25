@@ -13,12 +13,16 @@ import 'l10n/app_localizations.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/products/data/repositories/category_repository.dart';
 import 'features/products/data/repositories/item_repository.dart';
 import 'features/products/presentation/bloc/category_bloc.dart';
 import 'features/products/presentation/bloc/item_bloc.dart';
 import 'features/pos/data/repositories/sale_repository.dart';
+import 'features/pos/data/repositories/custom_page_repository_impl.dart';
 import 'features/pos/presentation/bloc/sale_bloc.dart';
+import 'features/pos/presentation/bloc/custom_page_bloc.dart';
+import 'features/pos/presentation/bloc/custom_page_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,6 +87,13 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<SaleRepository>(
           create: (context) => SaleRepository(database),
         ),
+        // Repository pour les pages personnalisées
+        RepositoryProvider<CustomPageRepositoryImpl>(
+          create: (context) => CustomPageRepositoryImpl(
+            database: database,
+            supabase: Supabase.instance.client,
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -109,6 +120,21 @@ class MyApp extends StatelessWidget {
             create: (context) => SaleBloc(
               context.read<SaleRepository>(),
             ),
+          ),
+          // BLoC pour les pages personnalisées
+          BlocProvider<CustomPageBloc>(
+            create: (context) {
+              final bloc = CustomPageBloc(
+                repository: context.read<CustomPageRepositoryImpl>(),
+              );
+              // Charger les pages au démarrage si store disponible
+              final authBloc = context.read<AuthBloc>();
+              if (authBloc.state is AuthAuthenticatedWithStore) {
+                final storeId = (authBloc.state as AuthAuthenticatedWithStore).storeId;
+                bloc.add(LoadStorePages(storeId));
+              }
+              return bloc;
+            },
           ),
         ],
         child: MaterialApp.router(
