@@ -8,6 +8,7 @@ import '../../features/auth/presentation/screens/setup_wizard_screen.dart';
 import '../../features/auth/presentation/screens/pin_screen.dart';
 import '../../features/products/presentation/screens/products_list_screen.dart';
 import '../../features/products/presentation/screens/product_form_screen.dart';
+import '../../features/pos/presentation/screens/pos_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -49,10 +50,10 @@ class AppRouter {
         builder: (context, state) => const PinScreen(),
       ),
 
-      // POS (Caisse principale) - TODO: Implémenter l'écran
+      // POS (Caisse principale)
       GoRoute(
         path: '/pos',
-        builder: (context, state) => const Placeholder(), // TODO
+        builder: (context, state) => const PosScreen(),
       ),
 
       // Products - Liste des produits

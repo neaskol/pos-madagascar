@@ -428,4 +428,43 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get productFormDeleted => 'Voafafa ny vokatra';
+
+  @override
+  String get posScreenTitle => 'Kaisa';
+
+  @override
+  String get clearTicket => 'Fafao ny panier';
+
+  @override
+  String get clearTicketConfirmation => 'Tena hofafanao ve ny ao anaty panier?';
+
+  @override
+  String get saveTicket => 'Tahiry';
+
+  @override
+  String get comingSoon => 'Ho avy';
+
+  @override
+  String get searchProducts => 'Mitady vokatra';
+
+  @override
+  String get allCategories => 'Rehetra';
+
+  @override
+  String get noProducts => 'Tsy misy vokatra';
+
+  @override
+  String get addedToCart => 'nampiana tao anaty panier';
+
+  @override
+  String get emptyCart => 'Panier foana';
+
+  @override
+  String get subtotal => 'Isa';
+
+  @override
+  String get total => 'TOTALIN\'NY';
+
+  @override
+  String get pay => 'MANDOAVA';
 }

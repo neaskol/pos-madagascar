@@ -427,4 +427,44 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get productFormDeleted => 'Produit supprimé';
+
+  @override
+  String get posScreenTitle => 'Caisse';
+
+  @override
+  String get clearTicket => 'Vider le ticket';
+
+  @override
+  String get clearTicketConfirmation =>
+      'Êtes-vous sûr de vouloir vider le panier ?';
+
+  @override
+  String get saveTicket => 'Sauvegarder';
+
+  @override
+  String get comingSoon => 'À venir';
+
+  @override
+  String get searchProducts => 'Rechercher un produit';
+
+  @override
+  String get allCategories => 'Toutes';
+
+  @override
+  String get noProducts => 'Aucun produit disponible';
+
+  @override
+  String get addedToCart => 'ajouté au panier';
+
+  @override
+  String get emptyCart => 'Panier vide';
+
+  @override
+  String get subtotal => 'Sous-total';
+
+  @override
+  String get total => 'TOTAL';
+
+  @override
+  String get pay => 'PAYER';
 }

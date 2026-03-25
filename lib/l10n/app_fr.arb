@@ -154,5 +154,19 @@
   "productFormNoTaxes": "Aucune taxe configurée",
 
   "productFormSaved": "Produit enregistré",
-  "productFormDeleted": "Produit supprimé"
+  "productFormDeleted": "Produit supprimé",
+
+  "posScreenTitle": "Caisse",
+  "clearTicket": "Vider le ticket",
+  "clearTicketConfirmation": "Êtes-vous sûr de vouloir vider le panier ?",
+  "saveTicket": "Sauvegarder",
+  "comingSoon": "À venir",
+  "searchProducts": "Rechercher un produit",
+  "allCategories": "Toutes",
+  "noProducts": "Aucun produit disponible",
+  "addedToCart": "ajouté au panier",
+  "emptyCart": "Panier vide",
+  "subtotal": "Sous-total",
+  "total": "TOTAL",
+  "pay": "PAYER"
 }

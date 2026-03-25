@@ -925,6 +925,84 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Produit supprimé'**
   String get productFormDeleted;
+
+  /// No description provided for @posScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Caisse'**
+  String get posScreenTitle;
+
+  /// No description provided for @clearTicket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vider le ticket'**
+  String get clearTicket;
+
+  /// No description provided for @clearTicketConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir vider le panier ?'**
+  String get clearTicketConfirmation;
+
+  /// No description provided for @saveTicket.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarder'**
+  String get saveTicket;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'À venir'**
+  String get comingSoon;
+
+  /// No description provided for @searchProducts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un produit'**
+  String get searchProducts;
+
+  /// No description provided for @allCategories.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes'**
+  String get allCategories;
+
+  /// No description provided for @noProducts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun produit disponible'**
+  String get noProducts;
+
+  /// No description provided for @addedToCart.
+  ///
+  /// In fr, this message translates to:
+  /// **'ajouté au panier'**
+  String get addedToCart;
+
+  /// No description provided for @emptyCart.
+  ///
+  /// In fr, this message translates to:
+  /// **'Panier vide'**
+  String get emptyCart;
+
+  /// No description provided for @subtotal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous-total'**
+  String get subtotal;
+
+  /// No description provided for @total.
+  ///
+  /// In fr, this message translates to:
+  /// **'TOTAL'**
+  String get total;
+
+  /// No description provided for @pay.
+  ///
+  /// In fr, this message translates to:
+  /// **'PAYER'**
+  String get pay;
 }
 
 class _AppLocalizationsDelegate

@@ -154,5 +154,19 @@
   "productFormNoTaxes": "Tsy misy hetra voaomana",
 
   "productFormSaved": "Voatahiry ny vokatra",
-  "productFormDeleted": "Voafafa ny vokatra"
+  "productFormDeleted": "Voafafa ny vokatra",
+
+  "posScreenTitle": "Kaisa",
+  "clearTicket": "Fafao ny panier",
+  "clearTicketConfirmation": "Tena hofafanao ve ny ao anaty panier?",
+  "saveTicket": "Tahiry",
+  "comingSoon": "Ho avy",
+  "searchProducts": "Mitady vokatra",
+  "allCategories": "Rehetra",
+  "noProducts": "Tsy misy vokatra",
+  "addedToCart": "nampiana tao anaty panier",
+  "emptyCart": "Panier foana",
+  "subtotal": "Isa",
+  "total": "TOTALIN'NY",
+  "pay": "MANDOAVA"
 }
