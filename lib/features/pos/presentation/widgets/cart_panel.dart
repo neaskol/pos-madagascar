@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/cart_bloc.dart';
+import '../screens/payment_screen.dart';
 import '../../domain/entities/cart_item.dart';
 
 /// Panel affichant le panier et le bouton de paiement
@@ -101,10 +102,16 @@ class CartPanel extends StatelessWidget {
                       height: 56,
                       child: FilledButton(
                         onPressed: () {
-                          // TODO: Naviguer vers écran paiement
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('À venir'),
+                          // Naviguer vers écran paiement
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PaymentScreen(
+                                items: state.items,
+                                subtotal: state.subtotal,
+                                taxAmount: 0, // TODO: calcul taxes
+                                discountAmount: 0, // TODO: remises
+                                total: state.total,
+                              ),
                             ),
                           );
                         },

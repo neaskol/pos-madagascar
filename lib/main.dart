@@ -17,6 +17,8 @@ import 'features/products/data/repositories/category_repository.dart';
 import 'features/products/data/repositories/item_repository.dart';
 import 'features/products/presentation/bloc/category_bloc.dart';
 import 'features/products/presentation/bloc/item_bloc.dart';
+import 'features/pos/data/repositories/sale_repository.dart';
+import 'features/pos/presentation/bloc/sale_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +79,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<ItemRepository>(
           create: (context) => ItemRepository(database),
         ),
+        // Repository pour les ventes
+        RepositoryProvider<SaleRepository>(
+          create: (context) => SaleRepository(database),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -96,6 +102,12 @@ class MyApp extends StatelessWidget {
           BlocProvider<ItemBloc>(
             create: (context) => ItemBloc(
               context.read<ItemRepository>(),
+            ),
+          ),
+          // BLoC pour les ventes (paiement)
+          BlocProvider<SaleBloc>(
+            create: (context) => SaleBloc(
+              context.read<SaleRepository>(),
             ),
           ),
         ],
