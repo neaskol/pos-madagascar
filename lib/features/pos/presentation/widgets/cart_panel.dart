@@ -295,47 +295,45 @@ class _CartItemTile extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      child: InkWell(
-        onTap: () {
-          // Afficher dialog remise item
-          showDialog(
-            context: context,
-            builder: (context) => BlocProvider.value(
-              value: BlocProvider.of<CartBloc>(context),
-              child: ItemDiscountDialog(item: item),
-            ),
-          );
-        },
-        onLongPress: () {
-          _showQuantityDialog(context, item);
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-          child: Row(
-            children: [
-              // Image ou placeholder
-              if (item.imageUrl != null && item.imageUrl!.isNotEmpty)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: Image.network(
-                    item.imageUrl!,
-                    width: 48,
-                    height: 48,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return _buildPlaceholder(context);
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          children: [
+            // Image ou placeholder
+            if (item.imageUrl != null && item.imageUrl!.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Image.network(
+                  item.imageUrl!,
+                  width: 48,
+                  height: 48,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return _buildPlaceholder(context);
+                  },
+                ),
+              )
+            else
+              _buildPlaceholder(context),
+            const SizedBox(width: 12),
+            // Nom et contrôles quantité
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Nom du produit (cliquable pour remise)
+                  InkWell(
+                    onTap: () {
+                      // Afficher dialog remise item
+                      showDialog(
+                        context: context,
+                        builder: (context) => BlocProvider.value(
+                          value: BlocProvider.of<CartBloc>(context),
+                          child: ItemDiscountDialog(item: item),
+                        ),
+                      );
                     },
-                  ),
-                )
-              else
-                _buildPlaceholder(context),
-              const SizedBox(width: 12),
-              // Nom et détails
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+                    child: Text(
                       item.name,
                       style: const TextStyle(
                         fontSize: 14,
@@ -344,27 +342,98 @@ class _CartItemTile extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'x${item.quantity.toStringAsFixed(item.quantity.truncateToDouble() == item.quantity ? 0 : 2)}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(height: 8),
+                  // Contrôles quantité (+ / TextField / -)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Bouton -
+                      IconButton(
+                        onPressed: () {
+                          final newQty = item.quantity - 1;
+                          if (newQty > 0) {
+                            context.read<CartBloc>().add(
+                                  UpdateItemQuantity(
+                                    cartItemId: item.id,
+                                    quantity: newQty,
+                                  ),
+                                );
+                          } else {
+                            // Si quantité = 0, retirer l'item
+                            context
+                                .read<CartBloc>()
+                                .add(RemoveItemFromCart(item.id));
+                          }
+                        },
+                        icon: const Icon(Icons.remove_circle_outline),
+                        iconSize: 24,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: 8),
+                      // Quantité (cliquable pour édition manuelle)
+                      InkWell(
+                        onTap: () => _showQuantityDialog(context, item),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant,
+                            ),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'x${item.quantity.toStringAsFixed(item.quantity.truncateToDouble() == item.quantity ? 0 : 2)}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // Bouton +
+                      IconButton(
+                        onPressed: () {
+                          context.read<CartBloc>().add(
+                                UpdateItemQuantity(
+                                  cartItemId: item.id,
+                                  quantity: item.quantity + 1,
+                                ),
+                              );
+                        },
+                        icon: const Icon(Icons.add_circle_outline),
+                        iconSize: 24,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              // Prix ligne
-              Text(
-                _formatPrice(item.lineTotal),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+            ),
+            const SizedBox(width: 12),
+            // Prix ligne
+            Text(
+              _formatPrice(item.lineTotal),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
