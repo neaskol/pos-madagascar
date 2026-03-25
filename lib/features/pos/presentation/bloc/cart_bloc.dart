@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/entities/cart_item.dart';
+import '../../domain/entities/discount.dart';
+import '../../domain/entities/tax.dart';
 
 // Events
 abstract class CartEvent extends Equatable {
@@ -71,6 +73,59 @@ class ClearCart extends CartEvent {
   const ClearCart();
 }
 
+class ApplyDiscountToItem extends CartEvent {
+  final String cartItemId;
+  final Discount discount;
+
+  const ApplyDiscountToItem({
+    required this.cartItemId,
+    required this.discount,
+  });
+
+  @override
+  List<Object?> get props => [cartItemId, discount];
+}
+
+class RemoveDiscountFromItem extends CartEvent {
+  final String cartItemId;
+  final Discount discount;
+
+  const RemoveDiscountFromItem({
+    required this.cartItemId,
+    required this.discount,
+  });
+
+  @override
+  List<Object?> get props => [cartItemId, discount];
+}
+
+class ApplyDiscountToCart extends CartEvent {
+  final Discount discount;
+
+  const ApplyDiscountToCart(this.discount);
+
+  @override
+  List<Object?> get props => [discount];
+}
+
+class RemoveDiscountFromCart extends CartEvent {
+  final Discount discount;
+
+  const RemoveDiscountFromCart(this.discount);
+
+  @override
+  List<Object?> get props => [discount];
+}
+
+class SetCartTaxes extends CartEvent {
+  final List<Tax> taxes;
+
+  const SetCartTaxes(this.taxes);
+
+  @override
+  List<Object?> get props => [taxes];
+}
+
 // States
 abstract class CartState extends Equatable {
   const CartState();
@@ -85,34 +140,79 @@ class CartEmpty extends CartState {
 
 class CartLoaded extends CartState {
   final List<CartItem> items;
+  final List<Discount> cartDiscounts; // Remises appliquées au panier entier
+  final List<Tax> cartTaxes; // Taxes par défaut du magasin
 
-  const CartLoaded(this.items);
+  const CartLoaded(
+    this.items, {
+    this.cartDiscounts = const [],
+    this.cartTaxes = const [],
+  });
 
-  /// Calcule le sous-total (somme des lignes)
-  int get subtotal {
-    return items.fold(0, (sum, item) => sum + item.lineTotal);
+  /// Calcule le sous-total brut (somme prix × quantité, avant remises)
+  int get grossSubtotal {
+    return items.fold(0, (sum, item) => sum + item.subtotal);
   }
 
-  /// Calcule le montant total des taxes
+  /// Calcule le total des remises par item
+  int get itemDiscountsTotal {
+    return items.fold(0, (sum, item) => sum + item.totalDiscountAmount);
+  }
+
+  /// Calcule le sous-total après remises item (avant remises panier)
+  int get subtotalAfterItemDiscounts {
+    return grossSubtotal - itemDiscountsTotal;
+  }
+
+  /// Calcule le montant des remises panier
+  int get cartDiscountAmount {
+    if (cartDiscounts.isEmpty) return 0;
+    final base = subtotalAfterItemDiscounts;
+    return base - applyMultipleDiscounts(base, cartDiscounts);
+  }
+
+  /// Sous-total après toutes les remises (items + panier)
+  int get subtotalAfterAllDiscounts {
+    return subtotalAfterItemDiscounts - cartDiscountAmount;
+  }
+
+  /// Calcule le montant total des taxes (sur items + panier)
   int get totalTaxAmount {
-    return items.fold(0, (sum, item) => sum + item.taxAmount);
-  }
+    // Taxes on items (already calculated in CartItem)
+    final itemTaxes = items.fold(0, (sum, item) => sum + item.totalTaxAmount);
 
-  /// Calcule le montant total des remises
-  int get totalDiscountAmount {
-    return items.fold(0, (sum, item) => sum + item.discountAmount);
+    // If there are cart-level taxes, apply them to the subtotal after discounts
+    // For now, taxes are mainly per-item, so we rely on CartItem.totalTaxAmount
+    return itemTaxes;
   }
 
   /// Calcule le total final
   int get total {
-    return subtotal; // Pour l'instant, simple somme des lignes
+    return subtotalAfterAllDiscounts + totalTaxAmount;
   }
 
   /// Nombre total d'items
   int get itemCount => items.length;
 
+  /// Total de toutes les remises (items + panier)
+  int get totalDiscountAmount {
+    return itemDiscountsTotal + cartDiscountAmount;
+  }
+
+  CartLoaded copyWith({
+    List<CartItem>? items,
+    List<Discount>? cartDiscounts,
+    List<Tax>? cartTaxes,
+  }) {
+    return CartLoaded(
+      items ?? this.items,
+      cartDiscounts: cartDiscounts ?? this.cartDiscounts,
+      cartTaxes: cartTaxes ?? this.cartTaxes,
+    );
+  }
+
   @override
-  List<Object?> get props => [items];
+  List<Object?> get props => [items, cartDiscounts, cartTaxes];
 }
 
 // BLoC
@@ -124,6 +224,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<RemoveItemFromCart>(_onRemoveItemFromCart);
     on<UpdateItemQuantity>(_onUpdateItemQuantity);
     on<ClearCart>(_onClearCart);
+    on<ApplyDiscountToItem>(_onApplyDiscountToItem);
+    on<RemoveDiscountFromItem>(_onRemoveDiscountFromItem);
+    on<ApplyDiscountToCart>(_onApplyDiscountToCart);
+    on<RemoveDiscountFromCart>(_onRemoveDiscountFromCart);
+    on<SetCartTaxes>(_onSetCartTaxes);
   }
 
   void _onAddItemToCart(AddItemToCart event, Emitter<CartState> emit) {
@@ -205,6 +310,77 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _onClearCart(ClearCart event, Emitter<CartState> emit) {
     emit(const CartEmpty());
+  }
+
+  void _onApplyDiscountToItem(
+      ApplyDiscountToItem event, Emitter<CartState> emit) {
+    final currentState = state;
+    if (currentState is CartLoaded) {
+      final updatedItems = currentState.items.map((item) {
+        if (item.id == event.cartItemId) {
+          final updatedDiscounts = [...item.discounts, event.discount];
+          return item.copyWith(discounts: updatedDiscounts);
+        }
+        return item;
+      }).toList();
+
+      emit(currentState.copyWith(items: updatedItems));
+    }
+  }
+
+  void _onRemoveDiscountFromItem(
+      RemoveDiscountFromItem event, Emitter<CartState> emit) {
+    final currentState = state;
+    if (currentState is CartLoaded) {
+      final updatedItems = currentState.items.map((item) {
+        if (item.id == event.cartItemId) {
+          final updatedDiscounts =
+              item.discounts.where((d) => d != event.discount).toList();
+          return item.copyWith(discounts: updatedDiscounts);
+        }
+        return item;
+      }).toList();
+
+      emit(currentState.copyWith(items: updatedItems));
+    }
+  }
+
+  void _onApplyDiscountToCart(
+      ApplyDiscountToCart event, Emitter<CartState> emit) {
+    final currentState = state;
+    if (currentState is CartLoaded) {
+      final updatedDiscounts = [...currentState.cartDiscounts, event.discount];
+      emit(currentState.copyWith(cartDiscounts: updatedDiscounts));
+    }
+  }
+
+  void _onRemoveDiscountFromCart(
+      RemoveDiscountFromCart event, Emitter<CartState> emit) {
+    final currentState = state;
+    if (currentState is CartLoaded) {
+      final updatedDiscounts = currentState.cartDiscounts
+          .where((d) => d != event.discount)
+          .toList();
+      emit(currentState.copyWith(cartDiscounts: updatedDiscounts));
+    }
+  }
+
+  void _onSetCartTaxes(SetCartTaxes event, Emitter<CartState> emit) {
+    final currentState = state;
+    if (currentState is CartLoaded) {
+      // Apply taxes to all items
+      final updatedItems = currentState.items.map((item) {
+        return item.copyWith(taxes: event.taxes);
+      }).toList();
+
+      emit(currentState.copyWith(
+        items: updatedItems,
+        cartTaxes: event.taxes,
+      ));
+    } else if (currentState is CartEmpty) {
+      // Store taxes for when items are added
+      emit(CartLoaded(const [], cartTaxes: event.taxes));
+    }
   }
 
   /// Compare deux maps de modifiers pour déterminer si elles sont égales

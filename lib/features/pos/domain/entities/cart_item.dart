@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'discount.dart';
+import 'tax.dart';
 
 /// Entité représentant un item dans le panier de la caisse
 class CartItem extends Equatable {
@@ -9,8 +11,8 @@ class CartItem extends Equatable {
   final int unitPrice; // Prix unitaire en Ariary (int)
   final int cost; // Coût en Ariary
   final double quantity; // Quantité (peut être décimale pour les items au poids)
-  final int discountAmount; // Remise en Ariary
-  final int taxAmount; // Taxe en Ariary
+  final List<Discount> discounts; // Remises appliquées à cet item
+  final List<Tax> taxes; // Taxes appliquées à cet item
   final Map<String, dynamic>? modifiers; // Modifiers sélectionnés
   final String? imageUrl;
 
@@ -22,16 +24,35 @@ class CartItem extends Equatable {
     required this.unitPrice,
     required this.cost,
     this.quantity = 1.0,
-    this.discountAmount = 0,
-    this.taxAmount = 0,
+    this.discounts = const [],
+    this.taxes = const [],
     this.modifiers,
     this.imageUrl,
   });
 
+  /// Calcule le subtotal de la ligne (quantité × prix)
+  int get subtotal {
+    return (quantity * unitPrice).round();
+  }
+
+  /// Calcule le montant total des remises
+  int get totalDiscountAmount {
+    if (discounts.isEmpty) return 0;
+    final basePrice = subtotal;
+    return basePrice - applyMultipleDiscounts(basePrice, discounts);
+  }
+
+  /// Calcule le montant total des taxes
+  int get totalTaxAmount {
+    if (taxes.isEmpty) return 0;
+    // Taxes apply to price after discounts
+    final priceAfterDiscount = subtotal - totalDiscountAmount;
+    return calculateTotalTaxAmount(priceAfterDiscount, taxes);
+  }
+
   /// Calcule le total de la ligne (quantité × prix - remise + taxe)
   int get lineTotal {
-    final subtotal = (quantity * unitPrice).round();
-    return subtotal - discountAmount + taxAmount;
+    return subtotal - totalDiscountAmount + totalTaxAmount;
   }
 
   /// Copie avec modifications
@@ -43,8 +64,8 @@ class CartItem extends Equatable {
     int? unitPrice,
     int? cost,
     double? quantity,
-    int? discountAmount,
-    int? taxAmount,
+    List<Discount>? discounts,
+    List<Tax>? taxes,
     Map<String, dynamic>? modifiers,
     String? imageUrl,
   }) {
@@ -56,8 +77,8 @@ class CartItem extends Equatable {
       unitPrice: unitPrice ?? this.unitPrice,
       cost: cost ?? this.cost,
       quantity: quantity ?? this.quantity,
-      discountAmount: discountAmount ?? this.discountAmount,
-      taxAmount: taxAmount ?? this.taxAmount,
+      discounts: discounts ?? this.discounts,
+      taxes: taxes ?? this.taxes,
       modifiers: modifiers ?? this.modifiers,
       imageUrl: imageUrl ?? this.imageUrl,
     );
@@ -72,8 +93,8 @@ class CartItem extends Equatable {
         unitPrice,
         cost,
         quantity,
-        discountAmount,
-        taxAmount,
+        discounts,
+        taxes,
         modifiers,
         imageUrl,
       ];

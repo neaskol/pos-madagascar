@@ -66,7 +66,7 @@ class CartPanel extends StatelessWidget {
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          _formatPrice(state.subtotal),
+                          _formatPrice(state.grossSubtotal),
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -110,9 +110,9 @@ class CartPanel extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => PaymentScreen(
                                 items: state.items,
-                                subtotal: state.subtotal,
-                                taxAmount: 0, // TODO: calcul taxes
-                                discountAmount: 0, // TODO: remises
+                                subtotal: state.subtotalAfterAllDiscounts,
+                                taxAmount: state.totalTaxAmount,
+                                discountAmount: state.totalDiscountAmount,
                                 total: state.total,
                               ),
                             ),
