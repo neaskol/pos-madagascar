@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../domain/entities/cart_item.dart';
 import '../../domain/entities/discount.dart';
 import '../../domain/entities/tax.dart';
+import '../../domain/repositories/tax_repository.dart';
 
 // Events
 abstract class CartEvent extends Equatable {
@@ -126,6 +127,15 @@ class SetCartTaxes extends CartEvent {
   List<Object?> get props => [taxes];
 }
 
+class InitializeCart extends CartEvent {
+  final String storeId;
+
+  const InitializeCart(this.storeId);
+
+  @override
+  List<Object?> get props => [storeId];
+}
+
 // States
 abstract class CartState extends Equatable {
   const CartState();
@@ -218,8 +228,12 @@ class CartLoaded extends CartState {
 // BLoC
 class CartBloc extends Bloc<CartEvent, CartState> {
   final Uuid _uuid = const Uuid();
+  final TaxRepository? _taxRepository;
 
-  CartBloc() : super(const CartEmpty()) {
+  CartBloc({TaxRepository? taxRepository})
+      : _taxRepository = taxRepository,
+        super(const CartEmpty()) {
+    on<InitializeCart>(_onInitializeCart);
     on<AddItemToCart>(_onAddItemToCart);
     on<RemoveItemFromCart>(_onRemoveItemFromCart);
     on<UpdateItemQuantity>(_onUpdateItemQuantity);
@@ -231,8 +245,53 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<SetCartTaxes>(_onSetCartTaxes);
   }
 
-  void _onAddItemToCart(AddItemToCart event, Emitter<CartState> emit) {
+  Future<void> _onInitializeCart(
+      InitializeCart event, Emitter<CartState> emit) async {
+    final repository = _taxRepository;
+    if (repository == null) return;
+
+    try {
+      // Load default tax for the store
+      final defaultTax = await repository.getDefaultTax(event.storeId);
+
+      if (defaultTax != null) {
+        // Set the default tax to the cart
+        add(SetCartTaxes([defaultTax]));
+      }
+    } catch (e) {
+      // Silently fail - taxes are optional
+      // Could log this error in production
+    }
+  }
+
+  Future<void> _onAddItemToCart(
+      AddItemToCart event, Emitter<CartState> emit) async {
     final currentState = state;
+
+    // Determine taxes for this item
+    List<Tax> itemTaxes = [];
+    final repository = _taxRepository;
+    if (repository != null) {
+      try {
+        // Try to get item-specific taxes
+        final specificTaxes = await repository.getTaxesForItem(event.itemId);
+        if (specificTaxes.isNotEmpty) {
+          itemTaxes = specificTaxes;
+        } else if (currentState is CartLoaded) {
+          // Fall back to cart default taxes
+          itemTaxes = currentState.cartTaxes;
+        }
+      } catch (e) {
+        // Silently fail, use cart default taxes if available
+        if (currentState is CartLoaded) {
+          itemTaxes = currentState.cartTaxes;
+        }
+      }
+    } else if (currentState is CartLoaded) {
+      // No repository, use cart default taxes
+      itemTaxes = currentState.cartTaxes;
+    }
+
     final cartItem = CartItem(
       id: _uuid.v4(),
       itemId: event.itemId,
@@ -243,6 +302,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       quantity: event.quantity,
       imageUrl: event.imageUrl,
       modifiers: event.modifiers,
+      taxes: itemTaxes,
     );
 
     if (currentState is CartEmpty) {
@@ -263,10 +323,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         updatedItems[existingIndex] = existingItem.copyWith(
           quantity: existingItem.quantity + event.quantity,
         );
-        emit(CartLoaded(updatedItems));
+        emit(currentState.copyWith(items: updatedItems));
       } else {
         // Nouvel item : ajouter à la liste
-        emit(CartLoaded([...currentState.items, cartItem]));
+        emit(currentState.copyWith(items: [...currentState.items, cartItem]));
       }
     }
   }

@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import '../../domain/entities/sale.dart';
+import '../../domain/entities/discount.dart';
 import '../../data/services/receipt_pdf_service.dart';
 
 /// Écran d'affichage du reçu - Phase 2.4
@@ -188,10 +189,12 @@ class ReceiptScreen extends StatelessWidget {
   }
 
   Widget _buildItemRow(dynamic item) {
-    // CartItem structure: name, quantity, unitPrice, lineTotal
+    // CartItem structure: name, quantity, unitPrice, lineTotal, discounts, taxes
     final name = item.name;
     final quantity = item.quantity;
     final unitPrice = item.unitPrice;
+    final subtotal = item.subtotal;
+    final discountAmount = item.totalDiscountAmount;
     final total = item.lineTotal;
 
     return Padding(
@@ -228,26 +231,106 @@ class ReceiptScreen extends StatelessWidget {
               color: Colors.black54,
             ),
           ),
+          // Show item discounts if any
+          if (item.discounts != null && item.discounts.isNotEmpty)
+            ...item.discounts.map((discount) => Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '  🏷️ ${discount.name ?? "Remise"} (${discount.type == DiscountType.percentage ? "${discount.value.toStringAsFixed(0)}%" : _formatPrice(discount.value.toInt())})',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.red[700],
+                        ),
+                      ),
+                      Text(
+                        '-${_formatPrice(discount.calculateAmount(subtotal))}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.red[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+          // Show item taxes if any
+          if (item.taxes != null && item.taxes.isNotEmpty)
+            ...item.taxes.map((tax) => Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '  ${tax.name} (${tax.rate.toStringAsFixed(1)}%)',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      Text(
+                        '+${_formatPrice(tax.calculateTaxAmount(unitPrice, subtotal - discountAmount))}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
         ],
       ),
     );
   }
 
   Widget _buildTotals(BuildContext context) {
+    // Calculate detailed breakdown
+    final grossSubtotal =
+        sale.items.fold(0, (sum, item) => sum + item.subtotal);
+    final itemDiscountsTotal =
+        sale.items.fold(0, (sum, item) => sum + item.totalDiscountAmount);
+    final cartDiscountAmount = sale.discountAmount - itemDiscountsTotal;
+
     return Column(
       children: [
-        _buildTotalRow('Sous-total', sale.subtotal, false),
+        // Gross subtotal
+        _buildTotalRow('Sous-total', grossSubtotal, false),
+
+        // Item discounts (if any)
+        if (itemDiscountsTotal > 0)
+          _buildTotalRow(
+            'Remises articles',
+            -itemDiscountsTotal,
+            false,
+            color: Colors.red[700],
+          ),
+
+        // Cart discount (if any)
+        if (cartDiscountAmount > 0)
+          _buildTotalRow(
+            'Remise panier',
+            -cartDiscountAmount,
+            false,
+            color: Colors.red[700],
+          ),
+
+        // Taxes
         if (sale.taxAmount > 0)
           _buildTotalRow('Taxes', sale.taxAmount, false),
-        if (sale.discountAmount > 0)
-          _buildTotalRow('Remise', -sale.discountAmount, false),
+
         const SizedBox(height: 8),
+        const Divider(),
+        const SizedBox(height: 8),
+
+        // Final total
         _buildTotalRow('TOTAL', sale.total, true),
       ],
     );
   }
 
-  Widget _buildTotalRow(String label, int amount, bool isTotal) {
+  Widget _buildTotalRow(String label, int amount, bool isTotal,
+      {Color? color}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -258,6 +341,7 @@ class ReceiptScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 18 : 15,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
+              color: color,
             ),
           ),
           Text(
@@ -265,7 +349,7 @@ class ReceiptScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 20 : 15,
               fontWeight: isTotal ? FontWeight.bold : FontWeight.w500,
-              color: isTotal ? Colors.green[900] : Colors.black87,
+              color: color ?? (isTotal ? Colors.green[900] : Colors.black87),
             ),
           ),
         ],

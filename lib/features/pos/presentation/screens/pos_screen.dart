@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../bloc/cart_bloc.dart';
 import '../widgets/product_grid.dart';
 import '../widgets/cart_panel.dart';
+import '../../data/repositories/tax_repository_impl.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 
 /// Écran principal de la caisse (POS)
 /// Layout: Produits à gauche (ou en haut), Panier à droite (ou en bas)
@@ -11,8 +15,20 @@ class PosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authState = context.read<AuthBloc>().state;
+    final taxRepository = TaxRepositoryImpl(Supabase.instance.client);
+
     return BlocProvider(
-      create: (context) => CartBloc(),
+      create: (context) {
+        final bloc = CartBloc(taxRepository: taxRepository);
+
+        // Auto-load taxes if store is available
+        if (authState is AuthAuthenticatedWithStore) {
+          bloc.add(InitializeCart(authState.storeId));
+        }
+
+        return bloc;
+      },
       child: const _PosScreenContent(),
     );
   }
