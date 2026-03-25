@@ -49,7 +49,17 @@
 
 ---
 
-## Terminé
+## Terminé (aujourd'hui, 2026-03-25)
+- [x] Génération des fichiers de localisation (flutter gen-l10n)
+- [x] Correction de 38 erreurs de compilation
+- [x] Ajout de la méthode upsertUser dans UserDao
+- [x] Correction des imports AppLocalizations dans tous les écrans auth
+- [x] Correction des types User vs UsersTableData
+- [x] Correction des types Drift Companions (Value<T> vs T)
+- [x] Suppression du test par défaut invalide
+- [x] Projet compile sans erreur (13 infos de style uniquement)
+
+## Terminé (précédemment)
 - [x] Lecture de toute la documentation
 - [x] Création du projet Flutter
 - [x] Structure de dossiers créée

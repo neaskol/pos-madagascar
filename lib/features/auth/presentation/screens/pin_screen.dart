@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -16,8 +16,8 @@ class PinScreen extends StatefulWidget {
 }
 
 class _PinScreenState extends State<PinScreen> {
-  List<UsersTableData> _employees = [];
-  UsersTableData? _selectedEmployee;
+  List<User> _employees = [];
+  User? _selectedEmployee;
   String _pin = '';
 
   @override
@@ -63,7 +63,7 @@ class _PinScreenState extends State<PinScreen> {
     }
   }
 
-  void _selectEmployee(UsersTableData employee) {
+  void _selectEmployee(User employee) {
     setState(() {
       _selectedEmployee = employee;
       _pin = '';
@@ -187,7 +187,7 @@ class _PinScreenState extends State<PinScreen> {
     );
   }
 
-  Widget _buildEmployeeCard(UsersTableData employee, bool isDark) {
+  Widget _buildEmployeeCard(User employee, bool isDark) {
     final initials = _getInitials(employee.name);
     final avatarColor = _getAvatarColor(employee.id);
 

@@ -1,4 +1,6 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide User;
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase_auth;
+import 'package:drift/drift.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/data/local/daos/user_dao.dart';
 import '../../../../core/data/local/daos/store_dao.dart';
@@ -17,7 +19,7 @@ class AuthRepository {
         _storeDao = storeDao;
 
   /// Connexion avec email et mot de passe
-  Future<User?> signInWithEmail({
+  Future<supabase_auth.User?> signInWithEmail({
     required String email,
     required String password,
   }) async {
@@ -42,14 +44,15 @@ class AuthRepository {
             storeId: userRecord['store_id'],
             name: userRecord['name'],
             email: userRecord['email'],
-            phone: userRecord['phone'],
+            phone: Value(userRecord['phone']),
             role: userRecord['role'],
-            pinHash: userRecord['pin_hash'] ?? '',
-            emailVerified: userRecord['email_verified'] ?? false,
-            active: userRecord['active'] ?? true,
-            synced: true,
+            pinHash: Value(userRecord['pin_hash']),
+            emailVerified: Value(userRecord['email_verified'] == true ? 1 : 0),
+            active: Value(userRecord['active'] == true ? 1 : 0),
+            synced: const Value(1),
+            updatedAt: DateTime.now().millisecondsSinceEpoch,
           );
-          await _userDao.insertUser(user);
+          await _userDao.upsertUser(user);
         }
 
         return response.user;
@@ -61,7 +64,7 @@ class AuthRepository {
   }
 
   /// Inscription avec email et mot de passe
-  Future<User?> signUpWithEmail({
+  Future<supabase_auth.User?> signUpWithEmail({
     required String email,
     required String password,
     required String name,
@@ -81,14 +84,14 @@ class AuthRepository {
   }
 
   /// Connexion avec PIN (offline-first)
-  Future<UsersTableData?> signInWithPin({
+  Future<User?> signInWithPin({
     required String userId,
     required String pin,
   }) async {
     try {
       // Vérifier localement d'abord
-      final user = await _userDao.getUserById(userId);
-      if (user != null && _verifyPin(pin, user.pinHash)) {
+      final user = await _userDao.getUserById(userId).getSingleOrNull();
+      if (user != null && user.pinHash != null && _verifyPin(pin, user.pinHash!)) {
         return user;
       }
 
@@ -100,22 +103,25 @@ class AuthRepository {
             .eq('id', userId)
             .maybeSingle();
 
-        if (userRecord != null && _verifyPin(pin, userRecord['pin_hash'])) {
+        if (userRecord != null &&
+            userRecord['pin_hash'] != null &&
+            _verifyPin(pin, userRecord['pin_hash'])) {
           // Mettre à jour localement
           final userCompanion = UsersCompanion.insert(
             id: userRecord['id'],
             storeId: userRecord['store_id'],
             name: userRecord['name'],
             email: userRecord['email'],
-            phone: userRecord['phone'],
+            phone: Value(userRecord['phone']),
             role: userRecord['role'],
-            pinHash: userRecord['pin_hash'] ?? '',
-            emailVerified: userRecord['email_verified'] ?? false,
-            active: userRecord['active'] ?? true,
-            synced: true,
+            pinHash: Value(userRecord['pin_hash']),
+            emailVerified: Value(userRecord['email_verified'] == true ? 1 : 0),
+            active: Value(userRecord['active'] == true ? 1 : 0),
+            synced: const Value(1),
+            updatedAt: DateTime.now().millisecondsSinceEpoch,
           );
           await _userDao.insertUser(userCompanion);
-          return await _userDao.getUserById(userId);
+          return await _userDao.getUserById(userId).getSingleOrNull();
         }
       }
 
@@ -131,15 +137,15 @@ class AuthRepository {
   }
 
   /// Récupérer l'utilisateur actuellement connecté
-  Future<UsersTableData?> getCurrentUser() async {
+  Future<User?> getCurrentUser() async {
     final authUser = _supabase.auth.currentUser;
     if (authUser == null) return null;
 
-    return await _userDao.getUserById(authUser.id);
+    return await _userDao.getUserById(authUser.id).getSingleOrNull();
   }
 
   /// Stream de l'état d'authentification
-  Stream<AuthState> get authStateChanges => _supabase.auth.onAuthStateChange;
+  Stream<supabase_auth.AuthState> get authStateChanges => _supabase.auth.onAuthStateChange;
 
   /// Créer le magasin initial lors du setup wizard
   Future<String> createInitialStore({
@@ -165,12 +171,13 @@ class AuthRepository {
       final store = StoresCompanion.insert(
         id: storeRecord['id'],
         name: name,
-        address: address ?? '',
-        phone: phone ?? '',
-        logoUrl: logoUrl ?? '',
-        currency: currency,
-        timezone: timezone,
-        synced: true,
+        address: Value(address),
+        phone: Value(phone),
+        logoUrl: Value(logoUrl),
+        currency: Value(currency),
+        timezone: Value(timezone),
+        synced: const Value(1),
+        updatedAt: DateTime.now().millisecondsSinceEpoch,
       );
       await _storeDao.insertStore(store);
 
@@ -183,13 +190,15 @@ class AuthRepository {
         }).eq('id', currentUser.id);
 
         // Mettre à jour localement
-        final user = await _userDao.getUserById(currentUser.id);
+        final user = await _userDao.getUserById(currentUser.id).getSingleOrNull();
         if (user != null) {
           await _userDao.updateUser(
-            user.copyWith(
-              storeId: storeRecord['id'],
-              role: 'OWNER',
-              synced: false,
+            UsersCompanion(
+              id: Value(user.id),
+              storeId: Value(storeRecord['id']),
+              role: const Value('OWNER'),
+              synced: const Value(0),
+              updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
             ),
           );
         }
@@ -234,10 +243,10 @@ class AuthRepository {
   }
 
   /// Récupérer tous les employés d'un magasin (pour l'écran PIN)
-  Future<List<UsersTableData>> getStoreEmployees(String storeId) async {
+  Future<List<User>> getStoreEmployees(String storeId) async {
     try {
       // Essayer localement d'abord
-      final localUsers = await _userDao.getUsersByStore(storeId);
+      final localUsers = await _userDao.getUsersByStore(storeId).get();
       if (localUsers.isNotEmpty) {
         return localUsers;
       }
@@ -247,7 +256,7 @@ class AuthRepository {
           .from('users')
           .select()
           .eq('store_id', storeId)
-          .eq('active', true);
+          .eq('active', true) as List<dynamic>;
 
       // Sauvegarder localement
       for (final record in usersRecords) {
@@ -256,20 +265,21 @@ class AuthRepository {
           storeId: record['store_id'],
           name: record['name'],
           email: record['email'],
-          phone: record['phone'],
+          phone: Value(record['phone']),
           role: record['role'],
-          pinHash: record['pin_hash'] ?? '',
-          emailVerified: record['email_verified'] ?? false,
-          active: record['active'] ?? true,
-          synced: true,
+          pinHash: Value(record['pin_hash']),
+          emailVerified: Value(record['email_verified'] == true ? 1 : 0),
+          active: Value(record['active'] == true ? 1 : 0),
+          synced: const Value(1),
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
         );
         await _userDao.insertUser(user);
       }
 
-      return await _userDao.getUsersByStore(storeId);
+      return await _userDao.getUsersByStore(storeId).get();
     } catch (e) {
       // En cas d'erreur (offline), retourner les données locales
-      return await _userDao.getUsersByStore(storeId);
+      return await _userDao.getUsersByStore(storeId).get();
     }
   }
 }

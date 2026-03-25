@@ -29,7 +29,7 @@ class AuthAuthenticatedNoStore extends AuthState {
 
 /// Authentifié avec magasin (redirection vers PIN ou app)
 class AuthAuthenticatedWithStore extends AuthState {
-  final UsersTableData user;
+  final User user;
   final String storeId;
 
   const AuthAuthenticatedWithStore({
@@ -43,7 +43,7 @@ class AuthAuthenticatedWithStore extends AuthState {
 
 /// Employés du magasin chargés (pour écran PIN)
 class AuthStoreEmployeesLoaded extends AuthState {
-  final List<UsersTableData> employees;
+  final List<User> employees;
   final String storeId;
 
   const AuthStoreEmployeesLoaded({
@@ -57,7 +57,7 @@ class AuthStoreEmployeesLoaded extends AuthState {
 
 /// Session PIN active (utilisateur sélectionné via PIN)
 class AuthPinSessionActive extends AuthState {
-  final UsersTableData user;
+  final User user;
 
   const AuthPinSessionActive({required this.user});
 

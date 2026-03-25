@@ -24,6 +24,10 @@ class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
   Future<int> insertUser(UsersCompanion user) =>
       into(users).insert(user);
 
+  /// Insère ou met à jour un utilisateur (upsert)
+  Future<int> upsertUser(UsersCompanion user) =>
+      into(users).insertOnConflictUpdate(user);
+
   /// Met à jour un utilisateur existant et marque comme non synchronisé
   Future<bool> updateUser(UsersCompanion user) async {
     final rowsAffected = await (update(users)
