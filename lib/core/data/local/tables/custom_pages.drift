@@ -1,0 +1,46 @@
+-- Phase 3.7 — Custom Product Pages
+-- Tables Drift pour le support offline des pages personnalisées
+
+-- Pages personnalisées
+CREATE TABLE custom_product_pages (
+  id TEXT NOT NULL PRIMARY KEY,
+  store_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  is_default INTEGER NOT NULL DEFAULT 0, -- 0 = false, 1 = true
+  created_by TEXT,
+  created_at INTEGER NOT NULL, -- Unix timestamp
+  updated_at INTEGER NOT NULL,
+  synced INTEGER NOT NULL DEFAULT 0 -- 0 = false, 1 = true
+);
+
+-- Items placés sur une page personnalisée
+CREATE TABLE custom_page_items (
+  id TEXT NOT NULL PRIMARY KEY,
+  page_id TEXT NOT NULL,
+  item_id TEXT NOT NULL,
+  position INTEGER NOT NULL,
+  created_at INTEGER NOT NULL,
+  synced INTEGER NOT NULL DEFAULT 0
+);
+
+-- Grilles de catégories placées sur une page personnalisée
+CREATE TABLE custom_page_category_grids (
+  id TEXT NOT NULL PRIMARY KEY,
+  page_id TEXT NOT NULL,
+  category_id TEXT NOT NULL,
+  position INTEGER NOT NULL,
+  created_at INTEGER NOT NULL,
+  synced INTEGER NOT NULL DEFAULT 0
+);
+
+-- Indexes pour performance
+CREATE INDEX idx_custom_pages_store ON custom_product_pages(store_id);
+CREATE INDEX idx_custom_pages_sort ON custom_product_pages(store_id, sort_order);
+CREATE INDEX idx_custom_page_items_page ON custom_page_items(page_id);
+CREATE INDEX idx_custom_page_items_position ON custom_page_items(page_id, position);
+CREATE INDEX idx_custom_page_category_grids_page ON custom_page_category_grids(page_id);
+
+-- Contraintes uniques
+CREATE UNIQUE INDEX unique_item_per_page ON custom_page_items(page_id, item_id);
+CREATE UNIQUE INDEX unique_category_per_page ON custom_page_category_grids(page_id, category_id);

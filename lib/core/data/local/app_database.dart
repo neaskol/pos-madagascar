@@ -12,6 +12,7 @@ import 'daos/category_dao.dart';
 import 'daos/item_dao.dart';
 import 'daos/item_variant_dao.dart';
 import 'daos/modifier_dao.dart';
+import 'daos/custom_page_dao.dart';
 
 // Export DAOs for use in repositories
 export 'daos/store_dao.dart';
@@ -21,6 +22,7 @@ export 'daos/category_dao.dart';
 export 'daos/item_dao.dart';
 export 'daos/item_variant_dao.dart';
 export 'daos/modifier_dao.dart';
+export 'daos/custom_page_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -35,6 +37,7 @@ part 'app_database.g.dart';
     'tables/modifiers.drift',
     'tables/modifier_options.drift',
     'tables/item_modifiers.drift',
+    'tables/custom_pages.drift',
   },
   daos: [
     StoreDao,
@@ -44,6 +47,7 @@ part 'app_database.g.dart';
     ItemDao,
     ItemVariantDao,
     ModifierDao,
+    CustomPageDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
