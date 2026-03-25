@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -71,10 +72,11 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   }
 
   void _finishSetup() {
+    final l10n = AppLocalizations.of(context)!;
     if (_storeNameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Veuillez entrer le nom du magasin'),
+        SnackBar(
+          content: Text(l10n.setupStoreNameRequired),
         ),
       );
       return;
@@ -119,7 +121,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
             );
           } else if (state is AuthStoreCreated ||
               state is AuthAuthenticatedWithStore) {
-            Navigator.of(context).pushReplacementNamed('/pin');
+            context.go('/pin');
           }
         },
         child: SafeArea(
@@ -157,7 +159,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
               // Step indicator
               Text(
-                'Étape ${_currentStep + 1} / 4',
+                l10n.setupStepIndicator(_currentStep + 1, 4),
                 style: TextStyle(
                   fontSize: 13,
                   color: isDark

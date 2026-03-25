@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/cart_bloc.dart';
 import '../widgets/product_grid.dart';
 import '../widgets/cart_panel.dart';
@@ -44,14 +45,16 @@ class _PosScreenContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.width >= 600;
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Caisse'),
+        title: Text(l10n.posScreenTitle),
         actions: [
           // Bouton scan barcode
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
-            tooltip: 'Scanner code-barres',
+            tooltip: l10n.scanBarcode,
             onPressed: () {
               _openBarcodeScanner(context);
             },
@@ -60,10 +63,9 @@ class _PosScreenContent extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.receipt_long),
             onPressed: () {
-              // TODO: Naviguer vers liste des tickets ouverts
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('À venir'),
+                SnackBar(
+                  content: Text(l10n.comingSoon),
                 ),
               );
             },
@@ -76,23 +78,22 @@ class _PosScreenContent extends StatelessWidget {
                   _showClearCartDialog(context);
                   break;
                 case 'save':
-                  // TODO: Sauvegarder ticket
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('À venir'),
+                    SnackBar(
+                      content: Text(l10n.comingSoon),
                     ),
                   );
                   break;
               }
             },
-            itemBuilder: (context) => const [
+            itemBuilder: (context) => [
               PopupMenuItem(
                 value: 'clear',
-                child: Text('Vider le ticket'),
+                child: Text(l10n.clearTicket),
               ),
               PopupMenuItem(
                 value: 'save',
-                child: Text('Sauvegarder'),
+                child: Text(l10n.saveTicket),
               ),
             ],
           ),
@@ -142,22 +143,23 @@ class _PosScreenContent extends StatelessWidget {
   }
 
   void _showClearCartDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Vider le ticket'),
-        content: const Text('Êtes-vous sûr de vouloir vider le panier ?'),
+        title: Text(l10n.clearTicket),
+        content: Text(l10n.clearTicketConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () {
               context.read<CartBloc>().add(const ClearCart());
               Navigator.of(dialogContext).pop();
             },
-            child: const Text('Confirmer'),
+            child: Text(l10n.confirm),
           ),
         ],
       ),
@@ -165,6 +167,7 @@ class _PosScreenContent extends StatelessWidget {
   }
 
   Future<void> _openBarcodeScanner(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final String? barcode = await Navigator.of(context).push<String>(
       MaterialPageRoute(
         builder: (context) => const BarcodeScannerScreen(),
@@ -177,7 +180,7 @@ class _PosScreenContent extends StatelessWidget {
     final itemState = context.read<ItemBloc>().state;
 
     if (itemState is! ItemsLoaded) {
-      _showMessage(context, 'Produits non chargés');
+      _showMessage(context, l10n.productsNotLoaded);
       return;
     }
 
@@ -192,7 +195,7 @@ class _PosScreenContent extends StatelessWidget {
     if (product == null) {
       _showMessage(
         context,
-        'Aucun produit trouvé avec le code: $barcode',
+        l10n.productNotFound(barcode),
         isError: true,
       );
       return;
@@ -208,7 +211,7 @@ class _PosScreenContent extends StatelessWidget {
 
     _showMessage(
       context,
-      '${product.name} ajouté au panier',
+      '${product.name} ${l10n.addedToCart}',
       isError: false,
     );
   }

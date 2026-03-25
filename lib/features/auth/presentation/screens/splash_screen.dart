@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -32,13 +33,13 @@ class _SplashScreenState extends State<SplashScreen> {
       listener: (context, state) {
         if (state is AuthUnauthenticated) {
           // Rediriger vers login
-          Navigator.of(context).pushReplacementNamed('/login');
+          context.go('/login');
         } else if (state is AuthAuthenticatedNoStore) {
           // Rediriger vers setup wizard
-          Navigator.of(context).pushReplacementNamed('/setup');
+          context.go('/setup');
         } else if (state is AuthAuthenticatedWithStore) {
           // Rediriger vers écran PIN
-          Navigator.of(context).pushReplacementNamed('/pin');
+          context.go('/pin');
         }
       },
       child: Scaffold(

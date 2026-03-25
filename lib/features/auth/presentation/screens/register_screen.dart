@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -72,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             );
           } else if (state is AuthAuthenticatedNoStore) {
-            Navigator.of(context).pushReplacementNamed('/setup');
+            context.go('/setup');
           }
         },
         builder: (context, state) {
@@ -289,7 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onPressed: isLoading
                               ? null
                               : () {
-                                  Navigator.of(context).pop();
+                                  context.pop();
                                 },
                           child: Text(
                             l10n.registerSignIn,

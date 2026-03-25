@@ -2,11 +2,12 @@
 -- Correspond à la table item_variants dans Supabase
 
 import 'items.drift';
+import 'stores.drift';
 
 CREATE TABLE item_variants (
   id TEXT NOT NULL PRIMARY KEY,
   item_id TEXT NOT NULL REFERENCES items(id) ON DELETE CASCADE,
-  store_id TEXT NOT NULL,
+  store_id TEXT NOT NULL REFERENCES stores(id) ON DELETE CASCADE,
 
   -- Option 1 (ex: Taille)
   option1_name TEXT,

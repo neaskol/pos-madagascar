@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../bloc/cart_bloc.dart';
 import '../screens/payment_screen.dart';
 import '../../domain/entities/cart_item.dart';
@@ -15,6 +16,7 @@ class CartPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         if (state is CartEmpty) {
           return Center(
             child: Column(
@@ -27,7 +29,7 @@ class CartPanel extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Panier vide',
+                  l10n.emptyCart,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -63,9 +65,9 @@ class CartPanel extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'Sous-total',
-                          style: TextStyle(fontSize: 14),
+                        Text(
+                          l10n.subtotal,
+                          style: const TextStyle(fontSize: 14),
                         ),
                         Text(
                           _formatPrice(state.grossSubtotal),
@@ -84,7 +86,7 @@ class CartPanel extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Remises items',
+                            l10n.cartItemDiscounts,
                             style: TextStyle(
                               fontSize: 13,
                               color: Theme.of(context).colorScheme.error,
@@ -110,7 +112,7 @@ class CartPanel extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Remise panier',
+                                l10n.cartDiscount,
                                 style: TextStyle(
                                   fontSize: 13,
                                   color: Theme.of(context).colorScheme.error,
@@ -151,7 +153,7 @@ class CartPanel extends StatelessWidget {
                         );
                       },
                       icon: const Icon(Icons.add, size: 16),
-                      label: const Text('Remise panier'),
+                      label: Text(l10n.cartDiscount),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -167,7 +169,7 @@ class CartPanel extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Taxes',
+                            l10n.cartTaxes,
                             style: TextStyle(
                               fontSize: 13,
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -192,9 +194,9 @@ class CartPanel extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'TOTAL',
-                          style: TextStyle(
+                        Text(
+                          l10n.total,
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -234,9 +236,9 @@ class CartPanel extends StatelessWidget {
                         style: FilledButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.primary,
                         ),
-                        child: const Text(
-                          'PAYER',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.pay,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -279,9 +281,10 @@ class _CartItemTile extends StatelessWidget {
       onDismissed: (direction) {
         HapticFeedback.mediumImpact();
         context.read<CartBloc>().add(RemoveItemFromCart(item.id));
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${item.name} retiré du panier'),
+            content: Text(l10n.cartItemRemoved(item.name)),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -502,15 +505,15 @@ class _CartItemTile extends StatelessWidget {
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           autofocus: true,
-          decoration: const InputDecoration(
-            labelText: 'Quantité',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: AppLocalizations.of(context)!.cartQuantity,
+            border: const OutlineInputBorder(),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Annuler'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -525,7 +528,7 @@ class _CartItemTile extends StatelessWidget {
               }
               Navigator.of(dialogContext).pop();
             },
-            child: const Text('OK'),
+            child: Text(AppLocalizations.of(context)!.ok),
           ),
         ],
       ),

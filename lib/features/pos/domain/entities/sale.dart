@@ -146,6 +146,7 @@ enum PaymentType {
   card,
   mvola,
   orangeMoney,
+  credit, // Vente à crédit - Différenciant #3
   custom,
 }
 

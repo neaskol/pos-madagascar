@@ -64,6 +64,9 @@ class AppLocalizationsMg extends AppLocalizations {
   String get loginCreateAccount => 'Mamorona kaonty';
 
   @override
+  String get loginSignUp => 'Misoratra anarana';
+
+  @override
   String get loginShowPassword => 'Asehoy ny teny miafina';
 
   @override
@@ -95,6 +98,22 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get registerSignIn => 'Miditra';
+
+  @override
+  String get forgotPasswordTitle => 'Hadino ny teny miafina';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Ampidiro ny email-nao ary handefasanay rohy hamerenana ny teny miafinao.';
+
+  @override
+  String get forgotPasswordSubmit => 'Alefaso ny rohy';
+
+  @override
+  String get forgotPasswordEmailSent => 'Email lasa! Jereo ny boaty mailakao.';
+
+  @override
+  String get forgotPasswordBackToLogin => 'Miverina amin\'ny fidirana';
 
   @override
   String get setupTitle => 'Fandrindrana ny magazay';
@@ -166,6 +185,14 @@ class AppLocalizationsMg extends AppLocalizations {
   String get setupBusinessTypeOther => 'Hafa';
 
   @override
+  String setupStepIndicator(int current, int total) {
+    return 'Dingana $current / $total';
+  }
+
+  @override
+  String get setupStoreNameRequired => 'Ampidiro ny anaran\'ny magazay azafady';
+
+  @override
   String get setupPrevious => 'Taloha';
 
   @override
@@ -203,7 +230,7 @@ class AppLocalizationsMg extends AppLocalizations {
   String get errorNetworkFailed => 'Tsy misy connexion internet';
 
   @override
-  String get cancel => 'Hanafoana';
+  String get cancel => 'Aoka ihany';
 
   @override
   String get confirm => 'Hamarino';
@@ -507,6 +534,43 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get addToCart => 'Hampiana ao amin\'ny panier';
+
+  @override
+  String get cartItemDiscounts => 'Fihenam-bidy items';
+
+  @override
+  String get cartDiscount => 'Fihenam-bidy panier';
+
+  @override
+  String get cartTaxes => 'Hetra';
+
+  @override
+  String get cartQuantity => 'Isa';
+
+  @override
+  String cartItemRemoved(String name) {
+    return '$name nesorina tao amin\'ny panier';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get paymentSuccess => 'Fandoavana vita soa aman-tsara';
+
+  @override
+  String receiptNumber(String number) {
+    return 'Resevoka N° $number';
+  }
+
+  @override
+  String get changeDue => 'Vola averina:';
+
+  @override
+  String get newSale => 'Varotra vaovao';
+
+  @override
+  String get viewReceipt => 'Jereo resevoka';
 
   @override
   String get allProducts => 'Vokatra rehetra';

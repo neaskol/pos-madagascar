@@ -1,0 +1,42 @@
+import 'customers.drift';
+
+-- Credits table (offline-first) - Différenciant #3
+CREATE TABLE credits (
+  id TEXT NOT NULL PRIMARY KEY,
+  store_id TEXT NOT NULL,
+  customer_id TEXT NOT NULL,
+  sale_id TEXT, -- Can be null if credit without sale
+  amount_total INTEGER NOT NULL,
+  amount_paid INTEGER NOT NULL DEFAULT 0,
+  amount_remaining INTEGER NOT NULL,
+  due_date INTEGER, -- Unix timestamp (nullable)
+  status TEXT NOT NULL DEFAULT 'pending', -- 'pending', 'partial', 'paid', 'overdue'
+  notes TEXT,
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  created_by TEXT,
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+);
+
+-- Indexes pour performance
+CREATE INDEX idx_credits_store_id ON credits(store_id);
+CREATE INDEX idx_credits_customer_id ON credits(customer_id);
+CREATE INDEX idx_credits_status ON credits(status);
+CREATE INDEX idx_credits_due_date ON credits(due_date);
+CREATE INDEX idx_credits_synced ON credits(synced) WHERE synced = 0;
+
+-- Credit payments table
+CREATE TABLE credit_payments (
+  id TEXT NOT NULL PRIMARY KEY,
+  credit_id TEXT NOT NULL,
+  amount INTEGER NOT NULL,
+  payment_type TEXT NOT NULL, -- 'cash', 'card', 'mvola', 'orange_money', 'other'
+  payment_reference TEXT,
+  notes TEXT,
+  synced INTEGER NOT NULL DEFAULT 0,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL,
+  created_by TEXT,
+  FOREIGN KEY (credit_id) REFERENCES credits(id) ON DELETE CASCADE
+);

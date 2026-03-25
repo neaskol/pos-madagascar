@@ -20,6 +20,7 @@
   "loginButton": "Miditra",
   "loginForgotPassword": "Hadino ny teny miafina?",
   "loginCreateAccount": "Mamorona kaonty",
+  "loginSignUp": "Misoratra anarana",
   "loginShowPassword": "Asehoy ny teny miafina",
   "loginHidePassword": "Afeno ny teny miafina",
 
@@ -32,6 +33,12 @@
   "registerButton": "Mamorona ny kaontiko",
   "registerHaveAccount": "Efa manana kaonty?",
   "registerSignIn": "Miditra",
+
+  "forgotPasswordTitle": "Hadino ny teny miafina",
+  "forgotPasswordDescription": "Ampidiro ny email-nao ary handefasanay rohy hamerenana ny teny miafinao.",
+  "forgotPasswordSubmit": "Alefaso ny rohy",
+  "forgotPasswordEmailSent": "Email lasa! Jereo ny boaty mailakao.",
+  "forgotPasswordBackToLogin": "Miverina amin'ny fidirana",
 
   "setupTitle": "Fandrindrana ny magazay",
   "setupStep1Title": "Fampahalalana momba ny magazay",
@@ -56,6 +63,14 @@
   "setupBusinessTypeFashion": "Boutique / Mode",
   "setupBusinessTypeService": "Serivisy / Salon",
   "setupBusinessTypeOther": "Hafa",
+  "setupStepIndicator": "Dingana {current} / {total}",
+  "@setupStepIndicator": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "setupStoreNameRequired": "Ampidiro ny anaran'ny magazay azafady",
   "setupPrevious": "Taloha",
   "setupNext": "Manaraka",
   "setupFinish": "Vita",
@@ -190,7 +205,28 @@
   "noVariantSelected": "Tsy misy variant voafidy",
   "modifierRequired": "Mila mifidy safidy ilaina ianao",
   "addToCart": "Hampiana ao amin'ny panier",
-  "cancel": "Hanafoana",
+
+  "cartItemDiscounts": "Fihenam-bidy items",
+  "cartDiscount": "Fihenam-bidy panier",
+  "cartTaxes": "Hetra",
+  "cartQuantity": "Isa",
+  "cartItemRemoved": "{name} nesorina tao amin'ny panier",
+  "@cartItemRemoved": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "ok": "OK",
+  "paymentSuccess": "Fandoavana vita soa aman-tsara",
+  "receiptNumber": "Resevoka N° {number}",
+  "@receiptNumber": {
+    "placeholders": {
+      "number": {"type": "String"}
+    }
+  },
+  "changeDue": "Vola averina:",
+  "newSale": "Varotra vaovao",
+  "viewReceipt": "Jereo resevoka",
 
   "allProducts": "Vokatra rehetra",
   "customPages": "Pejy manokana",

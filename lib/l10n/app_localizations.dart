@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Créer un compte'**
   String get loginCreateAccount;
 
+  /// No description provided for @loginSignUp.
+  ///
+  /// In fr, this message translates to:
+  /// **'S\'inscrire'**
+  String get loginSignUp;
+
   /// No description provided for @loginShowPassword.
   ///
   /// In fr, this message translates to:
@@ -265,6 +271,36 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Se connecter'**
   String get registerSignIn;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mot de passe oublié'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrez votre email et nous vous enverrons un lien pour réinitialiser votre mot de passe.'**
+  String get forgotPasswordDescription;
+
+  /// No description provided for @forgotPasswordSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer le lien'**
+  String get forgotPasswordSubmit;
+
+  /// No description provided for @forgotPasswordEmailSent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Email envoyé ! Vérifiez votre boîte de réception.'**
+  String get forgotPasswordEmailSent;
+
+  /// No description provided for @forgotPasswordBackToLogin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour à la connexion'**
+  String get forgotPasswordBackToLogin;
 
   /// No description provided for @setupTitle.
   ///
@@ -403,6 +439,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Autre'**
   String get setupBusinessTypeOther;
+
+  /// No description provided for @setupStepIndicator.
+  ///
+  /// In fr, this message translates to:
+  /// **'Étape {current} / {total}'**
+  String setupStepIndicator(int current, int total);
+
+  /// No description provided for @setupStoreNameRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Veuillez entrer le nom du magasin'**
+  String get setupStoreNameRequired;
 
   /// No description provided for @setupPrevious.
   ///
@@ -1075,6 +1123,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ajouter au panier'**
   String get addToCart;
+
+  /// No description provided for @cartItemDiscounts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remises items'**
+  String get cartItemDiscounts;
+
+  /// No description provided for @cartDiscount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remise panier'**
+  String get cartDiscount;
+
+  /// No description provided for @cartTaxes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taxes'**
+  String get cartTaxes;
+
+  /// No description provided for @cartQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quantité'**
+  String get cartQuantity;
+
+  /// No description provided for @cartItemRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'{name} retiré du panier'**
+  String cartItemRemoved(String name);
+
+  /// No description provided for @ok.
+  ///
+  /// In fr, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @paymentSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement réussi'**
+  String get paymentSuccess;
+
+  /// No description provided for @receiptNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reçu N° {number}'**
+  String receiptNumber(String number);
+
+  /// No description provided for @changeDue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Monnaie à rendre:'**
+  String get changeDue;
+
+  /// No description provided for @newSale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle vente'**
+  String get newSale;
+
+  /// No description provided for @viewReceipt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir reçu'**
+  String get viewReceipt;
 
   /// No description provided for @allProducts.
   ///

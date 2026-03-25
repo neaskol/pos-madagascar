@@ -8,32 +8,28 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  void _handleLogin() {
+  void _handleSubmit() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
-            AuthEmailSignInRequested(
+            AuthPasswordResetRequested(
               email: _emailController.text.trim(),
-              password: _passwordController.text,
             ),
           );
     }
@@ -46,6 +42,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        title: Text(l10n.forgotPasswordTitle),
+      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
@@ -57,10 +58,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     : AppColors.dangerLight,
               ),
             );
-          } else if (state is AuthAuthenticatedNoStore) {
-            context.go('/setup');
-          } else if (state is AuthAuthenticatedWithStore) {
-            context.go('/pin');
+          } else if (state is AuthPasswordResetSent) {
+            // Afficher un message de succès
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.forgotPasswordEmailSent),
+                backgroundColor: isDark
+                    ? AppColors.successDark
+                    : AppColors.successLight,
+                duration: const Duration(seconds: 5),
+              ),
+            );
+            // Retourner à l'écran de login après 2 secondes
+            Future.delayed(const Duration(seconds: 2), () {
+              if (mounted) {
+                context.pop();
+              }
+            });
           }
         },
         builder: (context, state) {
@@ -74,9 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 24),
 
-                    // Logo
+                    // Icon
                     Center(
                       child: Container(
                         width: 64,
@@ -88,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Icon(
-                          Icons.store,
+                          Icons.lock_reset,
                           size: 32,
                           color: isDark
                               ? AppColors.darkTextPrimary
@@ -99,27 +113,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     const SizedBox(height: 24),
 
-                    // Title
+                    // Description
                     Text(
-                      l10n.loginTitle,
+                      l10n.forgotPasswordDescription,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                         color: isDark
-                            ? AppColors.darkTextPrimary
-                            : AppColors.lightTextPrimary,
+                            ? AppColors.darkTextSecondary
+                            : AppColors.lightTextSecondary,
                       ),
                     ),
 
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 32),
 
                     // Email field
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
+                      textInputAction: TextInputAction.done,
                       enabled: !isLoading,
+                      onFieldSubmitted: (_) => _handleSubmit(),
                       decoration: InputDecoration(
                         labelText: l10n.loginEmail,
                         prefixIcon: const Icon(Icons.email_outlined),
@@ -135,76 +149,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 32),
 
-                    // Password field
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      textInputAction: TextInputAction.done,
-                      enabled: !isLoading,
-                      onFieldSubmitted: (_) => _handleLogin(),
-                      decoration: InputDecoration(
-                        labelText: l10n.loginPassword,
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
-                          tooltip: _obscurePassword
-                              ? l10n.loginShowPassword
-                              : l10n.loginHidePassword,
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return l10n.errorFieldRequired;
-                        }
-                        if (value.length < 8) {
-                          return l10n.errorPasswordTooShort;
-                        }
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    // Forgot password
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: isLoading
-                            ? null
-                            : () {
-                                context.push('/forgot-password');
-                              },
-                        child: Text(
-                          l10n.loginForgotPassword,
-                          style: TextStyle(
-                            color: isDark
-                                ? AppColors.darkAccent
-                                : AppColors.lightAccent,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Login button
+                    // Submit button
                     SizedBox(
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: isLoading ? null : _handleLogin,
+                        onPressed: isLoading ? null : _handleSubmit,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isDark
                               ? AppColors.darkTextPrimary
@@ -231,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               )
                             : Text(
-                                l10n.loginButton,
+                                l10n.forgotPasswordSubmit,
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -243,37 +194,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     const SizedBox(height: 24),
 
-                    // Create account
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          l10n.loginCreateAccount,
+                    // Back to login
+                    Center(
+                      child: TextButton(
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                context.pop();
+                              },
+                        child: Text(
+                          l10n.forgotPasswordBackToLogin,
                           style: TextStyle(
                             color: isDark
-                                ? AppColors.darkTextSecondary
-                                : AppColors.lightTextSecondary,
+                                ? AppColors.darkAccent
+                                : AppColors.lightAccent,
                             fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        TextButton(
-                          onPressed: isLoading
-                              ? null
-                              : () {
-                                  context.push('/register');
-                                },
-                          child: Text(
-                            l10n.loginSignUp,
-                            style: TextStyle(
-                              color: isDark
-                                  ? AppColors.darkAccent
-                                  : AppColors.lightAccent,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),

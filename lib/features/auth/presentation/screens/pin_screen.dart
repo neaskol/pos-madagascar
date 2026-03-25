@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -29,6 +30,14 @@ class _PinScreenState extends State<PinScreen> {
       context.read<AuthBloc>().add(
             AuthLoadStoreEmployeesRequested(storeId: authState.storeId),
           );
+    } else if (authState is AuthStoreEmployeesLoaded) {
+      // Employés déjà chargés (retour depuis POS)
+      _employees = authState.employees;
+    } else {
+      // État inattendu — rediriger vers login
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) context.go('/login');
+      });
     }
   }
 
@@ -105,7 +114,7 @@ class _PinScreenState extends State<PinScreen> {
             });
           } else if (state is AuthPinSessionActive) {
             // Rediriger vers l'app principale
-            Navigator.of(context).pushReplacementNamed('/pos');
+            context.go('/pos');
           }
         },
         builder: (context, state) {
@@ -137,7 +146,7 @@ class _PinScreenState extends State<PinScreen> {
                 // Lien "Connexion email"
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacementNamed('/login');
+                    context.go('/login');
                   },
                   child: Text(
                     l10n.pinEmailLogin,

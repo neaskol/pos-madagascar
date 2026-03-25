@@ -120,6 +120,35 @@ class StoreSettingsRepository {
     );
   }
 
+  /// Mettre à jour le numéro marchand MVola (Phase 3.8)
+  Future<void> updateMVolaMerchantNumber(String storeId, String? merchantNumber) async {
+    await _settingsDao.updateSettings(
+      StoreSettingsCompanion(
+        storeId: Value(storeId),
+        mvolaMerchantNumber: Value(merchantNumber),
+        synced: const Value(0),
+        updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+      ),
+    );
+  }
+
+  /// Mettre à jour le numéro marchand Orange Money (Phase 3.8)
+  Future<void> updateOrangeMoneyMerchantNumber(String storeId, String? merchantNumber) async {
+    await _settingsDao.updateSettings(
+      StoreSettingsCompanion(
+        storeId: Value(storeId),
+        orangeMoneyMerchantNumber: Value(merchantNumber),
+        synced: const Value(0),
+        updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+      ),
+    );
+  }
+
+  /// Activer/Désactiver les paiements mobile money (Phase 3.8)
+  Future<void> toggleMobileMoney(String storeId, bool enabled) {
+    return _settingsDao.toggleFeature(storeId: storeId, mobileMoneyEnabled: enabled);
+  }
+
   /// Récupérer les réglages non synchronisés
   Future<List<StoreSetting>> getUnsyncedSettings() {
     return _settingsDao.getUnsyncedSettings().get();

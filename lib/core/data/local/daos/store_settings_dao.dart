@@ -82,6 +82,7 @@ class StoreSettingsDao extends DatabaseAccessor<AppDatabase>
     bool? lowStockNotifications,
     bool? negativeStockAlerts,
     bool? weightBarcodesEnabled,
+    bool? mobileMoneyEnabled,
   }) async {
     final rowsAffected = await (update(storeSettings)
           ..where((tbl) => tbl.storeId.equals(storeId)))
@@ -97,6 +98,7 @@ class StoreSettingsDao extends DatabaseAccessor<AppDatabase>
         lowStockNotifications: lowStockNotifications != null ? Value(lowStockNotifications ? 1 : 0) : const Value.absent(),
         negativeStockAlerts: negativeStockAlerts != null ? Value(negativeStockAlerts ? 1 : 0) : const Value.absent(),
         weightBarcodesEnabled: weightBarcodesEnabled != null ? Value(weightBarcodesEnabled ? 1 : 0) : const Value.absent(),
+        mobileMoneyEnabled: mobileMoneyEnabled != null ? Value(mobileMoneyEnabled ? 1 : 0) : const Value.absent(),
         synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),

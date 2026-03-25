@@ -17,6 +17,9 @@ class StoreSettingsBloc extends Bloc<StoreSettingsEvent, StoreSettingsState> {
     on<ToggleLowStockNotificationsEvent>(_onToggleLowStockNotifications);
     on<UpdateCashRoundingUnitEvent>(_onUpdateCashRoundingUnit);
     on<UpdateReceiptFooterEvent>(_onUpdateReceiptFooter);
+    on<UpdateMVolaMerchantNumberEvent>(_onUpdateMVolaMerchantNumber);
+    on<UpdateOrangeMoneyMerchantNumberEvent>(_onUpdateOrangeMoneyMerchantNumber);
+    on<ToggleMobileMoneyEvent>(_onToggleMobileMoney);
   }
 
   /// Charger les réglages d'un magasin
@@ -149,6 +152,48 @@ class StoreSettingsBloc extends Bloc<StoreSettingsEvent, StoreSettingsState> {
       emit(const StoreSettingsLoading());
       await _repository.updateReceiptFooter(event.storeId, event.footer);
       emit(const StoreSettingsOperationSuccess('Footer des reçus mis à jour'));
+    } catch (e) {
+      emit(StoreSettingsError(e.toString()));
+    }
+  }
+
+  /// Mettre à jour le numéro marchand MVola (Phase 3.8)
+  Future<void> _onUpdateMVolaMerchantNumber(
+    UpdateMVolaMerchantNumberEvent event,
+    Emitter<StoreSettingsState> emit,
+  ) async {
+    try {
+      emit(const StoreSettingsLoading());
+      await _repository.updateMVolaMerchantNumber(event.storeId, event.merchantNumber);
+      emit(const StoreSettingsOperationSuccess('Numéro marchand MVola mis à jour'));
+    } catch (e) {
+      emit(StoreSettingsError(e.toString()));
+    }
+  }
+
+  /// Mettre à jour le numéro marchand Orange Money (Phase 3.8)
+  Future<void> _onUpdateOrangeMoneyMerchantNumber(
+    UpdateOrangeMoneyMerchantNumberEvent event,
+    Emitter<StoreSettingsState> emit,
+  ) async {
+    try {
+      emit(const StoreSettingsLoading());
+      await _repository.updateOrangeMoneyMerchantNumber(event.storeId, event.merchantNumber);
+      emit(const StoreSettingsOperationSuccess('Numéro marchand Orange Money mis à jour'));
+    } catch (e) {
+      emit(StoreSettingsError(e.toString()));
+    }
+  }
+
+  /// Toggle mobile money (Phase 3.8)
+  Future<void> _onToggleMobileMoney(
+    ToggleMobileMoneyEvent event,
+    Emitter<StoreSettingsState> emit,
+  ) async {
+    try {
+      emit(const StoreSettingsLoading());
+      await _repository.toggleMobileMoney(event.storeId, event.enabled);
+      emit(const StoreSettingsOperationSuccess('Paiements mobile money mis à jour'));
     } catch (e) {
       emit(StoreSettingsError(e.toString()));
     }

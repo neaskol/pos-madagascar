@@ -132,3 +132,36 @@ class UpdateReceiptFooterEvent extends StoreSettingsEvent {
   @override
   List<Object?> get props => [storeId, footer];
 }
+
+/// Mettre à jour le numéro marchand MVola (Phase 3.8)
+class UpdateMVolaMerchantNumberEvent extends StoreSettingsEvent {
+  final String storeId;
+  final String? merchantNumber;
+
+  const UpdateMVolaMerchantNumberEvent(this.storeId, this.merchantNumber);
+
+  @override
+  List<Object?> get props => [storeId, merchantNumber];
+}
+
+/// Mettre à jour le numéro marchand Orange Money (Phase 3.8)
+class UpdateOrangeMoneyMerchantNumberEvent extends StoreSettingsEvent {
+  final String storeId;
+  final String? merchantNumber;
+
+  const UpdateOrangeMoneyMerchantNumberEvent(this.storeId, this.merchantNumber);
+
+  @override
+  List<Object?> get props => [storeId, merchantNumber];
+}
+
+/// Toggle mobile money (Phase 3.8)
+class ToggleMobileMoneyEvent extends StoreSettingsEvent {
+  final String storeId;
+  final bool enabled;
+
+  const ToggleMobileMoneyEvent(this.storeId, this.enabled);
+
+  @override
+  List<Object?> get props => [storeId, enabled];
+}

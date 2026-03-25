@@ -107,6 +107,7 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
         itemId: itemId,
         position: position,
         createdAt: now,
+        updatedAt: now,
         synced: const Value(0),
       ),
     );
@@ -186,6 +187,7 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
         categoryId: categoryId,
         position: position,
         createdAt: now,
+        updatedAt: now,
         synced: const Value(0),
       ),
     );

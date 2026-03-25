@@ -63,6 +63,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get loginCreateAccount => 'Créer un compte';
 
   @override
+  String get loginSignUp => 'S\'inscrire';
+
+  @override
   String get loginShowPassword => 'Afficher le mot de passe';
 
   @override
@@ -94,6 +97,23 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get registerSignIn => 'Se connecter';
+
+  @override
+  String get forgotPasswordTitle => 'Mot de passe oublié';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Entrez votre email et nous vous enverrons un lien pour réinitialiser votre mot de passe.';
+
+  @override
+  String get forgotPasswordSubmit => 'Envoyer le lien';
+
+  @override
+  String get forgotPasswordEmailSent =>
+      'Email envoyé ! Vérifiez votre boîte de réception.';
+
+  @override
+  String get forgotPasswordBackToLogin => 'Retour à la connexion';
 
   @override
   String get setupTitle => 'Configuration du magasin';
@@ -163,6 +183,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get setupBusinessTypeOther => 'Autre';
+
+  @override
+  String setupStepIndicator(int current, int total) {
+    return 'Étape $current / $total';
+  }
+
+  @override
+  String get setupStoreNameRequired => 'Veuillez entrer le nom du magasin';
 
   @override
   String get setupPrevious => 'Précédent';
@@ -507,6 +535,43 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get addToCart => 'Ajouter au panier';
+
+  @override
+  String get cartItemDiscounts => 'Remises items';
+
+  @override
+  String get cartDiscount => 'Remise panier';
+
+  @override
+  String get cartTaxes => 'Taxes';
+
+  @override
+  String get cartQuantity => 'Quantité';
+
+  @override
+  String cartItemRemoved(String name) {
+    return '$name retiré du panier';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get paymentSuccess => 'Paiement réussi';
+
+  @override
+  String receiptNumber(String number) {
+    return 'Reçu N° $number';
+  }
+
+  @override
+  String get changeDue => 'Monnaie à rendre:';
+
+  @override
+  String get newSale => 'Nouvelle vente';
+
+  @override
+  String get viewReceipt => 'Voir reçu';
 
   @override
   String get allProducts => 'Tous les produits';

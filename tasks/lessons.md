@@ -59,6 +59,34 @@ Après chaque correction ou bug résolu, ajouter une entrée ici pour éviter de
 
 ---
 
+## 2026-03-25 — Audit complet du codebase et corrections
+
+**Contexte** : Audit systématique de toute la base de code : navigation, BLoC, Drift, localisation, logique UX.
+
+**Erreurs trouvées** :
+- Hardcoded `'store-1'` dans product_form_screen.dart empêchait la création/modification de produits
+- Hardcoded strings en français dans cart_panel.dart, pos_screen.dart, setup_wizard_screen.dart
+- Duplicate key `cancel` dans les fichiers ARB (FR et MG)
+- `Navigator.pop(context)` dans product_form_screen au lieu de `context.pop()` (GoRouter)
+- Aucun route guard dans GoRouter — n'importe qui pouvait naviguer vers /pos, /products etc.
+- PIN screen ne gérait pas l'état `AuthStoreEmployeesLoaded` (retour depuis POS)
+- Foreign keys manquantes dans modifiers.drift et item_variants.drift (store_id)
+- Foreign keys manquantes dans custom_pages.drift (page_id, item_id, category_id)
+- `updated_at` manquant dans custom_page_items et custom_page_category_grids
+- DAO custom_page_dao n'incluait pas `updatedAt` dans les Companion.insert()
+- Aucun index sur customers.name, credits.status, credits.due_date
+
+**Règle** :
+- TOUJOURS récupérer le `storeId` depuis `context.read<AuthBloc>().state` — jamais de placeholder
+- TOUJOURS utiliser `context.pop()` (GoRouter) dans les écrans, `Navigator.pop()` uniquement dans les dialogs
+- TOUJOURS définir les route guards dans GoRouter redirect pour protéger les routes authentifiées
+- TOUJOURS ajouter foreign keys dans Drift pour les colonnes `_id` qui référencent d'autres tables
+- TOUJOURS ajouter `updated_at` dans les tables Drift qui participent à la synchro
+- TOUJOURS ajouter des indexes sur les colonnes utilisées dans WHERE et ORDER BY
+- JAMAIS de clé dupliquée dans les fichiers ARB (le JSON prend la dernière valeur silencieusement)
+
+---
+
 ## Leçons à venir...
 
 Les prochaines leçons seront ajoutées ici au fur et à mesure du développement.

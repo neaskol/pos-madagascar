@@ -20,6 +20,7 @@
   "loginButton": "Se connecter",
   "loginForgotPassword": "Mot de passe oublié ?",
   "loginCreateAccount": "Créer un compte",
+  "loginSignUp": "S'inscrire",
   "loginShowPassword": "Afficher le mot de passe",
   "loginHidePassword": "Masquer le mot de passe",
 
@@ -32,6 +33,12 @@
   "registerButton": "Créer mon compte",
   "registerHaveAccount": "Déjà un compte ?",
   "registerSignIn": "Se connecter",
+
+  "forgotPasswordTitle": "Mot de passe oublié",
+  "forgotPasswordDescription": "Entrez votre email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+  "forgotPasswordSubmit": "Envoyer le lien",
+  "forgotPasswordEmailSent": "Email envoyé ! Vérifiez votre boîte de réception.",
+  "forgotPasswordBackToLogin": "Retour à la connexion",
 
   "setupTitle": "Configuration du magasin",
   "setupStep1Title": "Informations du magasin",
@@ -56,6 +63,14 @@
   "setupBusinessTypeFashion": "Boutique / Mode",
   "setupBusinessTypeService": "Service / Salon",
   "setupBusinessTypeOther": "Autre",
+  "setupStepIndicator": "Étape {current} / {total}",
+  "@setupStepIndicator": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "setupStoreNameRequired": "Veuillez entrer le nom du magasin",
   "setupPrevious": "Précédent",
   "setupNext": "Suivant",
   "setupFinish": "Terminer",
@@ -190,7 +205,28 @@
   "noVariantSelected": "Aucun variant sélectionné",
   "modifierRequired": "Vous devez sélectionner une option obligatoire",
   "addToCart": "Ajouter au panier",
-  "cancel": "Annuler",
+
+  "cartItemDiscounts": "Remises items",
+  "cartDiscount": "Remise panier",
+  "cartTaxes": "Taxes",
+  "cartQuantity": "Quantité",
+  "cartItemRemoved": "{name} retiré du panier",
+  "@cartItemRemoved": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "ok": "OK",
+  "paymentSuccess": "Paiement réussi",
+  "receiptNumber": "Reçu N° {number}",
+  "@receiptNumber": {
+    "placeholders": {
+      "number": {"type": "String"}
+    }
+  },
+  "changeDue": "Monnaie à rendre:",
+  "newSale": "Nouvelle vente",
+  "viewReceipt": "Voir reçu",
 
   "allProducts": "Tous les produits",
   "customPages": "Pages personnalisées",

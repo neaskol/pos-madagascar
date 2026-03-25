@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
@@ -136,8 +137,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       sku = 'SKU-${DateTime.now().millisecondsSinceEpoch}';
     }
 
-    // ID du magasin (TODO: récupérer depuis le store/auth)
-    const storeId = 'store-1'; // Placeholder
+    // ID du magasin depuis l'état d'authentification
+    final authState = context.read<AuthBloc>().state;
+    final storeId = authState is AuthAuthenticatedWithStore
+        ? authState.storeId
+        : '';
+    if (storeId.isEmpty) return;
 
     if (widget.itemId == null) {
       // Création
@@ -308,7 +313,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
-          Navigator.pop(context);
+          context.pop();
         } else if (state is ItemError) {
           // Erreur
           ScaffoldMessenger.of(context).showSnackBar(
@@ -463,7 +468,11 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         // Catégorie
         StreamBuilder<List<Category>>(
           stream: context.read<CategoryRepository>()
-              .watchStoreCategories('store-1'), // TODO: real storeId
+              .watchStoreCategories(
+                (context.read<AuthBloc>().state is AuthAuthenticatedWithStore)
+                    ? (context.read<AuthBloc>().state as AuthAuthenticatedWithStore).storeId
+                    : '',
+              ),
           builder: (context, snapshot) {
             final categories = snapshot.data ?? [];
             return DropdownButtonFormField<String>(
