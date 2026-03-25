@@ -9,16 +9,14 @@ part 'store_dao.g.dart';
 class StoreDao extends DatabaseAccessor<AppDatabase> with _$StoreDaoMixin {
   StoreDao(AppDatabase db) : super(db);
 
-  /// Récupère tous les magasins non supprimés
-  Future<List<Store>> getAllStores() => getAllStoresQuery().get();
-
-  /// Récupère un magasin par ID
-  Future<Store?> getStoreById(String id) =>
-      getStoreByIdQuery(id).getSingleOrNull();
-
-  /// Récupère tous les magasins non synchronisés avec Supabase
-  Future<List<Store>> getUnsyncedStores() =>
-      getUnsyncedStoresQuery().get();
+  // Les queries définies dans stores.drift sont automatiquement générées
+  // et disponibles via le mixin _$StoreDaoMixin:
+  // - getAllStores() retourne Selectable<Store>
+  // - getStoreById(id) retourne Selectable<Store>
+  // - getUnsyncedStores() retourne Selectable<Store>
+  //
+  // Utiliser .get() pour Future<List<T>>, .getSingleOrNull() pour Future<T?>,
+  // .watch() pour Stream<List<T>>, .watchSingleOrNull() pour Stream<T?>
 
   /// Insère un nouveau magasin
   Future<int> insertStore(StoresCompanion store) =>
@@ -26,32 +24,35 @@ class StoreDao extends DatabaseAccessor<AppDatabase> with _$StoreDaoMixin {
 
   /// Met à jour un magasin existant et marque comme non synchronisé
   Future<bool> updateStore(StoresCompanion store) async {
-    return await (update(stores)
+    final rowsAffected = await (update(stores)
           ..where((tbl) => tbl.id.equals(store.id.value)))
         .write(store.copyWith(
-      synced: const Value(false),
+      synced: const Value(0),
       updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
     ));
+    return rowsAffected > 0;
   }
 
   /// Suppression logique (soft delete) d'un magasin
   Future<bool> deleteStore(String id) async {
-    return await (update(stores)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(stores)..where((tbl) => tbl.id.equals(id))).write(
       StoresCompanion(
         deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        synced: const Value(false),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Marque un magasin comme synchronisé avec Supabase
   Future<bool> markStoreSynced(String id) async {
-    return await (update(stores)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(stores)..where((tbl) => tbl.id.equals(id))).write(
       const StoresCompanion(
-        synced: Value(true),
+        synced: Value(1),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Compte le nombre total de magasins non supprimés
@@ -65,9 +66,9 @@ class StoreDao extends DatabaseAccessor<AppDatabase> with _$StoreDaoMixin {
 
   /// Stream pour écouter les changements sur tous les magasins
   Stream<List<Store>> watchAllStores() =>
-      getAllStoresQuery().watch();
+      getAllStores().watch();
 
   /// Stream pour écouter les changements sur un magasin spécifique
   Stream<Store?> watchStoreById(String id) =>
-      getStoreByIdQuery(id).watchSingleOrNull();
+      getStoreById(id).watchSingleOrNull();
 }

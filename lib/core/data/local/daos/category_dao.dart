@@ -10,17 +10,9 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
     with _$CategoryDaoMixin {
   CategoryDao(AppDatabase db) : super(db);
 
-  /// Récupère toutes les catégories d'un magasin (triées par sort_order puis nom)
-  Future<List<Category>> getCategoriesByStore(String storeId) =>
-      getCategoriesByStoreQuery(storeId).get();
-
-  /// Récupère une catégorie par ID
-  Future<Category?> getCategoryById(String id) =>
-      getCategoryByIdQuery(id).getSingleOrNull();
-
-  /// Récupère toutes les catégories non synchronisées
-  Future<List<Category>> getUnsyncedCategories() =>
-      getUnsyncedCategoriesQuery().get();
+  // Les queries définies dans categories.drift sont automatiquement générées
+  // et disponibles via le mixin _$CategoryDaoMixin.
+  // Utiliser directement: getCategoriesByStore(storeId).get() ou .watch()
 
   /// Insère une nouvelle catégorie
   Future<int> insertCategory(CategoriesCompanion category) =>
@@ -28,32 +20,35 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
 
   /// Met à jour une catégorie existante et marque comme non synchronisée
   Future<bool> updateCategory(CategoriesCompanion category) async {
-    return await (update(categories)
+    final rowsAffected = await (update(categories)
           ..where((tbl) => tbl.id.equals(category.id.value)))
         .write(category.copyWith(
-      synced: const Value(false),
+      synced: const Value(0),
       updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
     ));
+    return rowsAffected > 0;
   }
 
   /// Suppression logique (soft delete) d'une catégorie
   Future<bool> deleteCategory(String id) async {
-    return await (update(categories)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(categories)..where((tbl) => tbl.id.equals(id))).write(
       CategoriesCompanion(
         deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        synced: const Value(false),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Marque une catégorie comme synchronisée avec Supabase
   Future<bool> markCategorySynced(String id) async {
-    return await (update(categories)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(categories)..where((tbl) => tbl.id.equals(id))).write(
       const CategoriesCompanion(
-        synced: Value(true),
+        synced: Value(1),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Compte le nombre de catégories dans un magasin
@@ -85,7 +80,7 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
             .write(
           CategoriesCompanion(
             sortOrder: Value(i),
-            synced: const Value(false),
+            synced: const Value(0),
             updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
           ),
         );
@@ -104,11 +99,23 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
         .get();
   }
 
-  /// Stream pour écouter les changements sur les catégories d'un magasin
+  /// Stream pour écouter les catégories d'un magasin
   Stream<List<Category>> watchCategoriesByStore(String storeId) =>
-      getCategoriesByStoreQuery(storeId).watch();
+      getCategoriesByStore(storeId).watch();
 
-  /// Stream pour écouter les changements sur une catégorie spécifique
+  /// Stream pour écouter une catégorie spécifique
   Stream<Category?> watchCategoryById(String id) =>
-      getCategoryByIdQuery(id).watchSingleOrNull();
+      getCategoryById(id).watchSingleOrNull();
+
+  /// Récupère une catégorie par ID (wrapper pour la query générée)
+  Future<Category?> getCategoryByIdFuture(String id) =>
+      getCategoryById(id).getSingleOrNull();
+
+  /// Récupère toutes les catégories d'un magasin (wrapper pour la query générée)
+  Future<List<Category>> getCategoriesByStoreFuture(String storeId) =>
+      getCategoriesByStore(storeId).get();
+
+  /// Récupère toutes les catégories non synchronisées (wrapper pour la query générée)
+  Future<List<Category>> getUnsyncedCategoriesFuture() =>
+      getUnsyncedCategories().get();
 }

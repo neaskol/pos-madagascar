@@ -28,6 +28,8 @@
 ### Multi-utilisateurs & Rôles
 - [x] Tables Supabase : users, stores, pos_devices, store_settings
 - [x] Tables Drift correspondantes + DAO
+- [x] Repositories créés (Store, User, StoreSettings, Category, Item)
+- [x] BLoCs créés avec Events et States (Store, User, StoreSettings, Category, Item)
 - [ ] Repository + BLoC pour auth
 - [ ] Système de rôles (OWNER/ADMIN/MANAGER/CASHIER)
 - [ ] Permissions configurables par rôle
@@ -59,6 +61,10 @@
 - [x] DAOs Drift implémentés (StoreDao, UserDao, StoreSettingsDao, CategoryDao, ItemDao)
 - [x] SyncService complété avec logique de synchronisation Drift → Supabase
 - [x] Code Drift généré avec build_runner (app_database.g.dart + tous les DAOs)
+- [x] Repositories créés pour les 5 entités core (pattern DataSource → Repository)
+- [x] BLoCs créés avec Events et States pour les 5 entités core
+- [x] Correction des signatures de méthodes Drift (Selectable vs Future)
+- [x] Code compile sans erreur (5 suggestions de style uniquement)
 
 ---
 

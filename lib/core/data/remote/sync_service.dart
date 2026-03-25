@@ -61,7 +61,7 @@ class SyncService {
   /// Synchronise les magasins
   Future<void> _syncStores(SyncResult result) async {
     try {
-      final unsyncedStores = await _localDb.storeDao.getUnsyncedStores();
+      final unsyncedStores = await _localDb.storeDao.getUnsyncedStores().get();
 
       for (final store in unsyncedStores) {
         try {
@@ -99,7 +99,7 @@ class SyncService {
   /// Synchronise les utilisateurs
   Future<void> _syncUsers(SyncResult result) async {
     try {
-      final unsyncedUsers = await _localDb.userDao.getUnsyncedUsers();
+      final unsyncedUsers = await _localDb.userDao.getUnsyncedUsers().get();
 
       for (final user in unsyncedUsers) {
         try {
@@ -136,7 +136,7 @@ class SyncService {
   /// Synchronise les réglages de magasin
   Future<void> _syncStoreSettings(SyncResult result) async {
     try {
-      final unsyncedSettings = await _localDb.storeSettingsDao.getUnsyncedSettings();
+      final unsyncedSettings = await _localDb.storeSettingsDao.getUnsyncedSettings().get();
 
       for (final settings in unsyncedSettings) {
         try {
@@ -174,7 +174,7 @@ class SyncService {
   /// Synchronise les catégories
   Future<void> _syncCategories(SyncResult result) async {
     try {
-      final unsyncedCategories = await _localDb.categoryDao.getUnsyncedCategories();
+      final unsyncedCategories = await _localDb.categoryDao.getUnsyncedCategories().get();
 
       for (final category in unsyncedCategories) {
         try {
@@ -207,7 +207,7 @@ class SyncService {
   /// Synchronise les articles/produits
   Future<void> _syncItems(SyncResult result) async {
     try {
-      final unsyncedItems = await _localDb.itemDao.getUnsyncedItems();
+      final unsyncedItems = await _localDb.itemDao.getUnsyncedItems().get();
 
       for (final item in unsyncedItems) {
         try {

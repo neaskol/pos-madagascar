@@ -9,37 +9,18 @@ part 'item_dao.g.dart';
 class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   ItemDao(AppDatabase db) : super(db);
 
-  /// Récupère tous les items d'un magasin
-  Future<List<Item>> getItemsByStore(String storeId) =>
-      getItemsByStoreQuery(storeId).get();
-
-  /// Récupère tous les items disponibles à la vente
-  Future<List<Item>> getAvailableItems(String storeId) =>
-      getAvailableItemsQuery(storeId).get();
-
-  /// Récupère un item par ID
-  Future<Item?> getItemById(String id) =>
-      getItemByIdQuery(id).getSingleOrNull();
-
-  /// Recherche d'items par nom ou SKU
-  Future<List<Item>> searchItems(String storeId, String query) =>
-      searchItemsQuery(storeId, query).get();
-
-  /// Récupère un item par code-barres
-  Future<Item?> getItemByBarcode(String barcode) =>
-      getItemByBarcodeQuery(barcode).getSingleOrNull();
-
-  /// Récupère un item par SKU
-  Future<Item?> getItemBySku(String sku) =>
-      getItemsBySkuQuery(sku).getSingleOrNull();
-
-  /// Récupère les items en stock faible
-  Future<List<Item>> getLowStockItems(String storeId) =>
-      getLowStockItemsQuery(storeId).get();
-
-  /// Récupère tous les items non synchronisés
-  Future<List<Item>> getUnsyncedItems() =>
-      getUnsyncedItemsQuery().get();
+  // Les queries définies dans items.drift sont automatiquement générées
+  // et disponibles via le mixin _$ItemDaoMixin:
+  // - getItemsByStore(storeId) retourne Selectable<Item>
+  // - getAvailableItems(storeId) retourne Selectable<Item>
+  // - getItemById(id) retourne Selectable<Item>
+  // - getItemByBarcode(barcode) retourne Selectable<Item>
+  // - getItemsBySku(sku) retourne Selectable<Item>
+  // - getLowStockItems(storeId) retourne Selectable<Item>
+  // - getUnsyncedItems() retourne Selectable<Item>
+  //
+  // Utiliser .get() pour Future<List<T>>, .getSingleOrNull() pour Future<T?>,
+  // .watch() pour Stream<List<T>>, .watchSingleOrNull() pour Stream<T?>
 
   /// Insère un nouvel item
   Future<int> insertItem(ItemsCompanion item) =>
@@ -47,32 +28,35 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
 
   /// Met à jour un item existant et marque comme non synchronisé
   Future<bool> updateItem(ItemsCompanion item) async {
-    return await (update(items)
+    final rowsAffected = await (update(items)
           ..where((tbl) => tbl.id.equals(item.id.value)))
         .write(item.copyWith(
-      synced: const Value(false),
+      synced: const Value(0),
       updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
     ));
+    return rowsAffected > 0;
   }
 
   /// Suppression logique (soft delete) d'un item
   Future<bool> deleteItem(String id) async {
-    return await (update(items)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(items)..where((tbl) => tbl.id.equals(id))).write(
       ItemsCompanion(
         deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        synced: const Value(false),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Marque un item comme synchronisé avec Supabase
   Future<bool> markItemSynced(String id) async {
-    return await (update(items)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(items)..where((tbl) => tbl.id.equals(id))).write(
       const ItemsCompanion(
-        synced: Value(true),
+        synced: Value(1),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Compte le nombre d'items dans un magasin
@@ -101,35 +85,37 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
     required int quantityChange,
     int? newAverageCost,
   }) async {
-    final item = await getItemById(itemId);
+    final item = await getItemById(itemId).getSingleOrNull();
     if (item == null) return false;
 
     final newStock = item.inStock + quantityChange;
-    if (newStock < 0 && item.trackStock) {
+    if (newStock < 0 && item.trackStock == 1) {
       // Stock négatif non autorisé si suivi de stock activé
       // (sauf si negative_stock_alerts est activé dans store_settings)
       throw Exception('Stock insuffisant');
     }
 
-    return await (update(items)..where((tbl) => tbl.id.equals(itemId))).write(
+    final rowsAffected = await (update(items)..where((tbl) => tbl.id.equals(itemId))).write(
       ItemsCompanion(
         inStock: Value(newStock),
         averageCost: newAverageCost != null ? Value(newAverageCost) : const Value.absent(),
-        synced: const Value(false),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Active ou désactive un item pour la vente
   Future<bool> setItemAvailability(String id, bool available) async {
-    return await (update(items)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(items)..where((tbl) => tbl.id.equals(id))).write(
       ItemsCompanion(
-        availableForSale: Value(available),
-        synced: const Value(false),
+        availableForSale: Value(available ? 1 : 0),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Vérifie si un SKU existe déjà dans le magasin
@@ -153,8 +139,8 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
     final query = selectOnly(items)
       ..addColumns([items.id.count()])
       ..where(items.storeId.equals(storeId))
-      ..where(items.trackStock.equals(true))
-      ..where(items.inStock.isSmallerOrEqualValue(items.lowStockThreshold))
+      ..where(items.trackStock.equals(1))
+      ..where(items.inStock.isSmallerOrEqual(items.lowStockThreshold))
       ..where(items.deletedAt.isNull());
     final result = await query.getSingleOrNull();
     return result?.read(items.id.count()) ?? 0;
@@ -162,17 +148,17 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
 
   /// Stream pour écouter les changements sur les items d'un magasin
   Stream<List<Item>> watchItemsByStore(String storeId) =>
-      getItemsByStoreQuery(storeId).watch();
+      getItemsByStore(storeId).watch();
 
   /// Stream pour écouter les changements sur les items disponibles
   Stream<List<Item>> watchAvailableItems(String storeId) =>
-      getAvailableItemsQuery(storeId).watch();
+      getAvailableItems(storeId).watch();
 
   /// Stream pour écouter les changements sur un item spécifique
   Stream<Item?> watchItemById(String id) =>
-      getItemByIdQuery(id).watchSingleOrNull();
+      getItemById(id).watchSingleOrNull();
 
   /// Stream pour écouter les items en stock faible
   Stream<List<Item>> watchLowStockItems(String storeId) =>
-      getLowStockItemsQuery(storeId).watch();
+      getLowStockItems(storeId).watch();
 }

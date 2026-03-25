@@ -11,6 +11,13 @@ import 'daos/store_settings_dao.dart';
 import 'daos/category_dao.dart';
 import 'daos/item_dao.dart';
 
+// Export DAOs for use in repositories
+export 'daos/store_dao.dart';
+export 'daos/user_dao.dart';
+export 'daos/store_settings_dao.dart';
+export 'daos/category_dao.dart';
+export 'daos/item_dao.dart';
+
 part 'app_database.g.dart';
 
 @DriftDatabase(
@@ -60,8 +67,8 @@ class AppDatabase extends _$AppDatabase {
         },
       );
 
-  @override
-  bool get logStatements => true; // Debug mode - à désactiver en prod
+  // Debug mode - à désactiver en prod
+  bool get logStatements => true;
 }
 
 LazyDatabase _openConnection() {

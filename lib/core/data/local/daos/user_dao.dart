@@ -9,25 +9,16 @@ part 'user_dao.g.dart';
 class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
   UserDao(AppDatabase db) : super(db);
 
-  /// Récupère tous les utilisateurs d'un magasin
-  Future<List<User>> getUsersByStore(String storeId) =>
-      getUsersByStoreQuery(storeId).get();
-
-  /// Récupère un utilisateur par ID
-  Future<User?> getUserById(String id) =>
-      getUserByIdQuery(id).getSingleOrNull();
-
-  /// Récupère tous les utilisateurs actifs
-  Future<List<User>> getActiveUsers() =>
-      getActiveUsersQuery().get();
-
-  /// Récupère un utilisateur par email
-  Future<User?> getUserByEmail(String email) =>
-      getUserByEmailQuery(email).getSingleOrNull();
-
-  /// Récupère tous les utilisateurs non synchronisés
-  Future<List<User>> getUnsyncedUsers() =>
-      getUnsyncedUsersQuery().get();
+  // Les queries définies dans users.drift sont automatiquement générées
+  // et disponibles via le mixin _$UserDaoMixin:
+  // - getUsersByStore(storeId) retourne Selectable<User>
+  // - getUserById(id) retourne Selectable<User>
+  // - getActiveUsers() retourne Selectable<User>
+  // - getUserByEmail(email) retourne Selectable<User>
+  // - getUnsyncedUsers() retourne Selectable<User>
+  //
+  // Utiliser .get() pour Future<List<T>>, .getSingleOrNull() pour Future<T?>,
+  // .watch() pour Stream<List<T>>, .watchSingleOrNull() pour Stream<T?>
 
   /// Insère un nouvel utilisateur
   Future<int> insertUser(UsersCompanion user) =>
@@ -35,32 +26,35 @@ class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
 
   /// Met à jour un utilisateur existant et marque comme non synchronisé
   Future<bool> updateUser(UsersCompanion user) async {
-    return await (update(users)
+    final rowsAffected = await (update(users)
           ..where((tbl) => tbl.id.equals(user.id.value)))
         .write(user.copyWith(
-      synced: const Value(false),
+      synced: const Value(0),
       updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
     ));
+    return rowsAffected > 0;
   }
 
   /// Suppression logique (soft delete) d'un utilisateur
   Future<bool> deleteUser(String id) async {
-    return await (update(users)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(users)..where((tbl) => tbl.id.equals(id))).write(
       UsersCompanion(
         deletedAt: Value(DateTime.now().millisecondsSinceEpoch),
-        synced: const Value(false),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Marque un utilisateur comme synchronisé avec Supabase
   Future<bool> markUserSynced(String id) async {
-    return await (update(users)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(users)..where((tbl) => tbl.id.equals(id))).write(
       const UsersCompanion(
-        synced: Value(true),
+        synced: Value(1),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Compte le nombre d'utilisateurs actifs dans un magasin
@@ -68,7 +62,7 @@ class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
     final query = selectOnly(users)
       ..addColumns([users.id.count()])
       ..where(users.storeId.equals(storeId))
-      ..where(users.active.equals(true))
+      ..where(users.active.equals(1))
       ..where(users.deletedAt.isNull());
     final result = await query.getSingleOrNull();
     return result?.read(users.id.count()) ?? 0;
@@ -87,20 +81,21 @@ class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
 
   /// Active ou désactive un utilisateur
   Future<bool> setUserActive(String id, bool active) async {
-    return await (update(users)..where((tbl) => tbl.id.equals(id))).write(
+    final rowsAffected = await (update(users)..where((tbl) => tbl.id.equals(id))).write(
       UsersCompanion(
-        active: Value(active),
-        synced: const Value(false),
+        active: Value(active ? 1 : 0),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Stream pour écouter les changements sur les utilisateurs d'un magasin
   Stream<List<User>> watchUsersByStore(String storeId) =>
-      getUsersByStoreQuery(storeId).watch();
+      getUsersByStore(storeId).watch();
 
   /// Stream pour écouter les changements sur un utilisateur spécifique
   Stream<User?> watchUserById(String id) =>
-      getUserByIdQuery(id).watchSingleOrNull();
+      getUserById(id).watchSingleOrNull();
 }

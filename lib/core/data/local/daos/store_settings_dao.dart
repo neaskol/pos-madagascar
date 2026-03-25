@@ -10,13 +10,13 @@ class StoreSettingsDao extends DatabaseAccessor<AppDatabase>
     with _$StoreSettingsDaoMixin {
   StoreSettingsDao(AppDatabase db) : super(db);
 
-  /// Récupère les réglages d'un magasin
-  Future<StoreSetting?> getSettingsByStore(String storeId) =>
-      getSettingsByStoreQuery(storeId).getSingleOrNull();
-
-  /// Récupère tous les réglages non synchronisés
-  Future<List<StoreSetting>> getUnsyncedSettings() =>
-      getUnsyncedSettingsQuery().get();
+  // Les queries définies dans store_settings.drift sont automatiquement générées
+  // et disponibles via le mixin _$StoreSettingsDaoMixin:
+  // - getSettingsByStore(storeId) retourne Selectable<StoreSetting>
+  // - getUnsyncedSettings() retourne Selectable<StoreSetting>
+  //
+  // Utiliser .get() pour Future<List<T>>, .getSingleOrNull() pour Future<T?>,
+  // .watch() pour Stream<List<T>>, .watchSingleOrNull() pour Stream<T?>
 
   /// Insère les réglages par défaut pour un nouveau magasin
   Future<int> insertSettings(StoreSettingsCompanion settings) =>
@@ -24,23 +24,25 @@ class StoreSettingsDao extends DatabaseAccessor<AppDatabase>
 
   /// Met à jour les réglages d'un magasin et marque comme non synchronisé
   Future<bool> updateSettings(StoreSettingsCompanion settings) async {
-    return await (update(storeSettings)
+    final rowsAffected = await (update(storeSettings)
           ..where((tbl) => tbl.storeId.equals(settings.storeId.value)))
         .write(settings.copyWith(
-      synced: const Value(false),
+      synced: const Value(0),
       updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
     ));
+    return rowsAffected > 0;
   }
 
   /// Marque les réglages comme synchronisés avec Supabase
   Future<bool> markSettingsSynced(String storeId) async {
-    return await (update(storeSettings)
+    final rowsAffected = await (update(storeSettings)
           ..where((tbl) => tbl.storeId.equals(storeId)))
         .write(
       const StoreSettingsCompanion(
-        synced: Value(true),
+        synced: Value(1),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Crée les réglages par défaut pour un nouveau magasin
@@ -48,19 +50,19 @@ class StoreSettingsDao extends DatabaseAccessor<AppDatabase>
     return insertSettings(
       StoreSettingsCompanion(
         storeId: Value(storeId),
-        shiftsEnabled: const Value(false),
-        timeClockEnabled: const Value(false),
-        openTicketsEnabled: const Value(false),
-        predefinedTicketsEnabled: const Value(false),
-        kitchenPrintersEnabled: const Value(false),
-        customerDisplayEnabled: const Value(false),
-        diningOptionsEnabled: const Value(false),
-        lowStockNotifications: const Value(true),
-        negativeStockAlerts: const Value(false),
-        weightBarcodesEnabled: const Value(false),
+        shiftsEnabled: const Value(0),
+        timeClockEnabled: const Value(0),
+        openTicketsEnabled: const Value(0),
+        predefinedTicketsEnabled: const Value(0),
+        kitchenPrintersEnabled: const Value(0),
+        customerDisplayEnabled: const Value(0),
+        diningOptionsEnabled: const Value(0),
+        lowStockNotifications: const Value(1),
+        negativeStockAlerts: const Value(0),
+        weightBarcodesEnabled: const Value(0),
         cashRoundingUnit: const Value(0),
         receiptFooter: const Value(null),
-        synced: const Value(false),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
@@ -81,27 +83,28 @@ class StoreSettingsDao extends DatabaseAccessor<AppDatabase>
     bool? negativeStockAlerts,
     bool? weightBarcodesEnabled,
   }) async {
-    return await (update(storeSettings)
+    final rowsAffected = await (update(storeSettings)
           ..where((tbl) => tbl.storeId.equals(storeId)))
         .write(
       StoreSettingsCompanion(
-        shiftsEnabled: shiftsEnabled != null ? Value(shiftsEnabled) : const Value.absent(),
-        timeClockEnabled: timeClockEnabled != null ? Value(timeClockEnabled) : const Value.absent(),
-        openTicketsEnabled: openTicketsEnabled != null ? Value(openTicketsEnabled) : const Value.absent(),
-        predefinedTicketsEnabled: predefinedTicketsEnabled != null ? Value(predefinedTicketsEnabled) : const Value.absent(),
-        kitchenPrintersEnabled: kitchenPrintersEnabled != null ? Value(kitchenPrintersEnabled) : const Value.absent(),
-        customerDisplayEnabled: customerDisplayEnabled != null ? Value(customerDisplayEnabled) : const Value.absent(),
-        diningOptionsEnabled: diningOptionsEnabled != null ? Value(diningOptionsEnabled) : const Value.absent(),
-        lowStockNotifications: lowStockNotifications != null ? Value(lowStockNotifications) : const Value.absent(),
-        negativeStockAlerts: negativeStockAlerts != null ? Value(negativeStockAlerts) : const Value.absent(),
-        weightBarcodesEnabled: weightBarcodesEnabled != null ? Value(weightBarcodesEnabled) : const Value.absent(),
-        synced: const Value(false),
+        shiftsEnabled: shiftsEnabled != null ? Value(shiftsEnabled ? 1 : 0) : const Value.absent(),
+        timeClockEnabled: timeClockEnabled != null ? Value(timeClockEnabled ? 1 : 0) : const Value.absent(),
+        openTicketsEnabled: openTicketsEnabled != null ? Value(openTicketsEnabled ? 1 : 0) : const Value.absent(),
+        predefinedTicketsEnabled: predefinedTicketsEnabled != null ? Value(predefinedTicketsEnabled ? 1 : 0) : const Value.absent(),
+        kitchenPrintersEnabled: kitchenPrintersEnabled != null ? Value(kitchenPrintersEnabled ? 1 : 0) : const Value.absent(),
+        customerDisplayEnabled: customerDisplayEnabled != null ? Value(customerDisplayEnabled ? 1 : 0) : const Value.absent(),
+        diningOptionsEnabled: diningOptionsEnabled != null ? Value(diningOptionsEnabled ? 1 : 0) : const Value.absent(),
+        lowStockNotifications: lowStockNotifications != null ? Value(lowStockNotifications ? 1 : 0) : const Value.absent(),
+        negativeStockAlerts: negativeStockAlerts != null ? Value(negativeStockAlerts ? 1 : 0) : const Value.absent(),
+        weightBarcodesEnabled: weightBarcodesEnabled != null ? Value(weightBarcodesEnabled ? 1 : 0) : const Value.absent(),
+        synced: const Value(0),
         updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       ),
     );
+    return rowsAffected > 0;
   }
 
   /// Stream pour écouter les changements sur les réglages d'un magasin
   Stream<StoreSetting?> watchSettingsByStore(String storeId) =>
-      getSettingsByStoreQuery(storeId).watchSingleOrNull();
+      getSettingsByStore(storeId).watchSingleOrNull();
 }
