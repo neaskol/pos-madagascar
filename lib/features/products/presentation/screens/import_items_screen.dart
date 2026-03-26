@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/theme_ext.dart';
@@ -22,26 +21,24 @@ class ImportItemsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final typography = context.typography;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: context.bg,
       appBar: AppBar(
-        backgroundColor: colors.surface,
+        backgroundColor: context.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colors.onSurface),
+          icon: Icon(Icons.arrow_back, color: context.textPri),
           onPressed: () => context.pop(),
         ),
         title: Text(
           l10n.importItems,
-          style: typography.titleLarge.copyWith(color: colors.onSurface),
+          style: AppTypography.screenTitle.copyWith(color: context.textPri),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.help_outline, color: colors.onSurfaceVariant),
+            icon: Icon(Icons.help_outline, color: context.textSec),
             tooltip: l10n.help,
             onPressed: () => _showHelpDialog(context),
           ),
@@ -53,7 +50,7 @@ class ImportItemsScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: colors.error,
+                backgroundColor: context.danger,
               ),
             );
           } else if (state is ItemImportSuccess) {
@@ -79,9 +76,7 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// État initial avec boutons pour choisir fichier ou télécharger template
   Widget _buildInitial(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final typography = context.typography;
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: SingleChildScrollView(
@@ -92,15 +87,15 @@ class ImportItemsScreen extends StatelessWidget {
             Icon(
               Icons.file_upload_outlined,
               size: 96,
-              color: colors.primary.withOpacity(0.3),
+              color: context.accent.withOpacity(0.3),
             ),
             const SizedBox(height: AppDimensions.spacingLarge),
             Text(
               l10n.importItemsDescription,
-              style: typography.bodyLarge.copyWith(color: colors.onSurfaceVariant),
+              style: AppTypography.body.copyWith(color: context.textSec),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppDimensions.spacingXLarge),
+            const SizedBox(height: AppDimensions.spacingExtraLarge),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -110,8 +105,8 @@ class ImportItemsScreen extends StatelessWidget {
                 icon: const Icon(Icons.file_open),
                 label: Text(l10n.selectFile),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: colors.primary,
-                  foregroundColor: colors.onPrimary,
+                  backgroundColor: context.accent,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     vertical: AppDimensions.paddingMedium,
                     horizontal: AppDimensions.paddingLarge,
@@ -129,7 +124,7 @@ class ImportItemsScreen extends StatelessWidget {
                 icon: const Icon(Icons.download),
                 label: Text(l10n.downloadTemplate),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: colors.primary,
+                  foregroundColor: context.accent,
                   padding: const EdgeInsets.symmetric(
                     vertical: AppDimensions.paddingMedium,
                     horizontal: AppDimensions.paddingLarge,
@@ -137,7 +132,7 @@ class ImportItemsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: AppDimensions.spacingXLarge),
+            const SizedBox(height: AppDimensions.spacingExtraLarge),
             _buildFormatInfo(context),
           ],
         ),
@@ -147,14 +142,12 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Informations sur le format du fichier
   Widget _buildFormatInfo(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final typography = context.typography;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingMedium),
       decoration: BoxDecoration(
-        color: colors.primaryContainer.withOpacity(0.3),
+        color: context.accent.withOpacity(0.1),
         borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
       ),
       child: Column(
@@ -162,18 +155,18 @@ class ImportItemsScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.info_outline, color: colors.primary, size: 20),
+              Icon(Icons.info_outline, color: context.accent, size: 20),
               const SizedBox(width: AppDimensions.spacingSmall),
               Text(
                 l10n.fileFormat,
-                style: typography.titleSmall.copyWith(color: colors.primary),
+                style: AppTypography.sectionTitle.copyWith(color: context.accent),
               ),
             ],
           ),
           const SizedBox(height: AppDimensions.spacingSmall),
           Text(
             l10n.fileFormatDescription,
-            style: typography.bodySmall.copyWith(color: colors.onSurfaceVariant),
+            style: AppTypography.bodySmall.copyWith(color: context.textSec),
           ),
         ],
       ),
@@ -182,14 +175,13 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Loading state
   Widget _buildLoading(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(color: colors.primary),
+          CircularProgressIndicator(color: context.accent),
           const SizedBox(height: AppDimensions.spacingMedium),
           Text(l10n.parsingFile),
         ],
@@ -199,16 +191,14 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Prévisualisation des données avant import
   Widget _buildPreview(BuildContext context, ItemImportPreview state) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final typography = context.typography;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       children: [
         // Statistiques
         Container(
           padding: const EdgeInsets.all(AppDimensions.paddingMedium),
-          color: colors.surfaceContainerHighest,
+          color: context.surface,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -216,19 +206,19 @@ class ImportItemsScreen extends StatelessWidget {
                 context,
                 l10n.total,
                 state.rows.length.toString(),
-                colors.onSurface,
+                context.textPri,
               ),
               _buildStat(
                 context,
                 l10n.valid,
                 state.validCount.toString(),
-                colors.success,
+                context.success,
               ),
               _buildStat(
                 context,
                 l10n.errors,
                 state.errorCount.toString(),
-                colors.error,
+                context.danger,
               ),
             ],
           ),
@@ -249,10 +239,10 @@ class ImportItemsScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppDimensions.paddingMedium),
           decoration: BoxDecoration(
-            color: colors.surface,
+            color: context.surface,
             boxShadow: [
               BoxShadow(
-                color: colors.shadow.withOpacity(0.1),
+                color: Colors.black.withOpacity(0.1),
                 blurRadius: 4,
                 offset: const Offset(0, -2),
               ),
@@ -286,8 +276,8 @@ class ImportItemsScreen extends StatelessWidget {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: colors.primary,
-                    foregroundColor: colors.onPrimary,
+                    backgroundColor: context.accent,
+                    foregroundColor: Colors.white,
                   ),
                   child: Text(l10n.importValidRows(state.validCount)),
                 ),
@@ -301,20 +291,18 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Widget statistique
   Widget _buildStat(BuildContext context, String label, String value, Color color) {
-    final typography = context.typography;
-
     return Column(
       children: [
         Text(
           value,
-          style: typography.headlineMedium.copyWith(
+          style: AppTypography.amountLarge.copyWith(
             color: color,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           label,
-          style: typography.bodySmall.copyWith(color: color),
+          style: AppTypography.bodySmall.copyWith(color: color),
         ),
       ],
     );
@@ -322,9 +310,6 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Prévisualisation d'une ligne
   Widget _buildRowPreview(BuildContext context, ImportItemRow row) {
-    final colors = context.colors;
-    final typography = context.typography;
-
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: AppDimensions.paddingSmall,
@@ -338,14 +323,14 @@ class ImportItemsScreen extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: row.isValid ? colors.successContainer : colors.errorContainer,
+              color: row.isValid ? context.successBg : context.dangerBg,
               borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
             ),
             child: Center(
               child: Text(
                 '${row.lineNumber}',
-                style: typography.labelSmall.copyWith(
-                  color: row.isValid ? colors.onSuccessContainer : colors.onErrorContainer,
+                style: AppTypography.caption.copyWith(
+                  color: row.isValid ? context.success : context.danger,
                 ),
               ),
             ),
@@ -359,27 +344,27 @@ class ImportItemsScreen extends StatelessWidget {
                 if (row.name != null && row.name!.isNotEmpty)
                   Text(
                     row.name!,
-                    style: typography.bodyMedium.copyWith(
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: colors.onSurface,
+                      color: context.textPri,
                     ),
                   ),
                 if (row.price != null && row.price!.isNotEmpty)
                   Text(
                     '${row.price} Ar',
-                    style: typography.bodySmall.copyWith(color: colors.onSurfaceVariant),
+                    style: AppTypography.bodySmall.copyWith(color: context.textSec),
                   ),
                 if (row.errors.isNotEmpty)
                   ...row.errors.map((error) => Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Row(
                           children: [
-                            Icon(Icons.error_outline, size: 14, color: colors.error),
+                            Icon(Icons.error_outline, size: 14, color: context.danger),
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
                                 error,
-                                style: typography.bodySmall.copyWith(color: colors.error),
+                                style: AppTypography.bodySmall.copyWith(color: context.danger),
                               ),
                             ),
                           ],
@@ -391,7 +376,7 @@ class ImportItemsScreen extends StatelessWidget {
           // Icône statut
           Icon(
             row.isValid ? Icons.check_circle : Icons.cancel,
-            color: row.isValid ? colors.success : colors.error,
+            color: row.isValid ? context.success : context.danger,
             size: 20,
           ),
         ],
@@ -401,9 +386,7 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Progression de l'import
   Widget _buildImportProgress(BuildContext context, ItemImportInProgress state) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
-    final typography = context.typography;
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: Padding(
@@ -413,23 +396,23 @@ class ImportItemsScreen extends StatelessWidget {
           children: [
             CircularProgressIndicator(
               value: state.percentage / 100,
-              color: colors.primary,
+              color: context.accent,
             ),
             const SizedBox(height: AppDimensions.spacingLarge),
             Text(
               l10n.importing,
-              style: typography.titleMedium.copyWith(color: colors.onSurface),
+              style: AppTypography.sectionTitle.copyWith(color: context.textPri),
             ),
             const SizedBox(height: AppDimensions.spacingSmall),
             Text(
               '${state.progress} / ${state.total}',
-              style: typography.bodyLarge.copyWith(color: colors.onSurfaceVariant),
+              style: AppTypography.body.copyWith(color: context.textSec),
             ),
             const SizedBox(height: AppDimensions.spacingSmall),
             Text(
               '${state.percentage.toStringAsFixed(0)}%',
-              style: typography.headlineSmall.copyWith(
-                color: colors.primary,
+              style: AppTypography.amountLarge.copyWith(
+                color: context.accent,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -441,13 +424,12 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Dialog d'aide
   void _showHelpDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: colors.surface,
+        backgroundColor: context.surface,
         title: Text(l10n.help),
         content: SingleChildScrollView(
           child: Text(l10n.importHelpText),
@@ -464,17 +446,16 @@ class ImportItemsScreen extends StatelessWidget {
 
   /// Dialog de succès
   void _showSuccessDialog(BuildContext context, ImportResult result) {
-    final l10n = AppLocalizations.of(context);
-    final colors = context.colors;
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        backgroundColor: colors.surface,
+        backgroundColor: context.surface,
         title: Row(
           children: [
-            Icon(Icons.check_circle, color: colors.success),
+            Icon(Icons.check_circle, color: context.success),
             const SizedBox(width: 8),
             Text(l10n.importComplete),
           ],
@@ -488,7 +469,7 @@ class ImportItemsScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 l10n.importErrorsMessage(result.errorCount),
-                style: TextStyle(color: colors.error),
+                style: TextStyle(color: context.danger),
               ),
             ],
           ],
