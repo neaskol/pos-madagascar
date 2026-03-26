@@ -37,6 +37,8 @@ import 'features/products/data/repositories/inventory_export_repository.dart';
 import 'features/products/presentation/bloc/inventory_export_bloc.dart';
 import 'features/inventory/data/repositories/stock_adjustment_repository.dart';
 import 'features/inventory/presentation/bloc/stock_adjustment_bloc.dart';
+import 'features/inventory/data/repositories/inventory_count_repository.dart';
+import 'features/inventory/presentation/bloc/inventory_count_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -202,6 +204,12 @@ class MyApp extends StatelessWidget {
           BlocProvider<StockAdjustmentBloc>(
             create: (context) => StockAdjustmentBloc(
               repository: context.read<StockAdjustmentRepository>(),
+            ),
+          ),
+          // BLoC pour les comptages d'inventaire
+          BlocProvider<InventoryCountBloc>(
+            create: (context) => InventoryCountBloc(
+              context.read<InventoryCountRepository>(),
             ),
           ),
           // BLoC pour les pages personnalisées
