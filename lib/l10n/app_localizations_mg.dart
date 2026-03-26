@@ -487,10 +487,10 @@ class AppLocalizationsMg extends AppLocalizations {
   String get emptyCart => 'Panier foana';
 
   @override
-  String get subtotal => 'Isa';
+  String get subtotal => 'Totalin\'ny ambany';
 
   @override
-  String get total => 'TOTALIN\'NY';
+  String get total => 'Totaliny';
 
   @override
   String get pay => 'MANDOAVA';
@@ -836,4 +836,371 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get settingsPaymentTypes => 'Karazana fandoavana';
+
+  @override
+  String get creditSale => 'Varotra amin\'ny trosa';
+
+  @override
+  String get selectCustomerForCredit =>
+      'Safidio ny mpanjifa ho an\'ny varotra amin\'ny trosa';
+
+  @override
+  String get selectCustomer => 'Hifidy mpanjifa';
+
+  @override
+  String get noCustomerSelected => 'Tsy misy mpanjifa voafidy';
+
+  @override
+  String get creditDueDateTitle => 'Fetr\'andro fandoavana';
+
+  @override
+  String get creditDueDateNone => 'Tsy misy fetr\'andro';
+
+  @override
+  String get creditDueDate7d => '7 andro';
+
+  @override
+  String get creditDueDate15d => '15 andro';
+
+  @override
+  String get creditDueDate30d => '30 andro';
+
+  @override
+  String get creditDueDateCustom => 'Hifidy daty';
+
+  @override
+  String get creditNoteHint => 'Fanamarihana momba ny trosa (tsy voatery)';
+
+  @override
+  String creditSaleConfirmation(String amount, String customer) {
+    return 'Hamarino ny varotra amin\'ny trosa $amount Ar ho an\'i $customer ?';
+  }
+
+  @override
+  String get creditSaleSuccess => 'Varotra amin\'ny trosa voatahiry';
+
+  @override
+  String get creditSaleCustomerRequired =>
+      'Ilaina ny mpanjifa ho an\'ny varotra amin\'ny trosa';
+
+  @override
+  String get totalDebts => 'Totalin\'ny trosa';
+
+  @override
+  String get overdueDebts => 'Tara';
+
+  @override
+  String get creditSalesEmpty => 'Tsy misy varotra amin\'ny trosa';
+
+  @override
+  String get creditSalesEmptyDescription =>
+      'Ny varotra amin\'ny trosa dia hiseho eto';
+
+  @override
+  String get payment => 'Fandoavana';
+
+  @override
+  String get paymentTitle => 'Fandoavana';
+
+  @override
+  String get paymentSingle => 'Fandoavana tokana';
+
+  @override
+  String get paymentSplit => 'Fandoavana maro';
+
+  @override
+  String get paymentType => 'Karazana fandoavana';
+
+  @override
+  String get paymentCash => 'Vola madinika';
+
+  @override
+  String get paymentCard => 'Karatra';
+
+  @override
+  String get paymentMvola => 'MVola';
+
+  @override
+  String get paymentOrangeMoney => 'Orange Money';
+
+  @override
+  String get paymentCredit => 'Trosa';
+
+  @override
+  String get paymentTotalToPay => 'Totaliny aloa';
+
+  @override
+  String get paymentAmountReceived => 'Vola voaray';
+
+  @override
+  String get paymentCustomAmount => 'Na vola manokana';
+
+  @override
+  String get paymentCustomAmountHint => 'Vola amin\'ny Ariary';
+
+  @override
+  String get paymentChangeDue => 'Vola averina';
+
+  @override
+  String get paymentInsufficient => 'Tsy ampy ny vola';
+
+  @override
+  String get paymentNoteOptional => 'Fanamarihana (tsy voatery)';
+
+  @override
+  String get paymentNoteHint => 'Hanampy fanamarihana amin\'ity varotra ity...';
+
+  @override
+  String get paymentNoteHelper =>
+      'Ity fanamarihana ity dia hiseho ao amin\'ny resevoka';
+
+  @override
+  String get paymentValidate => 'HAMARINO NY FANDOAVANA';
+
+  @override
+  String get paymentRemainingAmount => 'Sisa aloa';
+
+  @override
+  String get paymentComplete => 'Fandoavana vita';
+
+  @override
+  String get paymentPaid => 'Voaloa';
+
+  @override
+  String get paymentAdded => 'Fandoavana nampiana';
+
+  @override
+  String get paymentAddPayment => 'Hanampy fandoavana';
+
+  @override
+  String get paymentSplitDescription => 'Zareo amin\'ny fomba fandoavana maro';
+
+  @override
+  String get paymentSplitMethods =>
+      'Vola madinika, Karatra, MVola, Orange Money';
+
+  @override
+  String get paymentErrorNotAuthenticated =>
+      'Hadisoana: tsy voamarina ny mpampiasa';
+
+  @override
+  String get paymentErrorStoreSettings =>
+      'Hadisoana: tsy afaka nalaina ny fandaminana';
+
+  @override
+  String get paymentErrorMvolaMerchant =>
+      'Hadisoana: tsy voaomana ny laharan\'ny mpivarotra MVola';
+
+  @override
+  String get paymentErrorOrangeMoneyMerchant =>
+      'Hadisoana: tsy voaomana ny laharan\'ny mpivarotra Orange Money';
+
+  @override
+  String get paymentConfigure => 'Amboary';
+
+  @override
+  String get inventoryTitle => 'Fijerin\'ny stock';
+
+  @override
+  String get inventoryMetrics => 'Fifehezan-dalàna';
+
+  @override
+  String get inventoryOutOfStock => 'Tapaka stock';
+
+  @override
+  String get inventoryLowStock => 'Stock ambany';
+
+  @override
+  String get inventoryTotalValue => 'Sandan\'ny stock';
+
+  @override
+  String get inventoryFilterAll => 'Rehetra';
+
+  @override
+  String get inventoryFilterLow => 'Stock ambany';
+
+  @override
+  String get inventoryFilterOut => 'Tapaka';
+
+  @override
+  String get inventoryEmpty => 'Tsy misy entana ao amin\'ny stock';
+
+  @override
+  String get inventoryEmptyDescription =>
+      'Ampio ny vokatra miaraka amin\'ny fanaraha-maso stock';
+
+  @override
+  String inventoryItemsCount(int count) {
+    return '$count entana';
+  }
+
+  @override
+  String get inventoryQuickEdit => 'Hanova ny stock';
+
+  @override
+  String get inventoryCurrentStock => 'Stock ankehitriny';
+
+  @override
+  String get inventoryNewStock => 'Stock vaovao';
+
+  @override
+  String get inventoryAdjustmentReason => 'Antony';
+
+  @override
+  String get inventoryReasonReceive => 'Fandraisana';
+
+  @override
+  String get inventoryReasonLoss => 'Very';
+
+  @override
+  String get inventoryReasonDamage => 'Simba';
+
+  @override
+  String get inventoryReasonCount => 'Fanisana';
+
+  @override
+  String get inventoryReasonOther => 'Hafa';
+
+  @override
+  String get inventoryAdjustmentNote => 'Fanamarihana (tsy voatery)';
+
+  @override
+  String get inventoryAdjustmentSuccess => 'Stock novaina';
+
+  @override
+  String inventoryStockUpdated(String name) {
+    return 'Stock ny $name novaina';
+  }
+
+  @override
+  String get inventoryAlertThreshold => 'Fetra fanairana';
+
+  @override
+  String get inventoryAlertSet => 'Hamaritra fanairana';
+
+  @override
+  String get inventoryAlertUpdated => 'Fanairana stock novaina';
+
+  @override
+  String inventoryUnitsRemaining(int count) {
+    return '$count sisa';
+  }
+
+  @override
+  String get salesHistory => 'Tantaran\'ny varotra';
+
+  @override
+  String get searchReceipts => 'Mitady tapakila';
+
+  @override
+  String get receiptDetail => 'Antsipiriany momba ny tapakila';
+
+  @override
+  String get refund => 'Hamerina vola';
+
+  @override
+  String get refundAll => 'Hamerina vola rehetra';
+
+  @override
+  String get refundReason => 'Antony ny famerenana vola';
+
+  @override
+  String get reasonDefective => 'Vokatra simba';
+
+  @override
+  String get reasonError => 'Hadisoana amin\'ny kaonty';
+
+  @override
+  String get reasonDissatisfied => 'Mpanjifa tsy afa-po';
+
+  @override
+  String get reasonOther => 'Hafa';
+
+  @override
+  String get confirmRefund => 'Hamafiso ny famerenana vola';
+
+  @override
+  String get confirmRefundMessage =>
+      'Azo antoka ve fa te hamerina vola ireo entana ireo? Tsy azo ovana ity hetsika ity.';
+
+  @override
+  String get refundSuccess => 'Vita soa aman-tsara ny famerenana vola';
+
+  @override
+  String get alreadyRefunded => 'Efa namerina vola ity varotra ity';
+
+  @override
+  String get notSynced => 'Tsy synchroniser';
+
+  @override
+  String get refunded => 'Namerina vola';
+
+  @override
+  String get noStoreSelected => 'Tsy misy fivarotana voafidy';
+
+  @override
+  String get today => 'Anio';
+
+  @override
+  String get thisWeek => 'Ity herinandro ity';
+
+  @override
+  String get all => 'Rehetra';
+
+  @override
+  String get items => 'Entana';
+
+  @override
+  String get noItems => 'Tsy misy entana';
+
+  @override
+  String get employee => 'Mpiasa';
+
+  @override
+  String get cashRegister => 'Kaonty';
+
+  @override
+  String get tax => 'Hetra';
+
+  @override
+  String get discount => 'Fihenam-bidy';
+
+  @override
+  String get paymentMethod => 'Fomba fandoavana';
+
+  @override
+  String get cash => 'Vola madinika';
+
+  @override
+  String get print => 'Manonta';
+
+  @override
+  String get sendWhatsApp => 'Alefa amin\'ny WhatsApp';
+
+  @override
+  String get originalItems => 'Entana tany am-boalohany';
+
+  @override
+  String get itemsToRefund => 'Entana haverina vola';
+
+  @override
+  String get selectItemsToRefund => 'Safidio ny entana haverina vola';
+
+  @override
+  String get noItemsSelected => 'Tsy misy entana voafidy';
+
+  @override
+  String get noteOptional => 'Fanamarihana (tsy voatery)';
+
+  @override
+  String get totalToRefund => 'Totalin\'ny haverina vola';
+
+  @override
+  String get changeDueLabel => 'Ambim-bola averina :';
+
+  @override
+  String get changeCustomer => 'Hanova';
+
+  @override
+  String get paymentOther => 'Hafa';
 }

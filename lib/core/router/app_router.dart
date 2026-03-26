@@ -17,6 +17,7 @@ import '../../features/pos/presentation/screens/pos_screen.dart';
 import '../../features/customers/presentation/screens/customer_list_screen.dart';
 import '../../features/customers/presentation/screens/customer_form_screen.dart';
 import '../../features/customers/presentation/screens/customer_detail_screen.dart';
+import '../../features/customers/presentation/screens/credit_list_screen.dart';
 import '../../features/store/presentation/screens/payment_settings_screen.dart';
 import '../../features/pos/presentation/screens/sales_history_screen.dart';
 import '../../features/pos/presentation/screens/receipt_detail_screen.dart';
@@ -179,6 +180,12 @@ class AppRouter {
       GoRoute(
         path: '/customers/new',
         builder: (context, state) => const CustomerFormScreen(),
+      ),
+
+      // Customers - Ventes à crédit
+      GoRoute(
+        path: '/customers/credits',
+        builder: (context, state) => const CreditListScreen(),
       ),
 
       // Customers - Détail client

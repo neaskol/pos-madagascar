@@ -491,7 +491,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get subtotal => 'Sous-total';
 
   @override
-  String get total => 'TOTAL';
+  String get total => 'Total';
 
   @override
   String get pay => 'PAYER';
@@ -840,4 +840,370 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsPaymentTypes => 'Types de paiement';
+
+  @override
+  String get creditSale => 'Vente à crédit';
+
+  @override
+  String get selectCustomerForCredit =>
+      'Sélectionnez un client pour la vente à crédit';
+
+  @override
+  String get selectCustomer => 'Sélectionner un client';
+
+  @override
+  String get noCustomerSelected => 'Aucun client sélectionné';
+
+  @override
+  String get creditDueDateTitle => 'Date d\'échéance';
+
+  @override
+  String get creditDueDateNone => 'Sans échéance';
+
+  @override
+  String get creditDueDate7d => '7 jours';
+
+  @override
+  String get creditDueDate15d => '15 jours';
+
+  @override
+  String get creditDueDate30d => '30 jours';
+
+  @override
+  String get creditDueDateCustom => 'Choisir une date';
+
+  @override
+  String get creditNoteHint => 'Note sur le crédit (optionnel)';
+
+  @override
+  String creditSaleConfirmation(String amount, String customer) {
+    return 'Confirmer la vente à crédit de $amount Ar pour $customer ?';
+  }
+
+  @override
+  String get creditSaleSuccess => 'Vente à crédit enregistrée';
+
+  @override
+  String get creditSaleCustomerRequired =>
+      'Un client est requis pour une vente à crédit';
+
+  @override
+  String get totalDebts => 'Total dettes';
+
+  @override
+  String get overdueDebts => 'En retard';
+
+  @override
+  String get creditSalesEmpty => 'Aucune vente à crédit';
+
+  @override
+  String get creditSalesEmptyDescription =>
+      'Les ventes à crédit apparaîtront ici';
+
+  @override
+  String get payment => 'Paiement';
+
+  @override
+  String get paymentTitle => 'Paiement';
+
+  @override
+  String get paymentSingle => 'Paiement unique';
+
+  @override
+  String get paymentSplit => 'Multi-paiement';
+
+  @override
+  String get paymentType => 'Type de paiement';
+
+  @override
+  String get paymentCash => 'Espèces';
+
+  @override
+  String get paymentCard => 'Carte bancaire';
+
+  @override
+  String get paymentMvola => 'MVola';
+
+  @override
+  String get paymentOrangeMoney => 'Orange Money';
+
+  @override
+  String get paymentCredit => 'Crédit';
+
+  @override
+  String get paymentTotalToPay => 'Total à payer';
+
+  @override
+  String get paymentAmountReceived => 'Montant reçu';
+
+  @override
+  String get paymentCustomAmount => 'Ou montant personnalisé';
+
+  @override
+  String get paymentCustomAmountHint => 'Montant en Ariary';
+
+  @override
+  String get paymentChangeDue => 'Monnaie à rendre';
+
+  @override
+  String get paymentInsufficient => 'Montant insuffisant';
+
+  @override
+  String get paymentNoteOptional => 'Note (optionnel)';
+
+  @override
+  String get paymentNoteHint => 'Ajouter une note à cette vente...';
+
+  @override
+  String get paymentNoteHelper => 'Cette note apparaîtra sur le reçu';
+
+  @override
+  String get paymentValidate => 'VALIDER LE PAIEMENT';
+
+  @override
+  String get paymentRemainingAmount => 'Montant restant';
+
+  @override
+  String get paymentComplete => 'Paiement complet';
+
+  @override
+  String get paymentPaid => 'Payé';
+
+  @override
+  String get paymentAdded => 'Paiements ajoutés';
+
+  @override
+  String get paymentAddPayment => 'Ajouter un paiement';
+
+  @override
+  String get paymentSplitDescription =>
+      'Divisez le paiement en plusieurs méthodes';
+
+  @override
+  String get paymentSplitMethods => 'Espèces, Carte, MVola, Orange Money';
+
+  @override
+  String get paymentErrorNotAuthenticated =>
+      'Erreur: utilisateur non authentifié';
+
+  @override
+  String get paymentErrorStoreSettings =>
+      'Erreur: impossible de charger les réglages du magasin';
+
+  @override
+  String get paymentErrorMvolaMerchant =>
+      'Erreur: numéro marchand MVola non configuré';
+
+  @override
+  String get paymentErrorOrangeMoneyMerchant =>
+      'Erreur: numéro marchand Orange Money non configuré';
+
+  @override
+  String get paymentConfigure => 'Configurer';
+
+  @override
+  String get inventoryTitle => 'Vue d\'ensemble stock';
+
+  @override
+  String get inventoryMetrics => 'Indicateurs';
+
+  @override
+  String get inventoryOutOfStock => 'Ruptures';
+
+  @override
+  String get inventoryLowStock => 'Alertes stock';
+
+  @override
+  String get inventoryTotalValue => 'Valeur stock';
+
+  @override
+  String get inventoryFilterAll => 'Tous';
+
+  @override
+  String get inventoryFilterLow => 'Bas stock';
+
+  @override
+  String get inventoryFilterOut => 'Rupture';
+
+  @override
+  String get inventoryEmpty => 'Aucun article en stock';
+
+  @override
+  String get inventoryEmptyDescription =>
+      'Ajoutez vos produits avec suivi de stock activé';
+
+  @override
+  String inventoryItemsCount(int count) {
+    return '$count articles';
+  }
+
+  @override
+  String get inventoryQuickEdit => 'Modifier le stock';
+
+  @override
+  String get inventoryCurrentStock => 'Stock actuel';
+
+  @override
+  String get inventoryNewStock => 'Nouveau stock';
+
+  @override
+  String get inventoryAdjustmentReason => 'Raison';
+
+  @override
+  String get inventoryReasonReceive => 'Réception';
+
+  @override
+  String get inventoryReasonLoss => 'Perte';
+
+  @override
+  String get inventoryReasonDamage => 'Dommage';
+
+  @override
+  String get inventoryReasonCount => 'Inventaire';
+
+  @override
+  String get inventoryReasonOther => 'Autre';
+
+  @override
+  String get inventoryAdjustmentNote => 'Note (optionnel)';
+
+  @override
+  String get inventoryAdjustmentSuccess => 'Stock mis à jour';
+
+  @override
+  String inventoryStockUpdated(String name) {
+    return 'Stock de $name mis à jour';
+  }
+
+  @override
+  String get inventoryAlertThreshold => 'Seuil d\'alerte';
+
+  @override
+  String get inventoryAlertSet => 'Définir une alerte';
+
+  @override
+  String get inventoryAlertUpdated => 'Alerte stock mise à jour';
+
+  @override
+  String inventoryUnitsRemaining(int count) {
+    return '$count en stock';
+  }
+
+  @override
+  String get salesHistory => 'Historique des ventes';
+
+  @override
+  String get searchReceipts => 'Rechercher un reçu';
+
+  @override
+  String get receiptDetail => 'Détail du reçu';
+
+  @override
+  String get refund => 'Rembourser';
+
+  @override
+  String get refundAll => 'Tout rembourser';
+
+  @override
+  String get refundReason => 'Raison du remboursement';
+
+  @override
+  String get reasonDefective => 'Produit défectueux';
+
+  @override
+  String get reasonError => 'Erreur de caisse';
+
+  @override
+  String get reasonDissatisfied => 'Client insatisfait';
+
+  @override
+  String get reasonOther => 'Autre';
+
+  @override
+  String get confirmRefund => 'Confirmer le remboursement';
+
+  @override
+  String get confirmRefundMessage =>
+      'Êtes-vous sûr de vouloir rembourser ces articles ? Cette action est irréversible.';
+
+  @override
+  String get refundSuccess => 'Remboursement effectué avec succès';
+
+  @override
+  String get alreadyRefunded => 'Cette vente a déjà été remboursée';
+
+  @override
+  String get notSynced => 'Non synchronisé';
+
+  @override
+  String get refunded => 'Remboursé';
+
+  @override
+  String get noStoreSelected => 'Aucun magasin sélectionné';
+
+  @override
+  String get today => 'Aujourd\'hui';
+
+  @override
+  String get thisWeek => 'Cette semaine';
+
+  @override
+  String get all => 'Tous';
+
+  @override
+  String get items => 'Articles';
+
+  @override
+  String get noItems => 'Aucun article';
+
+  @override
+  String get employee => 'Employé';
+
+  @override
+  String get cashRegister => 'Caisse';
+
+  @override
+  String get tax => 'Taxes';
+
+  @override
+  String get discount => 'Remise';
+
+  @override
+  String get paymentMethod => 'Mode de paiement';
+
+  @override
+  String get cash => 'Espèces';
+
+  @override
+  String get print => 'Imprimer';
+
+  @override
+  String get sendWhatsApp => 'Envoyer par WhatsApp';
+
+  @override
+  String get originalItems => 'Articles originaux';
+
+  @override
+  String get itemsToRefund => 'Articles à rembourser';
+
+  @override
+  String get selectItemsToRefund => 'Sélectionnez les articles à rembourser';
+
+  @override
+  String get noItemsSelected => 'Aucun article sélectionné';
+
+  @override
+  String get noteOptional => 'Note (optionnel)';
+
+  @override
+  String get totalToRefund => 'Total à rembourser';
+
+  @override
+  String get changeDueLabel => 'Monnaie à rendre :';
+
+  @override
+  String get changeCustomer => 'Changer';
+
+  @override
+  String get paymentOther => 'Autre';
 }

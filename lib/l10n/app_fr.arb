@@ -465,5 +465,9 @@
   "selectItemsToRefund": "Sélectionnez les articles à rembourser",
   "noItemsSelected": "Aucun article sélectionné",
   "noteOptional": "Note (optionnel)",
-  "totalToRefund": "Total à rembourser"
+  "totalToRefund": "Total à rembourser",
+
+  "changeDueLabel": "Monnaie à rendre :",
+  "changeCustomer": "Changer",
+  "paymentOther": "Autre"
 }

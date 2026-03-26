@@ -1043,7 +1043,7 @@ abstract class AppLocalizations {
   /// No description provided for @total.
   ///
   /// In fr, this message translates to:
-  /// **'TOTAL'**
+  /// **'Total'**
   String get total;
 
   /// No description provided for @pay.
@@ -1705,6 +1705,702 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Types de paiement'**
   String get settingsPaymentTypes;
+
+  /// No description provided for @creditSale.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vente à crédit'**
+  String get creditSale;
+
+  /// No description provided for @selectCustomerForCredit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionnez un client pour la vente à crédit'**
+  String get selectCustomerForCredit;
+
+  /// No description provided for @selectCustomer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner un client'**
+  String get selectCustomer;
+
+  /// No description provided for @noCustomerSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun client sélectionné'**
+  String get noCustomerSelected;
+
+  /// No description provided for @creditDueDateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Date d\'échéance'**
+  String get creditDueDateTitle;
+
+  /// No description provided for @creditDueDateNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans échéance'**
+  String get creditDueDateNone;
+
+  /// No description provided for @creditDueDate7d.
+  ///
+  /// In fr, this message translates to:
+  /// **'7 jours'**
+  String get creditDueDate7d;
+
+  /// No description provided for @creditDueDate15d.
+  ///
+  /// In fr, this message translates to:
+  /// **'15 jours'**
+  String get creditDueDate15d;
+
+  /// No description provided for @creditDueDate30d.
+  ///
+  /// In fr, this message translates to:
+  /// **'30 jours'**
+  String get creditDueDate30d;
+
+  /// No description provided for @creditDueDateCustom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir une date'**
+  String get creditDueDateCustom;
+
+  /// No description provided for @creditNoteHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note sur le crédit (optionnel)'**
+  String get creditNoteHint;
+
+  /// No description provided for @creditSaleConfirmation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer la vente à crédit de {amount} Ar pour {customer} ?'**
+  String creditSaleConfirmation(String amount, String customer);
+
+  /// No description provided for @creditSaleSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vente à crédit enregistrée'**
+  String get creditSaleSuccess;
+
+  /// No description provided for @creditSaleCustomerRequired.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un client est requis pour une vente à crédit'**
+  String get creditSaleCustomerRequired;
+
+  /// No description provided for @totalDebts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total dettes'**
+  String get totalDebts;
+
+  /// No description provided for @overdueDebts.
+  ///
+  /// In fr, this message translates to:
+  /// **'En retard'**
+  String get overdueDebts;
+
+  /// No description provided for @creditSalesEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune vente à crédit'**
+  String get creditSalesEmpty;
+
+  /// No description provided for @creditSalesEmptyDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les ventes à crédit apparaîtront ici'**
+  String get creditSalesEmptyDescription;
+
+  /// No description provided for @payment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement'**
+  String get payment;
+
+  /// No description provided for @paymentTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement'**
+  String get paymentTitle;
+
+  /// No description provided for @paymentSingle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement unique'**
+  String get paymentSingle;
+
+  /// No description provided for @paymentSplit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Multi-paiement'**
+  String get paymentSplit;
+
+  /// No description provided for @paymentType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type de paiement'**
+  String get paymentType;
+
+  /// No description provided for @paymentCash.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espèces'**
+  String get paymentCash;
+
+  /// No description provided for @paymentCard.
+  ///
+  /// In fr, this message translates to:
+  /// **'Carte bancaire'**
+  String get paymentCard;
+
+  /// No description provided for @paymentMvola.
+  ///
+  /// In fr, this message translates to:
+  /// **'MVola'**
+  String get paymentMvola;
+
+  /// No description provided for @paymentOrangeMoney.
+  ///
+  /// In fr, this message translates to:
+  /// **'Orange Money'**
+  String get paymentOrangeMoney;
+
+  /// No description provided for @paymentCredit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Crédit'**
+  String get paymentCredit;
+
+  /// No description provided for @paymentTotalToPay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total à payer'**
+  String get paymentTotalToPay;
+
+  /// No description provided for @paymentAmountReceived.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant reçu'**
+  String get paymentAmountReceived;
+
+  /// No description provided for @paymentCustomAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ou montant personnalisé'**
+  String get paymentCustomAmount;
+
+  /// No description provided for @paymentCustomAmountHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant en Ariary'**
+  String get paymentCustomAmountHint;
+
+  /// No description provided for @paymentChangeDue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Monnaie à rendre'**
+  String get paymentChangeDue;
+
+  /// No description provided for @paymentInsufficient.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant insuffisant'**
+  String get paymentInsufficient;
+
+  /// No description provided for @paymentNoteOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note (optionnel)'**
+  String get paymentNoteOptional;
+
+  /// No description provided for @paymentNoteHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter une note à cette vente...'**
+  String get paymentNoteHint;
+
+  /// No description provided for @paymentNoteHelper.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette note apparaîtra sur le reçu'**
+  String get paymentNoteHelper;
+
+  /// No description provided for @paymentValidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'VALIDER LE PAIEMENT'**
+  String get paymentValidate;
+
+  /// No description provided for @paymentRemainingAmount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Montant restant'**
+  String get paymentRemainingAmount;
+
+  /// No description provided for @paymentComplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement complet'**
+  String get paymentComplete;
+
+  /// No description provided for @paymentPaid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Payé'**
+  String get paymentPaid;
+
+  /// No description provided for @paymentAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiements ajoutés'**
+  String get paymentAdded;
+
+  /// No description provided for @paymentAddPayment.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter un paiement'**
+  String get paymentAddPayment;
+
+  /// No description provided for @paymentSplitDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Divisez le paiement en plusieurs méthodes'**
+  String get paymentSplitDescription;
+
+  /// No description provided for @paymentSplitMethods.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espèces, Carte, MVola, Orange Money'**
+  String get paymentSplitMethods;
+
+  /// No description provided for @paymentErrorNotAuthenticated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur: utilisateur non authentifié'**
+  String get paymentErrorNotAuthenticated;
+
+  /// No description provided for @paymentErrorStoreSettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur: impossible de charger les réglages du magasin'**
+  String get paymentErrorStoreSettings;
+
+  /// No description provided for @paymentErrorMvolaMerchant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur: numéro marchand MVola non configuré'**
+  String get paymentErrorMvolaMerchant;
+
+  /// No description provided for @paymentErrorOrangeMoneyMerchant.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur: numéro marchand Orange Money non configuré'**
+  String get paymentErrorOrangeMoneyMerchant;
+
+  /// No description provided for @paymentConfigure.
+  ///
+  /// In fr, this message translates to:
+  /// **'Configurer'**
+  String get paymentConfigure;
+
+  /// No description provided for @inventoryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vue d\'ensemble stock'**
+  String get inventoryTitle;
+
+  /// No description provided for @inventoryMetrics.
+  ///
+  /// In fr, this message translates to:
+  /// **'Indicateurs'**
+  String get inventoryMetrics;
+
+  /// No description provided for @inventoryOutOfStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ruptures'**
+  String get inventoryOutOfStock;
+
+  /// No description provided for @inventoryLowStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alertes stock'**
+  String get inventoryLowStock;
+
+  /// No description provided for @inventoryTotalValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur stock'**
+  String get inventoryTotalValue;
+
+  /// No description provided for @inventoryFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get inventoryFilterAll;
+
+  /// No description provided for @inventoryFilterLow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bas stock'**
+  String get inventoryFilterLow;
+
+  /// No description provided for @inventoryFilterOut.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rupture'**
+  String get inventoryFilterOut;
+
+  /// No description provided for @inventoryEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun article en stock'**
+  String get inventoryEmpty;
+
+  /// No description provided for @inventoryEmptyDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajoutez vos produits avec suivi de stock activé'**
+  String get inventoryEmptyDescription;
+
+  /// No description provided for @inventoryItemsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} articles'**
+  String inventoryItemsCount(int count);
+
+  /// No description provided for @inventoryQuickEdit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le stock'**
+  String get inventoryQuickEdit;
+
+  /// No description provided for @inventoryCurrentStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock actuel'**
+  String get inventoryCurrentStock;
+
+  /// No description provided for @inventoryNewStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau stock'**
+  String get inventoryNewStock;
+
+  /// No description provided for @inventoryAdjustmentReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Raison'**
+  String get inventoryAdjustmentReason;
+
+  /// No description provided for @inventoryReasonReceive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réception'**
+  String get inventoryReasonReceive;
+
+  /// No description provided for @inventoryReasonLoss.
+  ///
+  /// In fr, this message translates to:
+  /// **'Perte'**
+  String get inventoryReasonLoss;
+
+  /// No description provided for @inventoryReasonDamage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dommage'**
+  String get inventoryReasonDamage;
+
+  /// No description provided for @inventoryReasonCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire'**
+  String get inventoryReasonCount;
+
+  /// No description provided for @inventoryReasonOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre'**
+  String get inventoryReasonOther;
+
+  /// No description provided for @inventoryAdjustmentNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note (optionnel)'**
+  String get inventoryAdjustmentNote;
+
+  /// No description provided for @inventoryAdjustmentSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock mis à jour'**
+  String get inventoryAdjustmentSuccess;
+
+  /// No description provided for @inventoryStockUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock de {name} mis à jour'**
+  String inventoryStockUpdated(String name);
+
+  /// No description provided for @inventoryAlertThreshold.
+  ///
+  /// In fr, this message translates to:
+  /// **'Seuil d\'alerte'**
+  String get inventoryAlertThreshold;
+
+  /// No description provided for @inventoryAlertSet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Définir une alerte'**
+  String get inventoryAlertSet;
+
+  /// No description provided for @inventoryAlertUpdated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alerte stock mise à jour'**
+  String get inventoryAlertUpdated;
+
+  /// No description provided for @inventoryUnitsRemaining.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} en stock'**
+  String inventoryUnitsRemaining(int count);
+
+  /// No description provided for @salesHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique des ventes'**
+  String get salesHistory;
+
+  /// No description provided for @searchReceipts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un reçu'**
+  String get searchReceipts;
+
+  /// No description provided for @receiptDetail.
+  ///
+  /// In fr, this message translates to:
+  /// **'Détail du reçu'**
+  String get receiptDetail;
+
+  /// No description provided for @refund.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rembourser'**
+  String get refund;
+
+  /// No description provided for @refundAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout rembourser'**
+  String get refundAll;
+
+  /// No description provided for @refundReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Raison du remboursement'**
+  String get refundReason;
+
+  /// No description provided for @reasonDefective.
+  ///
+  /// In fr, this message translates to:
+  /// **'Produit défectueux'**
+  String get reasonDefective;
+
+  /// No description provided for @reasonError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur de caisse'**
+  String get reasonError;
+
+  /// No description provided for @reasonDissatisfied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Client insatisfait'**
+  String get reasonDissatisfied;
+
+  /// No description provided for @reasonOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre'**
+  String get reasonOther;
+
+  /// No description provided for @confirmRefund.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmer le remboursement'**
+  String get confirmRefund;
+
+  /// No description provided for @confirmRefundMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir rembourser ces articles ? Cette action est irréversible.'**
+  String get confirmRefundMessage;
+
+  /// No description provided for @refundSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursement effectué avec succès'**
+  String get refundSuccess;
+
+  /// No description provided for @alreadyRefunded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette vente a déjà été remboursée'**
+  String get alreadyRefunded;
+
+  /// No description provided for @notSynced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non synchronisé'**
+  String get notSynced;
+
+  /// No description provided for @refunded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remboursé'**
+  String get refunded;
+
+  /// No description provided for @noStoreSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun magasin sélectionné'**
+  String get noStoreSelected;
+
+  /// No description provided for @today.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui'**
+  String get today;
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette semaine'**
+  String get thisWeek;
+
+  /// No description provided for @all.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get all;
+
+  /// No description provided for @items.
+  ///
+  /// In fr, this message translates to:
+  /// **'Articles'**
+  String get items;
+
+  /// No description provided for @noItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun article'**
+  String get noItems;
+
+  /// No description provided for @employee.
+  ///
+  /// In fr, this message translates to:
+  /// **'Employé'**
+  String get employee;
+
+  /// No description provided for @cashRegister.
+  ///
+  /// In fr, this message translates to:
+  /// **'Caisse'**
+  String get cashRegister;
+
+  /// No description provided for @tax.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taxes'**
+  String get tax;
+
+  /// No description provided for @discount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Remise'**
+  String get discount;
+
+  /// No description provided for @paymentMethod.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode de paiement'**
+  String get paymentMethod;
+
+  /// No description provided for @cash.
+  ///
+  /// In fr, this message translates to:
+  /// **'Espèces'**
+  String get cash;
+
+  /// No description provided for @print.
+  ///
+  /// In fr, this message translates to:
+  /// **'Imprimer'**
+  String get print;
+
+  /// No description provided for @sendWhatsApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer par WhatsApp'**
+  String get sendWhatsApp;
+
+  /// No description provided for @originalItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Articles originaux'**
+  String get originalItems;
+
+  /// No description provided for @itemsToRefund.
+  ///
+  /// In fr, this message translates to:
+  /// **'Articles à rembourser'**
+  String get itemsToRefund;
+
+  /// No description provided for @selectItemsToRefund.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionnez les articles à rembourser'**
+  String get selectItemsToRefund;
+
+  /// No description provided for @noItemsSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun article sélectionné'**
+  String get noItemsSelected;
+
+  /// No description provided for @noteOptional.
+  ///
+  /// In fr, this message translates to:
+  /// **'Note (optionnel)'**
+  String get noteOptional;
+
+  /// No description provided for @totalToRefund.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total à rembourser'**
+  String get totalToRefund;
+
+  /// No description provided for @changeDueLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Monnaie à rendre :'**
+  String get changeDueLabel;
+
+  /// No description provided for @changeCustomer.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer'**
+  String get changeCustomer;
+
+  /// No description provided for @paymentOther.
+  ///
+  /// In fr, this message translates to:
+  /// **'Autre'**
+  String get paymentOther;
 }
 
 class _AppLocalizationsDelegate

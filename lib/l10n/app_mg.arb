@@ -465,5 +465,9 @@
   "selectItemsToRefund": "Safidio ny entana haverina vola",
   "noItemsSelected": "Tsy misy entana voafidy",
   "noteOptional": "Fanamarihana (tsy voatery)",
-  "totalToRefund": "Totalin'ny haverina vola"
+  "totalToRefund": "Totalin'ny haverina vola",
+
+  "changeDueLabel": "Ambim-bola averina :",
+  "changeCustomer": "Hanova",
+  "paymentOther": "Hafa"
 }
