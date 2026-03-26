@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../../core/data/local/app_database.dart';
+import '../../../../core/data/local/app_database.dart' hide InventoryCount, InventoryCountItem;
 import '../../domain/entities/inventory_count.dart';
 import '../../domain/entities/inventory_count_item.dart';
 

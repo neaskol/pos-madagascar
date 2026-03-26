@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/data/local/app_database.dart';
+import '../../domain/enums/adjustment_reason.dart';
+import '../../domain/enums/inventory_movement_reason.dart';
 
 /// Repository pour les ajustements de stock et l'historique des mouvements
 /// Phase 3.14 - Différenciants #9 & #10
@@ -20,7 +22,7 @@ class StockAdjustmentRepository {
   }) async {
     try {
       final adjustmentId = _uuid.v4();
-      final now = DateTime.now();
+      final now = DateTime.now().millisecondsSinceEpoch;
 
       // Créer l'ajustement principal
       final adjustment = StockAdjustmentsCompanion(
@@ -29,7 +31,7 @@ class StockAdjustmentRepository {
         reason: Value(reason.index),
         notes: Value(notes),
         createdBy: Value(createdBy),
-        synced: const Value(false),
+        synced: const Value(0),
         createdAt: Value(now),
         updatedAt: Value(now),
       );
@@ -47,7 +49,7 @@ class StockAdjustmentRepository {
             quantityChange: Value(itemData.quantityChange),
             quantityAfter: Value(itemData.quantityAfter),
             cost: Value(itemData.cost),
-            synced: const Value(false),
+            synced: const Value(0),
             createdAt: Value(now),
             updatedAt: Value(now),
           ),
@@ -95,12 +97,12 @@ class StockAdjustmentRepository {
 
   /// Obtenir un ajustement par ID
   Future<StockAdjustment?> getAdjustmentById(String id) async {
-    return database.stockAdjustmentDao.getAdjustmentById(id);
+    return database.stockAdjustmentDao.getAdjustmentById(id).getSingleOrNull();
   }
 
   /// Stream des ajustements d'un magasin
   Stream<List<StockAdjustment>> watchAdjustmentsByStore(String storeId) {
-    return database.stockAdjustmentDao.watchAdjustmentsByStore(storeId);
+    return database.stockAdjustmentDao.watchAdjustments(storeId);
   }
 
   /// Stream des items d'un ajustement
@@ -109,7 +111,7 @@ class StockAdjustmentRepository {
   }
 
   /// Stream de l'historique des mouvements d'un magasin
-  Stream<List<InventoryHistoryEntry>> watchMovementsByStore(
+  Stream<List<InventoryHistory>> watchMovementsByStore(
     String storeId, {
     DateTime? dateFrom,
     DateTime? dateTo,
@@ -122,7 +124,7 @@ class StockAdjustmentRepository {
   }
 
   /// Stream de l'historique d'un item spécifique
-  Stream<List<InventoryHistoryEntry>> watchMovementsByItem(String itemId) {
+  Stream<List<InventoryHistory>> watchMovementsByItem(String itemId) {
     return database.inventoryHistoryDao.watchMovementsByItem(itemId);
   }
 
@@ -161,24 +163,26 @@ class StockAdjustmentRepository {
   }) async {
     if (variantId != null) {
       // Mettre à jour le stock du variant
+      final now = DateTime.now().millisecondsSinceEpoch;
       await (database.update(database.itemVariants)
             ..where((tbl) => tbl.id.equals(variantId)))
           .write(
         ItemVariantsCompanion(
           inStock: Value(newStock.toInt()),
-          updatedAt: Value(DateTime.now()),
-          synced: const Value(false),
+          updatedAt: Value(now),
+          synced: const Value(0),
         ),
       );
     } else {
       // Mettre à jour le stock de l'item principal
+      final now = DateTime.now().millisecondsSinceEpoch;
       await (database.update(database.items)
             ..where((tbl) => tbl.id.equals(itemId)))
           .write(
         ItemsCompanion(
           inStock: Value(newStock.toInt()),
-          updatedAt: Value(DateTime.now()),
-          synced: const Value(false),
+          updatedAt: Value(now),
+          synced: const Value(0),
         ),
       );
     }
@@ -207,8 +211,8 @@ class StockAdjustmentRepository {
       quantityAfter: Value(quantityAfter),
       cost: Value(cost),
       employeeId: Value(employeeId),
-      synced: const Value(false),
-      createdAt: Value(DateTime.now()),
+      synced: const Value(0),
+      createdAt: Value(DateTime.now().millisecondsSinceEpoch),
     );
 
     await database.inventoryHistoryDao.insertMovement(movement);

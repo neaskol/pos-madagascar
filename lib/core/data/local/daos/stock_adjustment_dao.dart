@@ -26,6 +26,14 @@ class StockAdjustmentDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
+  /// Obtenir un ajustement par ID (utilise la query Drift)
+  Selectable<StockAdjustment> getAdjustmentById(String id) =>
+      (select(stockAdjustments)..where((t) => t.id.equals(id)));
+
+  /// Stream des ajustements d'un magasin
+  Stream<List<StockAdjustment>> watchAdjustments(String storeId) =>
+      getAdjustmentsByStore(storeId).watch();
+
   /// Stream des items d'un ajustement
   Stream<List<StockAdjustmentItem>> watchAdjustmentItems(String adjustmentId) =>
       getAdjustmentItemsByAdjustment(adjustmentId).watch();
