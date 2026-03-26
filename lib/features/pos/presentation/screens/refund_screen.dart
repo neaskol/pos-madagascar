@@ -128,8 +128,8 @@ class _RefundScreenState extends State<RefundScreen> {
     final authState = context.read<AuthBloc>().state;
     if (authState is! AuthStoreEmployeesLoaded) return;
 
-    final storeId = authState.selectedStore.id;
-    final employeeId = authState.selectedEmployee.id;
+    final storeId = authState.storeId;
+    final employeeId = authState.employees.first.id; // TODO: Use actual logged-in employee
 
     // TODO: Construire la liste des RefundItemData depuis _selectedQuantities
     // Pour l'instant, utiliser des données de placeholder

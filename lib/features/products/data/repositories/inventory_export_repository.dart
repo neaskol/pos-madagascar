@@ -19,7 +19,7 @@ class InventoryExportRepository {
     required String storeName,
     String? filterType, // 'all', 'low', 'out'
   }) async {
-    final items = await _database.itemDao.getItemsByStore(storeId);
+    final items = await _database.itemDao.getItemsByStore(storeId).get();
     final trackedItems = items.where((item) => item.trackStock == 1).toList();
 
     // Filtrer selon le type
@@ -99,7 +99,7 @@ class InventoryExportRepository {
 
     // Auto-ajuster les colonnes
     for (var i = 0; i < 7; i++) {
-      sheet.setColWidth(i, 20);
+      sheet.setColumnWidth(i, 20);
     }
 
     // Ligne de total
@@ -178,7 +178,7 @@ class InventoryExportRepository {
     required String storeName,
     String? filterType, // 'all', 'low', 'out'
   }) async {
-    final items = await _database.itemDao.getItemsByStore(storeId);
+    final items = await _database.itemDao.getItemsByStore(storeId).get();
     final trackedItems = items.where((item) => item.trackStock == 1).toList();
 
     // Filtrer selon le type

@@ -43,7 +43,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
     final l10n = AppLocalizations.of(context)!;
     final authState = context.watch<AuthBloc>().state;
     final storeId = authState is AuthStoreEmployeesLoaded
-        ? authState.selectedStore.id
+        ? authState.storeId
         : null;
 
     return Scaffold(

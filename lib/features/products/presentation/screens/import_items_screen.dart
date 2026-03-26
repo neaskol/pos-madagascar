@@ -268,7 +268,7 @@ class ImportItemsScreen extends StatelessWidget {
                           if (authState is AuthStoreEmployeesLoaded) {
                             context.read<ItemImportBloc>().add(
                                   ExecuteImportEvent(
-                                    storeId: authState.store.id,
+                                    storeId: authState.storeId,
                                     rows: state.rows,
                                   ),
                                 );
@@ -464,7 +464,7 @@ class ImportItemsScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.importSuccessMessage(result.successCount, result.totalRows)),
+            Text(l10n.importSuccessMessage(result.successCount)),
             if (result.errorCount > 0) ...[
               const SizedBox(height: 8),
               Text(
