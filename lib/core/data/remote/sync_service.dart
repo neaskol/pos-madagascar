@@ -43,6 +43,7 @@ class SyncService {
       await _syncStoreSettings(result);
       await _syncCategories(result);
       await _syncItems(result);
+      await _syncCustomers(result);
 
       developer.log('Sync completed: ${result.summary}', name: 'SyncService');
     } catch (e, stack) {
@@ -251,6 +252,43 @@ class SyncService {
     }
   }
 
+  /// Synchronise les clients
+  Future<void> _syncCustomers(SyncResult result) async {
+    try {
+      final unsyncedCustomers = await _localDb.customerDao.getUnsyncedCustomers();
+
+      for (final customer in unsyncedCustomers) {
+        try {
+          final customerData = {
+            'id': customer.id,
+            'store_id': customer.storeId,
+            'name': customer.name,
+            'phone': customer.phone,
+            'email': customer.email,
+            'loyalty_card_barcode': customer.loyaltyCardBarcode,
+            'total_visits': customer.totalVisits,
+            'total_spent': customer.totalSpent,
+            'credit_balance': customer.creditBalance,
+            'notes': customer.notes,
+            'created_by': customer.createdBy,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(customer.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(customer.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('customers').upsert(customerData);
+          await _localDb.customerDao.markCustomerAsSynced(customer.id);
+          result.customersSynced++;
+        } catch (e) {
+          developer.log('Failed to sync customer ${customer.id}', name: 'SyncService', error: e);
+          result.errors.add('Customer ${customer.name}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync customers', name: 'SyncService', error: e);
+      result.errors.add('Customers: $e');
+    }
+  }
+
   /// Vérifie si une connexion internet est disponible
   ///
   /// Note: Cette implémentation simple tente une requête HEAD vers Supabase.
@@ -290,11 +328,12 @@ class SyncResult {
   int settingsSynced = 0;
   int categoriesSynced = 0;
   int itemsSynced = 0;
+  int customersSynced = 0;
   List<String> errors = [];
   bool skipped = false;
 
   int get totalSynced =>
-      storesSynced + usersSynced + settingsSynced + categoriesSynced + itemsSynced;
+      storesSynced + usersSynced + settingsSynced + categoriesSynced + itemsSynced + customersSynced;
 
   bool get hasErrors => errors.isNotEmpty;
 
@@ -303,6 +342,7 @@ class SyncResult {
   String get summary => skipped
       ? 'Sync skipped (no connection)'
       : 'Synced $totalSynced records (stores: $storesSynced, users: $usersSynced, '
-        'settings: $settingsSynced, categories: $categoriesSynced, items: $itemsSynced) '
+        'settings: $settingsSynced, categories: $categoriesSynced, items: $itemsSynced, '
+        'customers: $customersSynced) '
         '${hasErrors ? "with ${errors.length} errors" : "successfully"}';
 }
