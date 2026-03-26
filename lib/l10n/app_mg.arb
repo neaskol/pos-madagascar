@@ -500,5 +500,39 @@
 
   "changeDueLabel": "Ambim-bola averina :",
   "changeCustomer": "Hanova",
-  "paymentOther": "Hafa"
+  "paymentOther": "Hafa",
+
+  "importItems": "Hampiditra vokatra",
+  "importItemsDescription": "Ampidiro ny vokatra avy amin'ny rakitra CSV na Excel.\nAlao aloha ny template mba hahitana ny endrika takiana.",
+  "selectFile": "Hisafidy rakitra",
+  "downloadTemplate": "Hisintona ny template",
+  "fileFormat": "Endrika ny rakitra",
+  "fileFormatDescription": "Ny rakitra dia tokony ahitana ireto tsanganana ireto: Anarana, SKU, Barcode, Sokajy, Vidiny, Vidin'ny fividianana, Stock, Fetra fanairana, Famaritana.\nNy Anarana sy ny Vidiny ihany no tsy maintsy.",
+  "parsingFile": "Mandinika ny rakitra...",
+  "valid": "Marina",
+  "errors": "Fahadisoana",
+  "importValidRows": "Hampiditra vokatra {count} marina",
+  "@importValidRows": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importing": "Fampidirana...",
+  "importComplete": "Vita ny fampidirana",
+  "importSuccessMessage": "Vokatra {success} nampidirina tamin'ny {total}",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "success": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "importErrorsMessage": "Andalana {count} misy fahadisoana tsy nampidirina",
+  "@importErrorsMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "help": "Fanampiana",
+  "importHelpText": "Torolalana fampidirana:\n\n1. Alao ny template CSV\n2. Fenoy ny vokatra (Anarana sy Vidiny tsy maintsy)\n3. Tehirizo ny rakitra amin'ny endrika CSV na Excel\n4. Ampidiro ny rakitra ao amin'ny application\n5. Jereo ny angon-drakitra alohan'ny hanamafisana\n\nEndrika raisina: CSV, XLSX, XLS\n\nTorohevitra:\n- Ny SKU dia tokony tsy misy mitovy\n- Ny vidiny sy ny vidin'ny fividianana dia amin'ny Ariary (isa integer)\n- Ny sokajy dia tokony efa misy ao amin'ny application\n- Ny andalana tsy marina dia ho ambara alohan'ny fampidirana",
+  "close": "Hidio"
 }

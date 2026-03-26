@@ -500,5 +500,83 @@
 
   "changeDueLabel": "Monnaie à rendre :",
   "changeCustomer": "Changer",
-  "paymentOther": "Autre"
+  "paymentOther": "Autre",
+
+  "importItems": "Importer des produits",
+  "importItemsDescription": "Importez vos produits depuis un fichier CSV ou Excel.\nTéléchargez d'abord le template pour voir le format attendu.",
+  "selectFile": "Choisir un fichier",
+  "downloadTemplate": "Télécharger le template",
+  "fileFormat": "Format du fichier",
+  "fileFormatDescription": "Le fichier doit contenir les colonnes suivantes : Nom, SKU, Code-barres, Catégorie, Prix, Coût, Stock, Seuil d'alerte, Description.\nSeuls le Nom et le Prix sont obligatoires.",
+  "parsingFile": "Analyse du fichier en cours...",
+  "valid": "Valides",
+  "errors": "Erreurs",
+  "importValidRows": "Importer {count} produits valides",
+  "@importValidRows": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importing": "Import en cours...",
+  "importComplete": "Import terminé",
+  "importSuccessMessage": "{success} produits importés sur {total}",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "success": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "importErrorsMessage": "{count} lignes avec des erreurs n'ont pas été importées",
+  "@importErrorsMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "help": "Aide",
+  "importHelpText": "Guide d'import :\n\n1. Téléchargez le template CSV\n2. Remplissez vos produits (Nom et Prix obligatoires)\n3. Enregistrez le fichier au format CSV ou Excel\n4. Importez le fichier dans l'application\n5. Vérifiez les données avant de confirmer\n\nFormats supportés : CSV, XLSX, XLS\n\nConseils :\n- Les SKU doivent être uniques\n- Les prix et coûts sont en Ariary (nombres entiers)\n- Les catégories doivent déjà exister dans l'application\n- Les lignes invalides seront signalées avant l'import",
+  "close": "Fermer",
+
+  "adjustmentNewTitle": "Nouvel ajustement",
+  "adjustmentListTitle": "Ajustements de stock",
+  "adjustmentSelectReason": "Raison de l'ajustement",
+  "adjustmentSearchItems": "Rechercher un produit",
+  "adjustmentAddItems": "Ajouter des produits",
+  "adjustmentNoItems": "Aucun article ajouté",
+  "adjustmentNoItemsHint": "Recherchez et ajoutez des produits à ajuster",
+  "adjustmentCurrentStock": "Stock actuel",
+  "adjustmentVariation": "Variation",
+  "adjustmentStockAfter": "Stock après",
+  "adjustmentValidate": "Valider l'ajustement",
+  "adjustmentCreated": "Ajustement créé avec succès",
+  "adjustmentEmptyList": "Aucun ajustement",
+  "adjustmentEmptyDescription": "Les ajustements de stock apparaîtront ici",
+  "adjustmentFilterAll": "Tous",
+  "adjustmentItemsCount": "{count} articles",
+  "@adjustmentItemsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "adjustmentTotalVariation": "Variation totale",
+  "adjustmentBy": "Par {employee}",
+  "@adjustmentBy": {
+    "placeholders": {
+      "employee": {"type": "String"}
+    }
+  },
+
+  "historyTitle": "Historique",
+  "historyEmpty": "Aucun mouvement",
+  "historyEmptyDescription": "L'historique des mouvements de stock apparaîtra ici",
+  "historyFilterPeriod": "Période",
+  "historyFilterLast7Days": "7 derniers jours",
+  "historyFilterLast30Days": "30 derniers jours",
+  "historyFilterThisMonth": "Ce mois",
+  "historyFilterCustom": "Personnalisé",
+  "historyOn": "Le {date}",
+  "@historyOn": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  }
 }
