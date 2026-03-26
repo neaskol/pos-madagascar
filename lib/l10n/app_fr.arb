@@ -688,5 +688,19 @@
       "name": {"type": "String"}
     }
   },
-  "inventoryCountsEmptyHint": "Aucun inventaire. Appuyez sur + pour commencer."
+  "inventoryCountsEmptyHint": "Aucun inventaire. Appuyez sur + pour commencer.",
+  "inventoryNewCountTitle": "Nouvel inventaire",
+  "inventoryCountType": "Type d'inventaire",
+  "inventoryTypeFullDesc": "Compter tous les articles en stock",
+  "inventoryTypePartialDesc": "Compter uniquement les articles sélectionnés",
+  "inventorySelectProducts": "Sélectionner les produits",
+  "inventorySelectItems": "Sélectionner les articles à compter",
+  "inventoryNotesHint": "Notes (optionnel)",
+  "inventoryStartCounting": "Commencer l'inventaire",
+  "inventoryItemsSelected": "{count} articles sélectionnés",
+  "@inventoryItemsSelected": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  }
 }

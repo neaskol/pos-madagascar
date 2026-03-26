@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -102,10 +101,10 @@ class _NewInventoryCountScreenState extends State<NewInventoryCountScreen> {
 
             if (authState is AuthAuthenticatedWithStore) {
               storeId = authState.storeId;
-              employeeId = authState.userId;
+              employeeId = authState.user.id;
             } else if (authState is AuthPinSessionActive) {
-              storeId = authState.storeId;
-              employeeId = authState.employeeId;
+              storeId = authState.user.storeId;
+              employeeId = authState.user.id;
             }
 
             if (storeId == null || employeeId == null) {
@@ -174,10 +173,10 @@ class _NewInventoryCountScreenState extends State<NewInventoryCountScreen> {
                             controller: _searchController,
                             decoration: InputDecoration(
                               hintText: l10n.search,
-                              prefixIcon: const Icon(LucideIcons.search),
+                              prefixIcon: const Icon(Icons.search),
                               suffixIcon: _searchController.text.isNotEmpty
                                   ? IconButton(
-                                      icon: const Icon(LucideIcons.x),
+                                      icon: const Icon(Icons.close),
                                       onPressed: () {
                                         _searchController.clear();
                                         setState(() {});
@@ -205,7 +204,7 @@ class _NewInventoryCountScreenState extends State<NewInventoryCountScreen> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    LucideIcons.checkCircle,
+                                    Icons.check_circle,
                                     size: 16,
                                     color: context.success,
                                   ),
@@ -289,14 +288,14 @@ class _NewInventoryCountScreenState extends State<NewInventoryCountScreen> {
       children: [
         _buildTypeCard(
           type: 'full',
-          icon: LucideIcons.package,
+          icon: Icons.inventory_2_outlined,
           title: l10n.inventoryTypeFull,
           description: l10n.inventoryTypeFullDesc,
         ),
         const SizedBox(height: AppSpacing.md),
         _buildTypeCard(
           type: 'partial',
-          icon: LucideIcons.packageCheck,
+          icon: Icons.check_box_outlined,
           title: l10n.inventoryTypePartial,
           description: l10n.inventoryTypePartialDesc,
         ),
@@ -374,7 +373,7 @@ class _NewInventoryCountScreenState extends State<NewInventoryCountScreen> {
               ),
               if (isSelected)
                 Icon(
-                  LucideIcons.checkCircle,
+                  Icons.check_circle,
                   color: context.accent,
                   size: 24,
                 ),
@@ -419,7 +418,7 @@ class _NewInventoryCountScreenState extends State<NewInventoryCountScreen> {
               child: Column(
                 children: [
                   Icon(
-                    LucideIcons.packageSearch,
+                    Icons.inventory_outlined,
                     size: 48,
                     color: context.textHint,
                   ),
@@ -475,14 +474,14 @@ class _NewInventoryCountScreenState extends State<NewInventoryCountScreen> {
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Icon(
-                                LucideIcons.package,
+                                Icons.inventory_2_outlined,
                                 color: context.textHint,
                                 size: 20,
                               );
                             },
                           )
                         : Icon(
-                            LucideIcons.package,
+                            Icons.inventory_2_outlined,
                             color: context.textHint,
                             size: 20,
                           ),

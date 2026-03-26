@@ -36,7 +36,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
         return l10n.inventoryReasonLoss;
       case AdjustmentReason.damage:
         return l10n.inventoryReasonDamage;
-      case AdjustmentReason.inventoryCount:
+      case AdjustmentReason.count:
         return l10n.inventoryReasonCount;
       case AdjustmentReason.other:
         return l10n.inventoryReasonOther;
@@ -50,7 +50,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
       case AdjustmentReason.loss:
       case AdjustmentReason.damage:
         return context.danger;
-      case AdjustmentReason.inventoryCount:
+      case AdjustmentReason.count:
         return context.accent;
       case AdjustmentReason.other:
         return context.textSec;
@@ -68,7 +68,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
         return context.isDark
             ? AppColors.dangerBgDark
             : AppColors.dangerBgLight;
-      case AdjustmentReason.inventoryCount:
+      case AdjustmentReason.count:
         return context.isDark
             ? AppColors.darkSurface
             : AppColors.lightSurfaceHigh;
@@ -260,7 +260,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
     DateFormat dateFormat,
     NumberFormat numberFormat,
   ) {
-    final reason = adjustment.reason;
+    final reason = AdjustmentReason.values[adjustment.reason];
     final reasonColor = _getReasonColor(reason);
     final reasonBgColor = _getReasonBgColor(reason);
 
@@ -465,16 +465,16 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
                                 vertical: 3,
                               ),
                               decoration: BoxDecoration(
-                                color: _getReasonBgColor(adjustment.reason),
+                                color: _getReasonBgColor(AdjustmentReason.values[adjustment.reason]),
                                 borderRadius:
                                     BorderRadius.circular(AppRadius.full),
                               ),
                               child: Text(
-                                _getReasonLabel(adjustment.reason, l10n),
+                                _getReasonLabel(AdjustmentReason.values[adjustment.reason], l10n),
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
-                                  color: _getReasonColor(adjustment.reason),
+                                  color: _getReasonColor(AdjustmentReason.values[adjustment.reason]),
                                 ),
                               ),
                             ),

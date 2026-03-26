@@ -3216,6 +3216,60 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Aucun inventaire. Appuyez sur + pour commencer.'**
   String get inventoryCountsEmptyHint;
+
+  /// No description provided for @inventoryNewCountTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel inventaire'**
+  String get inventoryNewCountTitle;
+
+  /// No description provided for @inventoryCountType.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type d\'inventaire'**
+  String get inventoryCountType;
+
+  /// No description provided for @inventoryTypeFullDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compter tous les articles en stock'**
+  String get inventoryTypeFullDesc;
+
+  /// No description provided for @inventoryTypePartialDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compter uniquement les articles sélectionnés'**
+  String get inventoryTypePartialDesc;
+
+  /// No description provided for @inventorySelectProducts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner les produits'**
+  String get inventorySelectProducts;
+
+  /// No description provided for @inventorySelectItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner les articles à compter'**
+  String get inventorySelectItems;
+
+  /// No description provided for @inventoryNotesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes (optionnel)'**
+  String get inventoryNotesHint;
+
+  /// No description provided for @inventoryStartCounting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer l\'inventaire'**
+  String get inventoryStartCounting;
+
+  /// No description provided for @inventoryItemsSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} articles sélectionnés'**
+  String inventoryItemsSelected(int count);
 }
 
 class _AppLocalizationsDelegate

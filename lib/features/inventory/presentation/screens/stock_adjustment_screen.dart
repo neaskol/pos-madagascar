@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../../../domain/enums/adjustment_reason.dart";
+import '../../domain/enums/adjustment_reason.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -74,10 +74,10 @@ class _StockAdjustmentScreenState extends State<StockAdjustmentScreen> {
 
     if (authState is AuthAuthenticatedWithStore) {
       storeId = authState.storeId;
-      employeeId = authState.userId;
+      employeeId = authState.user.id;
     } else if (authState is AuthPinSessionActive) {
-      storeId = authState.storeId;
-      employeeId = authState.employeeId;
+      storeId = authState.user.storeId;
+      employeeId = authState.user.id;
     }
 
     if (storeId == null || employeeId == null) {
@@ -104,6 +104,7 @@ class _StockAdjustmentScreenState extends State<StockAdjustmentScreen> {
         .where((data) => data.variation != 0)
         .map((data) => AdjustmentItemData(
               itemId: data.item.id,
+              quantityBefore: data.item.inStock.toDouble(),
               quantityChange: data.variation.toDouble(),
               quantityAfter: (data.item.inStock + data.variation).toDouble(),
               cost: data.item.cost,
@@ -141,7 +142,7 @@ class _StockAdjustmentScreenState extends State<StockAdjustmentScreen> {
         return l10n.inventoryReasonLoss;
       case AdjustmentReason.damage:
         return l10n.inventoryReasonDamage;
-      case AdjustmentReason.inventoryCount:
+      case AdjustmentReason.count:
         return l10n.inventoryReasonCount;
       case AdjustmentReason.other:
         return l10n.inventoryReasonOther;
@@ -155,7 +156,7 @@ class _StockAdjustmentScreenState extends State<StockAdjustmentScreen> {
       case AdjustmentReason.loss:
       case AdjustmentReason.damage:
         return context.danger;
-      case AdjustmentReason.inventoryCount:
+      case AdjustmentReason.count:
         return context.accent;
       case AdjustmentReason.other:
         return context.textSec;
@@ -196,7 +197,7 @@ class _StockAdjustmentScreenState extends State<StockAdjustmentScreen> {
             if (authState is AuthAuthenticatedWithStore) {
               storeId = authState.storeId;
             } else if (authState is AuthPinSessionActive) {
-              storeId = authState.storeId;
+              storeId = authState.user.storeId;
             }
 
             if (storeId == null) {

@@ -1652,4 +1652,34 @@ class AppLocalizationsMg extends AppLocalizations {
   @override
   String get inventoryCountsEmptyHint =>
       'Aucun inventaire. Appuyez sur + pour commencer.';
+
+  @override
+  String get inventoryNewCountTitle => 'Nouvel inventaire';
+
+  @override
+  String get inventoryCountType => 'Type d\'inventaire';
+
+  @override
+  String get inventoryTypeFullDesc => 'Compter tous les articles en stock';
+
+  @override
+  String get inventoryTypePartialDesc =>
+      'Compter uniquement les articles sélectionnés';
+
+  @override
+  String get inventorySelectProducts => 'Sélectionner les produits';
+
+  @override
+  String get inventorySelectItems => 'Sélectionner les articles à compter';
+
+  @override
+  String get inventoryNotesHint => 'Notes (optionnel)';
+
+  @override
+  String get inventoryStartCounting => 'Commencer l\'inventaire';
+
+  @override
+  String inventoryItemsSelected(int count) {
+    return '$count articles sélectionnés';
+  }
 }
