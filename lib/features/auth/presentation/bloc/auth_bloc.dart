@@ -32,12 +32,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       // Vérifier si l'utilisateur a un magasin
-      if (user.storeId.isEmpty) {
+      if (user.storeId == null || user.storeId!.isEmpty) {
         emit(AuthAuthenticatedNoStore(userId: user.id));
         return;
       }
 
-      emit(AuthAuthenticatedWithStore(user: user, storeId: user.storeId));
+      emit(AuthAuthenticatedWithStore(user: user, storeId: user.storeId!));
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }
@@ -68,12 +68,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       // Vérifier si l'utilisateur a un magasin
       final isFirstTime = await _authRepository.isFirstTimeUser();
-      if (isFirstTime) {
+      if (isFirstTime || user.storeId == null || user.storeId!.isEmpty) {
         emit(AuthAuthenticatedNoStore(userId: user.id));
         return;
       }
 
-      emit(AuthAuthenticatedWithStore(user: user, storeId: user.storeId));
+      emit(AuthAuthenticatedWithStore(user: user, storeId: user.storeId!));
     } catch (e) {
       emit(AuthError(message: _formatError(e.toString())));
     }
