@@ -29,9 +29,19 @@ import '../../features/inventory/presentation/screens/adjustment_list_screen.dar
 import '../../features/inventory/presentation/screens/inventory_counts_screen.dart';
 import '../../features/inventory/presentation/screens/new_inventory_count_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_counting_screen.dart';
+import 'main_shell.dart';
+
+// Clés de navigation pour chaque branche
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _posNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'pos');
+final _productsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'products');
+final _customersNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'customers');
+final _reportsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'reports');
+final _settingsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
 
 class AppRouter {
   static final GoRouter router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
 
     // Route guards — redirige selon l'état d'authentification
@@ -61,10 +71,16 @@ class AppRouter {
         return '/setup';
       }
 
-      // Authentifié avec magasin mais pas de session PIN → pin
+      // Magasin créé → autoriser pin-setup
+      if (authState is AuthStoreCreated) {
+        if (currentPath == '/pin-setup') return null;
+        return '/pin-setup';
+      }
+
+      // Authentifié avec magasin mais pas de session PIN → pin ou pin-setup
       if (authState is AuthAuthenticatedWithStore ||
           authState is AuthStoreEmployeesLoaded) {
-        if (currentPath == '/pin') return null;
+        if (currentPath == '/pin' || currentPath == '/pin-setup') return null;
         return '/pin';
       }
 
@@ -78,202 +94,220 @@ class AppRouter {
     },
 
     routes: [
-      // Splash
+      // ── Routes publiques (sans bottom nav) ──────────────────────────
       GoRoute(
         path: '/splash',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const SplashScreen(),
       ),
-
-      // Onboarding
       GoRoute(
         path: '/onboarding',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const OnboardingScreen(),
       ),
-
-      // Login
       GoRoute(
         path: '/login',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const LoginScreen(),
       ),
-
-      // Register
       GoRoute(
         path: '/register',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const RegisterScreen(),
       ),
-
-      // Forgot Password
       GoRoute(
         path: '/forgot-password',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ForgotPasswordScreen(),
       ),
-
-      // Setup Wizard
       GoRoute(
         path: '/setup',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const SetupWizardScreen(),
       ),
-
-      // PIN Setup (première configuration après setup wizard)
       GoRoute(
         path: '/pin-setup',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const PinSetupScreen(),
       ),
-
-      // PIN Screen
       GoRoute(
         path: '/pin',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const PinScreen(),
       ),
 
-      // POS (Caisse principale)
-      GoRoute(
-        path: '/pos',
-        builder: (context, state) => const PosScreen(),
-      ),
-
-      // POS - Historique des ventes (reçus)
-      GoRoute(
-        path: '/pos/receipts',
-        builder: (context, state) => const SalesHistoryScreen(),
-      ),
-
-      // POS - Détail d'un reçu
-      GoRoute(
-        path: '/pos/receipts/:id',
-        builder: (context, state) {
-          final receiptId = state.pathParameters['id']!;
-          return ReceiptDetailScreen(receiptId: receiptId);
+      // ── Shell principal avec Bottom Navigation ──────────────────────
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return MainShell(navigationShell: navigationShell);
         },
-      ),
+        branches: [
+          // ── Branche 1 : Caisse (POS) ──
+          StatefulShellBranch(
+            navigatorKey: _posNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/pos',
+                builder: (context, state) => const PosScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'receipts',
+                    builder: (context, state) => const SalesHistoryScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) {
+                          final receiptId = state.pathParameters['id']!;
+                          return ReceiptDetailScreen(receiptId: receiptId);
+                        },
+                        routes: [
+                          GoRoute(
+                            path: 'refund',
+                            builder: (context, state) {
+                              final receiptId = state.pathParameters['id']!;
+                              return RefundScreen(receiptId: receiptId);
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
 
-      // POS - Remboursement
-      GoRoute(
-        path: '/pos/receipts/:id/refund',
-        builder: (context, state) {
-          final receiptId = state.pathParameters['id']!;
-          return RefundScreen(receiptId: receiptId);
-        },
-      ),
+          // ── Branche 2 : Produits ──
+          StatefulShellBranch(
+            navigatorKey: _productsNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/products',
+                builder: (context, state) => const ProductsListScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'new',
+                    builder: (context, state) => const ProductFormScreen(),
+                  ),
+                  GoRoute(
+                    path: 'import',
+                    builder: (context, state) => const ImportItemsScreen(),
+                  ),
+                  GoRoute(
+                    path: ':id/edit',
+                    builder: (context, state) {
+                      final itemId = state.pathParameters['id']!;
+                      return ProductFormScreen(itemId: itemId);
+                    },
+                  ),
+                ],
+              ),
+              // Inventory sous-section (accessible via Produits)
+              GoRoute(
+                path: '/inventory',
+                builder: (context, state) => const InventoryOverviewScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'adjustments',
+                    builder: (context, state) => const AdjustmentListScreen(),
+                    routes: [
+                      GoRoute(
+                        path: 'new',
+                        builder: (context, state) =>
+                            const StockAdjustmentScreen(),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'counts',
+                    builder: (context, state) =>
+                        const InventoryCountsScreen(),
+                    routes: [
+                      GoRoute(
+                        path: 'new',
+                        builder: (context, state) =>
+                            const NewInventoryCountScreen(),
+                      ),
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) {
+                          final countId = state.pathParameters['id']!;
+                          return InventoryCountingScreen(countId: countId);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
 
-      // Products - Liste des produits
-      GoRoute(
-        path: '/products',
-        builder: (context, state) => const ProductsListScreen(),
-      ),
+          // ── Branche 3 : Clients ──
+          StatefulShellBranch(
+            navigatorKey: _customersNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/customers',
+                builder: (context, state) => const CustomerListScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'new',
+                    builder: (context, state) => const CustomerFormScreen(),
+                  ),
+                  GoRoute(
+                    path: 'credits',
+                    builder: (context, state) => const CreditListScreen(),
+                  ),
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) {
+                      final customerId = state.pathParameters['id']!;
+                      return CustomerDetailScreen(customerId: customerId);
+                    },
+                    routes: [
+                      GoRoute(
+                        path: 'edit',
+                        builder: (context, state) {
+                          final customerId = state.pathParameters['id']!;
+                          return CustomerFormScreen(customerId: customerId);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
 
-      // Products - Créer un nouveau produit
-      GoRoute(
-        path: '/products/new',
-        builder: (context, state) => const ProductFormScreen(),
-      ),
+          // ── Branche 4 : Rapports (placeholder) ──
+          StatefulShellBranch(
+            navigatorKey: _reportsNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/reports',
+                builder: (context, state) => const _ReportsPlaceholder(),
+              ),
+            ],
+          ),
 
-      // Products - Importer des produits CSV/Excel
-      GoRoute(
-        path: '/products/import',
-        builder: (context, state) => const ImportItemsScreen(),
-      ),
-
-      // Products - Éditer un produit
-      GoRoute(
-        path: '/products/:id/edit',
-        builder: (context, state) {
-          final itemId = state.pathParameters['id']!;
-          return ProductFormScreen(itemId: itemId);
-        },
-      ),
-
-      // Inventory - Vue d'ensemble stock
-      GoRoute(
-        path: '/inventory',
-        builder: (context, state) => const InventoryOverviewScreen(),
-      ),
-
-      // Inventory - Liste des ajustements
-      GoRoute(
-        path: '/inventory/adjustments',
-        builder: (context, state) => const AdjustmentListScreen(),
-      ),
-
-      // Inventory - Nouvel ajustement
-      GoRoute(
-        path: '/inventory/adjustments/new',
-        builder: (context, state) => const StockAdjustmentScreen(),
-      ),
-
-      // Inventory - Comptages
-      GoRoute(
-        path: '/inventory/counts',
-        builder: (context, state) => const InventoryCountsScreen(),
-      ),
-
-      // Inventory - Nouveau comptage
-      GoRoute(
-        path: '/inventory/counts/new',
-        builder: (context, state) => const NewInventoryCountScreen(),
-      ),
-
-      // Inventory - Écran de comptage
-      GoRoute(
-        path: '/inventory/counts/:id',
-        builder: (context, state) {
-          final countId = state.pathParameters['id']!;
-          return InventoryCountingScreen(countId: countId);
-        },
-      ),
-
-      // Customers - Liste des clients
-      GoRoute(
-        path: '/customers',
-        builder: (context, state) => const CustomerListScreen(),
-      ),
-
-      // Customers - Nouveau client
-      GoRoute(
-        path: '/customers/new',
-        builder: (context, state) => const CustomerFormScreen(),
-      ),
-
-      // Customers - Ventes à crédit
-      GoRoute(
-        path: '/customers/credits',
-        builder: (context, state) => const CreditListScreen(),
-      ),
-
-      // Customers - Détail client
-      GoRoute(
-        path: '/customers/:id',
-        builder: (context, state) {
-          final customerId = state.pathParameters['id']!;
-          return CustomerDetailScreen(customerId: customerId);
-        },
-      ),
-
-      // Customers - Éditer client
-      GoRoute(
-        path: '/customers/:id/edit',
-        builder: (context, state) {
-          final customerId = state.pathParameters['id']!;
-          return CustomerFormScreen(customerId: customerId);
-        },
-      ),
-
-      // Reports - TODO: Sprint 5
-      GoRoute(
-        path: '/reports',
-        builder: (context, state) => const Placeholder(),
-      ),
-
-      // Settings - Payment Types (Mobile Money)
-      GoRoute(
-        path: '/settings/payment-types',
-        builder: (context, state) => const PaymentSettingsScreen(),
-      ),
-
-      // Settings - TODO: Sprint 6
-      GoRoute(
-        path: '/settings',
-        builder: (context, state) => const Placeholder(),
+          // ── Branche 5 : Réglages ──
+          StatefulShellBranch(
+            navigatorKey: _settingsNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/settings',
+                builder: (context, state) => const _SettingsScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'payment-types',
+                    builder: (context, state) =>
+                        const PaymentSettingsScreen(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     ],
 
@@ -284,4 +318,56 @@ class AppRouter {
       ),
     ),
   );
+}
+
+/// Placeholder pour les Rapports (Sprint 5)
+class _ReportsPlaceholder extends StatelessWidget {
+  const _ReportsPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Rapports'),
+      ),
+      body: const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.bar_chart, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text(
+              'Les rapports arrivent bientôt',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Placeholder pour les Réglages (Sprint 6)
+class _SettingsScreen extends StatelessWidget {
+  const _SettingsScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Réglages'),
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            leading: const Icon(Icons.payment),
+            title: const Text('Types de paiement'),
+            subtitle: const Text('MVola, Orange Money, Espèces'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/settings/payment-types'),
+          ),
+        ],
+      ),
+    );
+  }
 }

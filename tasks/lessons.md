@@ -140,6 +140,35 @@ Après chaque correction ou bug résolu, ajouter une entrée ici pour éviter de
 
 ---
 
+## 2026-03-26 — P0-13 : PIN setup onboarding bloqué (3 causes racines)
+
+**Contexte** : Après signup + setup wizard, l'écran PIN setup ne fonctionnait pas. 3h de debug.
+
+**Erreur 1 — Route guard bloquait /pin-setup** :
+Le GoRouter redirect forçait TOUTES les routes vers `/pin` quand le state était `AuthAuthenticatedWithStore`, y compris `/pin-setup`.
+
+**Erreur 2 — signUpWithEmail() ne sauvegardait pas l'user dans Drift** :
+`signUpWithEmail()` créait l'user dans Supabase mais ne le sauvegardait JAMAIS dans la base locale Drift. Ensuite `getCurrentUser()` (qui lit Drift) retournait `null`.
+
+**Erreur 3 — createInitialStore() faisait updateUser au lieu de upsertUser** :
+Comme l'user n'existait pas dans Drift, `getUserById()` retournait `null` et le `updateUser()` ne faisait rien. L'user restait absent de Drift.
+
+**Solution** :
+1. Route guard : ajouté `|| currentPath == '/pin-setup'` dans la condition d'exemption
+2. Route guard : ajouté bloc `AuthStoreCreated` → autorise `/pin-setup`
+3. `createInitialStore()` : remplacé `updateUser` par `upsertUser` avec fetch complet depuis Supabase
+4. BLoC : supprimé l'emit intermédiaire `AuthStoreCreated`, émet directement `AuthAuthenticatedWithStore`
+
+**Règle** :
+- **TOUJOURS sauvegarder l'user dans Drift après signup** — `getCurrentUser()` lit Drift, pas Supabase
+- **TOUJOURS utiliser `upsertUser` au lieu de `updateUser`** quand l'user peut ne pas exister localement
+- **TOUJOURS vérifier les route guards** quand on ajoute une nouvelle route — ils peuvent bloquer silencieusement
+- **JAMAIS appeler context.read<AuthBloc>() dans un setState()** — le faire APRÈS setState
+- **TOUJOURS tracer le data flow complet** : Supabase Auth → Drift local → BLoC state → UI read → résultat
+- Les emits intermédiaires dans BLoC (ex: `AuthStoreCreated` avant `AuthAuthenticatedWithStore`) causent des race conditions avec la navigation
+
+---
+
 ## Leçons à venir...
 
 Phase 3 complétée (10 sous-phases). Les prochaines leçons seront ajoutées au fil de la Phase 4 et au-delà.

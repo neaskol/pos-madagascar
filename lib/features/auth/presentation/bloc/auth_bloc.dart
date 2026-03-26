@@ -131,26 +131,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthPinSetupRequested event,
     Emitter<AuthState> emit,
   ) async {
+    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    print('🔵 [AUTH BLOC] _onPinSetupRequested START');
+    print('🔵 [AUTH BLOC] User ID: ${event.userId}');
     emit(AuthLoading());
+    print('🔵 [AUTH BLOC] Emitted AuthLoading');
     try {
-      // Sauvegarder le PIN dans le repository
+      print('🔵 [AUTH BLOC] Calling authRepository.setupPin()...');
       await _authRepository.setupPin(
         userId: event.userId,
         pin: event.pin,
       );
+      print('✅ [AUTH BLOC] setupPin() completed');
 
-      // Récupérer l'utilisateur mis à jour
+      print('🔵 [AUTH BLOC] Fetching current user...');
       final user = await _authRepository.getCurrentUser();
+      print('🔵 [AUTH BLOC] Current user: ${user?.id}');
       if (user == null) {
+        print('❌ [AUTH BLOC] User not found after setupPin!');
         emit(const AuthError(message: 'Utilisateur non trouvé'));
         return;
       }
 
-      // Activer la session PIN immédiatement
+      print('✅ [AUTH BLOC] Emitting AuthPinSessionActive');
       emit(AuthPinSessionActive(user: user));
-    } catch (e) {
+      print('✅ [AUTH BLOC] AuthPinSessionActive emitted');
+    } catch (e, stackTrace) {
+      print('❌ [AUTH BLOC] Error in _onPinSetupRequested: $e');
+      print('❌ [AUTH BLOC] Stack: $stackTrace');
       emit(AuthError(message: _formatError(e.toString())));
     }
+    print('🔵 [AUTH BLOC] _onPinSetupRequested END');
+    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
   Future<void> _onSignOutRequested(
@@ -194,12 +206,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         timezone: event.timezone,
       );
 
-      emit(AuthStoreCreated(storeId: storeId));
-
       // Recharger l'utilisateur avec le nouveau store_id
       final user = await _authRepository.getCurrentUser();
       if (user != null) {
         emit(AuthAuthenticatedWithStore(user: user, storeId: storeId));
+      } else {
+        // Fallback si l'utilisateur n'est pas trouvé localement
+        emit(AuthStoreCreated(storeId: storeId));
       }
     } catch (e) {
       emit(AuthError(message: _formatError(e.toString())));

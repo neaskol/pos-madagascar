@@ -21,12 +21,13 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
   bool _isConfirming = false;
 
   void _onNumberPressed(int number) {
+    bool shouldVerify = false;
     setState(() {
       if (_isConfirming) {
         if (_confirmPin.length < 4) {
           _confirmPin += number.toString();
           if (_confirmPin.length == 4) {
-            _verifyAndSavePin();
+            shouldVerify = true;
           }
         }
       } else {
@@ -38,6 +39,9 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
         }
       }
     });
+    if (shouldVerify) {
+      _verifyAndSavePin();
+    }
   }
 
   void _onBackspacePressed() {
@@ -58,19 +62,36 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
   }
 
   void _verifyAndSavePin() {
+    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    print('🔵 [PIN SETUP] _verifyAndSavePin START');
+    print('🔵 [PIN SETUP] Comparing: _pin="$_pin" vs _confirmPin="$_confirmPin"');
     if (_pin == _confirmPin) {
-      // PINs correspondent — enregistrer
+      print('✅ [PIN SETUP] PINs MATCH!');
       final authState = context.read<AuthBloc>().state;
+      print('🔵 [PIN SETUP] Auth state type: ${authState.runtimeType}');
       if (authState is AuthAuthenticatedWithStore) {
+        print('✅ [PIN SETUP] User ID: ${authState.user.id}');
+        print('🔵 [PIN SETUP] Dispatching AuthPinSetupRequested...');
         context.read<AuthBloc>().add(
               AuthPinSetupRequested(
                 userId: authState.user.id,
                 pin: _pin,
               ),
             );
+        print('✅ [PIN SETUP] AuthPinSetupRequested dispatched');
+      } else {
+        print('❌ [PIN SETUP] State is NOT AuthAuthenticatedWithStore!');
+        print('❌ [PIN SETUP] Actual state: $authState');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Erreur: état d\'authentification invalide (${authState.runtimeType})'),
+            backgroundColor: AppColors.dangerLight,
+          ),
+        );
       }
     } else {
-      // PINs ne correspondent pas
+      print('❌ [PIN SETUP] PINs DO NOT MATCH!');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.pinMismatch),
@@ -85,6 +106,8 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
         _isConfirming = false;
       });
     }
+    print('🔵 [PIN SETUP] _verifyAndSavePin END');
+    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
   @override
@@ -93,7 +116,8 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final authState = context.watch<AuthBloc>().state;
 
-    // Récupérer le nom de l'utilisateur
+    print('🔵 [PIN SETUP] build() called, auth state: ${authState.runtimeType}');
+
     String userName = 'Utilisateur';
     if (authState is AuthAuthenticatedWithStore) {
       userName = authState.user.name;
@@ -103,7 +127,9 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
+          print('🔵 [PIN SETUP] BlocListener received state: ${state.runtimeType}');
           if (state is AuthError) {
+            print('❌ [PIN SETUP] AuthError: ${state.message}');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -113,119 +139,118 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
               ),
             );
           } else if (state is AuthPinSessionActive) {
-            // PIN configuré avec succès → rediriger vers POS
+            print('✅ [PIN SETUP] AuthPinSessionActive! Navigating to /pos');
             context.go('/pos');
           }
         },
         child: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 32),
-
-              // Titre
-              Text(
-                l10n.pinSetupTitle,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w700,
-                  color: isDark
-                      ? AppColors.darkTextPrimary
-                      : AppColors.lightTextPrimary,
-                ),
-              ),
-
-              const SizedBox(height: 48),
-
-              // Avatar utilisateur
-              Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? AppColors.darkSurface
-                      : AppColors.lightSurfaceHigh,
-                  shape: BoxShape.circle,
-                ),
+              // Partie haute : avatar + nom + instruction + indicateurs PIN
+              Expanded(
                 child: Center(
-                  child: Text(
-                    userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppColors.darkTextSecondary
-                          : AppColors.lightTextSecondary,
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Avatar utilisateur
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.darkSurface
+                              : AppColors.lightSurfaceHigh,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            userName.isNotEmpty
+                                ? userName[0].toUpperCase()
+                                : 'U',
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.w600,
+                              color: isDark
+                                  ? AppColors.darkTextSecondary
+                                  : AppColors.lightTextSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Nom utilisateur
+                      Text(
+                        userName,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: isDark
+                              ? AppColors.darkTextPrimary
+                              : AppColors.lightTextPrimary,
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Instruction (créer ou confirmer)
+                      Text(
+                        _isConfirming
+                            ? l10n.pinConfirmMessage
+                            : l10n.pinCreateMessage,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDark
+                              ? AppColors.darkTextSecondary
+                              : AppColors.lightTextSecondary,
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Indicateurs PIN (4 ronds)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          4,
+                          (index) {
+                            final currentPin =
+                                _isConfirming ? _confirmPin : _pin;
+                            final isFilled = index < currentPin.length;
+                            return Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              width: 18,
+                              height: 18,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isFilled
+                                    ? (isDark
+                                        ? AppColors.darkTextPrimary
+                                        : AppColors.lightTextPrimary)
+                                    : Colors.transparent,
+                                border: Border.all(
+                                  color: isDark
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.lightTextSecondary,
+                                  width: 2,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
 
-              const SizedBox(height: 16),
-
-              // Nom utilisateur
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: isDark
-                      ? AppColors.darkTextPrimary
-                      : AppColors.lightTextPrimary,
-                ),
+              // Clavier numérique fixé en bas
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24, left: 32, right: 32),
+                child: _buildNumPad(isDark),
               ),
-
-              const SizedBox(height: 48),
-
-              // Instruction
-              Text(
-                _isConfirming ? l10n.pinConfirmMessage : l10n.pinCreateMessage,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: isDark
-                      ? AppColors.darkTextSecondary
-                      : AppColors.lightTextSecondary,
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Indicateurs PIN
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  4,
-                  (index) {
-                    final currentPin = _isConfirming ? _confirmPin : _pin;
-                    final isFilled = index < currentPin.length;
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isFilled
-                            ? (isDark
-                                ? AppColors.darkTextPrimary
-                                : AppColors.lightTextPrimary)
-                            : Colors.transparent,
-                        border: Border.all(
-                          color: isDark
-                              ? AppColors.darkTextSecondary
-                              : AppColors.lightTextSecondary,
-                          width: 2,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              const Spacer(),
-
-              // Clavier numérique
-              _buildNumPad(isDark),
-
-              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -234,49 +259,43 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
   }
 
   Widget _buildNumPad(bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        children: [
-          // Ligne 1-2-3
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [1, 2, 3].map((n) => _buildNumButton(n, isDark)).toList(),
-          ),
-          const SizedBox(height: 16),
-          // Ligne 4-5-6
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [4, 5, 6].map((n) => _buildNumButton(n, isDark)).toList(),
-          ),
-          const SizedBox(height: 16),
-          // Ligne 7-8-9
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [7, 8, 9].map((n) => _buildNumButton(n, isDark)).toList(),
-          ),
-          const SizedBox(height: 16),
-          // Ligne vide-0-backspace
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(width: 80, height: 80), // Espacement
-              _buildNumButton(0, isDark),
-              _buildBackspaceButton(isDark),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [1, 2, 3].map((n) => _buildNumButton(n, isDark)).toList(),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [4, 5, 6].map((n) => _buildNumButton(n, isDark)).toList(),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [7, 8, 9].map((n) => _buildNumButton(n, isDark)).toList(),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const SizedBox(width: 72, height: 72),
+            _buildNumButton(0, isDark),
+            _buildBackspaceButton(isDark),
+          ],
+        ),
+      ],
     );
   }
 
   Widget _buildNumButton(int number, bool isDark) {
     return InkWell(
       onTap: () => _onNumberPressed(number),
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.circular(36),
       child: Container(
-        width: 80,
-        height: 80,
+        width: 72,
+        height: 72,
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkSurface : AppColors.lightSurfaceHigh,
           shape: BoxShape.circle,
@@ -300,10 +319,10 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
   Widget _buildBackspaceButton(bool isDark) {
     return InkWell(
       onTap: _onBackspacePressed,
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.circular(36),
       child: Container(
-        width: 80,
-        height: 80,
+        width: 72,
+        height: 72,
         decoration: BoxDecoration(
           color: isDark ? AppColors.darkSurface : AppColors.lightSurfaceHigh,
           shape: BoxShape.circle,
@@ -313,7 +332,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
           color: isDark
               ? AppColors.darkTextSecondary
               : AppColors.lightTextSecondary,
-          size: 28,
+          size: 26,
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +7,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/theme/app_theme.dart';
 import 'core/data/remote/supabase_client.dart';
+import 'core/data/remote/sync_service.dart';
 import 'core/data/local/app_database.dart';
 import 'core/router/app_router.dart';
 import 'core/services/storage_service.dart';
+import 'dart:developer' as developer;
 import 'l10n/app_localizations.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -56,24 +59,79 @@ void main() async {
   final storageService = StorageService(Supabase.instance.client);
   await storageService.ensureBucketsExist();
 
+  // Initialiser le service de synchronisation
+  final syncService = SyncService(database, Supabase.instance.client);
+
   // Précharger la police Sora pour éviter le flash au premier lancement
   await GoogleFonts.pendingFonts([GoogleFonts.sora()]);
 
   runApp(MyApp(
     database: database,
     storageService: storageService,
+    syncService: syncService,
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final AppDatabase database;
   final StorageService storageService;
+  final SyncService syncService;
 
   const MyApp({
     super.key,
     required this.database,
     required this.storageService,
+    required this.syncService,
   });
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Timer? _syncTimer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Synchroniser immédiatement au démarrage
+    _performSync();
+
+    // Déclencher la synchronisation toutes les 5 minutes
+    _syncTimer = Timer.periodic(const Duration(minutes: 5), (_) {
+      _performSync();
+    });
+  }
+
+  @override
+  void dispose() {
+    _syncTimer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _performSync() async {
+    try {
+      final result = await widget.syncService.syncToRemote();
+      if (result.isSuccess) {
+        developer.log(
+          'Background sync completed: ${result.summary}',
+          name: 'MyApp',
+        );
+      } else if (result.hasErrors) {
+        developer.log(
+          'Background sync completed with errors: ${result.errors.join(", ")}',
+          name: 'MyApp',
+        );
+      }
+    } catch (e) {
+      developer.log(
+        'Background sync failed',
+        name: 'MyApp',
+        error: e,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,61 +139,69 @@ class MyApp extends StatelessWidget {
       providers: [
         // Service pour le storage (upload de photos)
         RepositoryProvider<StorageService>(
-          create: (context) => storageService,
+          create: (context) => widget.storageService,
+        ),
+        // Service pour la synchronisation Drift <-> Supabase
+        RepositoryProvider<SyncService>(
+          create: (context) => widget.syncService,
         ),
         // Repository pour l'authentification
         RepositoryProvider<AuthRepository>(
           create: (context) => AuthRepository(
             supabase: Supabase.instance.client,
-            userDao: database.userDao,
-            storeDao: database.storeDao,
+            userDao: widget.database.userDao,
+            storeDao: widget.database.storeDao,
           ),
         ),
         // Repository pour les catégories
         RepositoryProvider<CategoryRepository>(
-          create: (context) => CategoryRepository(database),
+          create: (context) => CategoryRepository(widget.database),
         ),
         // Repository pour les items (produits)
         RepositoryProvider<ItemRepository>(
-          create: (context) => ItemRepository(database),
+          create: (context) => ItemRepository(widget.database),
         ),
         // Repository pour l'import d'items
         RepositoryProvider<ItemImportRepository>(
           create: (context) => ItemImportRepository(
             context.read<ItemRepository>(),
-            database,
+            widget.database,
           ),
         ),
         // Repository pour les ventes
         RepositoryProvider<SaleRepository>(
-          create: (context) => SaleRepository(database),
+          create: (context) => SaleRepository(widget.database),
         ),
         // Repository pour les remboursements
         RepositoryProvider<RefundRepository>(
-          create: (context) => RefundRepository(database),
+          create: (context) => RefundRepository(widget.database),
         ),
         // Repository pour les pages personnalisées
         RepositoryProvider<CustomPageRepositoryImpl>(
           create: (context) => CustomPageRepositoryImpl(
-            database: database,
+            database: widget.database,
             supabase: Supabase.instance.client,
           ),
         ),
         // Repository pour les clients
         RepositoryProvider<CustomerRepository>(
-          create: (context) => CustomerRepository(database: database),
+          create: (context) => CustomerRepository(database: widget.database),
         ),
         // Repository pour les crédits
         RepositoryProvider<CreditRepository>(
-          create: (context) => CreditRepository(database: database),
+          create: (context) => CreditRepository(database: widget.database),
         ),
         // Repository pour les réglages magasin
         RepositoryProvider<StoreSettingsRepository>(
-          create: (context) => StoreSettingsRepository(database),
+          create: (context) => StoreSettingsRepository(widget.database),
         ),
         // Repository pour les ajustements de stock
         RepositoryProvider<StockAdjustmentRepository>(
-          create: (context) => StockAdjustmentRepository(database),
+          create: (context) => StockAdjustmentRepository(widget.database),
+        ),
+        // Repository pour les comptages d'inventaire
+        RepositoryProvider<InventoryCountRepository>(
+          create: (context) => InventoryCountRepository(widget.database),
         ),
       ],
       child: MultiBlocProvider(
@@ -167,7 +233,7 @@ class MyApp extends StatelessWidget {
           // BLoC pour l'export d'inventaire
           BlocProvider<InventoryExportBloc>(
             create: (context) => InventoryExportBloc(
-              InventoryExportRepository(database),
+              InventoryExportRepository(widget.database),
             ),
           ),
           // BLoC pour les ventes (paiement)
@@ -209,7 +275,7 @@ class MyApp extends StatelessWidget {
           // BLoC pour les comptages d'inventaire
           BlocProvider<InventoryCountBloc>(
             create: (context) => InventoryCountBloc(
-              context.read<InventoryCountRepository>(),
+              InventoryCountRepository(widget.database),
             ),
           ),
           // BLoC pour les pages personnalisées

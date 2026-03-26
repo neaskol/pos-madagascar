@@ -33,11 +33,16 @@ class _ProductGridState extends State<ProductGrid> {
     super.initState();
     // Charger les produits et catégories au démarrage avec storeId
     final authState = context.read<AuthBloc>().state;
+    String? storeId;
     if (authState is AuthAuthenticatedWithStore) {
-      context.read<ItemBloc>().add(LoadStoreItemsEvent(authState.storeId));
-      context
-          .read<CategoryBloc>()
-          .add(LoadStoreCategoriesEvent(authState.storeId));
+      storeId = authState.storeId;
+    } else if (authState is AuthPinSessionActive) {
+      storeId = authState.user.storeId;
+    }
+
+    if (storeId != null) {
+      context.read<ItemBloc>().add(LoadStoreItemsEvent(storeId));
+      context.read<CategoryBloc>().add(LoadStoreCategoriesEvent(storeId));
     }
   }
 

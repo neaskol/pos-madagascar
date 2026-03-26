@@ -40,7 +40,32 @@ class AuthRepository {
             .maybeSingle();
 
         if (userRecord != null) {
-          // Sauvegarder localement
+          // Si l'user a un store_id, charger le store d'abord
+          if (userRecord['store_id'] != null) {
+            final storeRecord = await _supabase
+                .from('stores')
+                .select()
+                .eq('id', userRecord['store_id'])
+                .maybeSingle();
+
+            if (storeRecord != null) {
+              // Sauvegarder le store localement d'abord
+              final store = StoresCompanion.insert(
+                id: storeRecord['id'],
+                name: storeRecord['name'],
+                address: Value(storeRecord['address']),
+                phone: Value(storeRecord['phone']),
+                logoUrl: Value(storeRecord['logo_url']),
+                currency: Value(storeRecord['currency'] ?? 'MGA'),
+                timezone: Value(storeRecord['timezone'] ?? 'Indian/Antananarivo'),
+                synced: const Value(1),
+                updatedAt: DateTime.now().millisecondsSinceEpoch,
+              );
+              await _storeDao.insertStore(store);
+            }
+          }
+
+          // Sauvegarder l'utilisateur localement
           final user = UsersCompanion.insert(
             id: userRecord['id'],
             storeId: Value(userRecord['store_id']),
@@ -115,6 +140,31 @@ class AuthRepository {
         if (userRecord != null &&
             userRecord['pin_hash'] != null &&
             _verifyPin(pin, userRecord['pin_hash'])) {
+          // Si l'user a un store_id, charger le store d'abord
+          if (userRecord['store_id'] != null) {
+            final storeRecord = await _supabase
+                .from('stores')
+                .select()
+                .eq('id', userRecord['store_id'])
+                .maybeSingle();
+
+            if (storeRecord != null) {
+              // Sauvegarder le store localement d'abord
+              final store = StoresCompanion.insert(
+                id: storeRecord['id'],
+                name: storeRecord['name'],
+                address: Value(storeRecord['address']),
+                phone: Value(storeRecord['phone']),
+                logoUrl: Value(storeRecord['logo_url']),
+                currency: Value(storeRecord['currency'] ?? 'MGA'),
+                timezone: Value(storeRecord['timezone'] ?? 'Indian/Antananarivo'),
+                synced: const Value(1),
+                updatedAt: DateTime.now().millisecondsSinceEpoch,
+              );
+              await _storeDao.insertStore(store);
+            }
+          }
+
           // Mettre à jour localement
           final userCompanion = UsersCompanion.insert(
             id: userRecord['id'],
@@ -202,23 +252,35 @@ class AuthRepository {
         print('🔵 [AUTH] Updating user ${currentUser.id} with store_id...');
         await _supabase.from('users').update({
           'store_id': storeRecord['id'],
-          'role': 'OWNER', // Premier utilisateur = OWNER
+          'role': 'OWNER',
         }).eq('id', currentUser.id);
 
-        print('✅ [AUTH] User updated with store_id');
+        print('✅ [AUTH] User updated with store_id in Supabase');
 
-        // Mettre à jour localement
-        final user = await _userDao.getUserById(currentUser.id).getSingleOrNull();
-        if (user != null) {
-          await _userDao.updateUser(
-            UsersCompanion(
-              id: Value(user.id),
-              storeId: Value(storeRecord['id']),
-              role: const Value('OWNER'),
-              synced: const Value(0),
-              updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-            ),
+        // Récupérer les données complètes depuis Supabase
+        final userRecord = await _supabase
+            .from('users')
+            .select()
+            .eq('id', currentUser.id)
+            .maybeSingle();
+
+        if (userRecord != null) {
+          // Upsert local (créer si absent, sinon mettre à jour)
+          final userCompanion = UsersCompanion.insert(
+            id: userRecord['id'],
+            storeId: Value(userRecord['store_id']),
+            name: userRecord['name'] ?? 'Utilisateur',
+            email: Value(userRecord['email']),
+            phone: Value(userRecord['phone']),
+            role: userRecord['role'] ?? 'OWNER',
+            pinHash: Value(userRecord['pin_hash']),
+            emailVerified: Value(userRecord['email_verified'] == true ? 1 : 0),
+            active: Value(userRecord['active'] == true ? 1 : 0),
+            synced: const Value(1),
+            updatedAt: DateTime.now().millisecondsSinceEpoch,
           );
+          await _userDao.upsertUser(userCompanion);
+          print('✅ [AUTH] User upserted locally with store_id');
         }
       }
 
@@ -268,23 +330,48 @@ class AuthRepository {
 
   /// Configuration initiale du PIN (après setup wizard)
   Future<void> setupPin({required String userId, required String pin}) async {
+    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    print('🔵 [AUTH REPO] setupPin START');
+    print('🔵 [AUTH REPO] User ID: $userId');
     final pinHash = hashPin(pin);
+    print('🔵 [AUTH REPO] PIN hash generated');
 
     // Mettre à jour en base
+    print('🔵 [AUTH REPO] Updating Supabase...');
     await _supabase
         .from('users')
         .update({'pin_hash': pinHash})
         .eq('id', userId);
+    print('✅ [AUTH REPO] Supabase updated');
 
-    // Mettre à jour localement
-    await _userDao.updateUser(
-      UsersCompanion(
-        id: Value(userId),
-        pinHash: Value(pinHash),
-        synced: const Value(0),
-        updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-      ),
-    );
+    // Récupérer l'utilisateur local actuel
+    print('🔵 [AUTH REPO] Fetching local user...');
+    final existingUser = await _userDao.getUserById(userId).getSingleOrNull();
+    print('🔵 [AUTH REPO] Local user found: ${existingUser != null}');
+
+    if (existingUser != null) {
+      print('🔵 [AUTH REPO] Updating local Drift database...');
+      await _userDao.updateUser(
+        UsersCompanion(
+          id: Value(userId),
+          storeId: Value(existingUser.storeId),
+          name: Value(existingUser.name),
+          email: Value(existingUser.email),
+          phone: Value(existingUser.phone),
+          role: Value(existingUser.role),
+          pinHash: Value(pinHash),
+          emailVerified: Value(existingUser.emailVerified),
+          active: Value(existingUser.active),
+          synced: const Value(0),
+          updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+        ),
+      );
+      print('✅ [AUTH REPO] Local database updated');
+    } else {
+      print('⚠️ [AUTH REPO] User not found locally — PIN saved only to Supabase');
+    }
+    print('🔵 [AUTH REPO] setupPin END');
+    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
   /// Récupérer tous les employés d'un magasin (pour l'écran PIN)
