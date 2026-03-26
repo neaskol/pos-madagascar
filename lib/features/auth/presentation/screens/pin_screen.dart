@@ -348,35 +348,36 @@ class _PinScreenState extends State<PinScreen> {
           ),
         ),
 
-        const SizedBox(height: 48),
+        const SizedBox(height: 32),
 
         // Pavé numérique
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: GridView.count(
-              crossAxisCount: 3,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                _buildNumberButton('1', isDark),
-                _buildNumberButton('2', isDark),
-                _buildNumberButton('3', isDark),
-                _buildNumberButton('4', isDark),
-                _buildNumberButton('5', isDark),
-                _buildNumberButton('6', isDark),
-                _buildNumberButton('7', isDark),
-                _buildNumberButton('8', isDark),
-                _buildNumberButton('9', isDark),
-                const SizedBox(), // Empty space
-                _buildNumberButton('0', isDark),
-                _buildBackspaceButton(isDark),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 48),
+          child: GridView.count(
+            crossAxisCount: 3,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            childAspectRatio: 1.2,
+            children: [
+              _buildNumberButton('1', isDark),
+              _buildNumberButton('2', isDark),
+              _buildNumberButton('3', isDark),
+              _buildNumberButton('4', isDark),
+              _buildNumberButton('5', isDark),
+              _buildNumberButton('6', isDark),
+              _buildNumberButton('7', isDark),
+              _buildNumberButton('8', isDark),
+              _buildNumberButton('9', isDark),
+              const SizedBox(), // Empty space
+              _buildNumberButton('0', isDark),
+              _buildBackspaceButton(isDark),
+            ],
           ),
         ),
+
+        const SizedBox(height: 24),
       ],
     );
   }
