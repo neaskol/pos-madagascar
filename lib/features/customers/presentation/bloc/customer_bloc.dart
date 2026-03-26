@@ -24,7 +24,10 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     Emitter<CustomerState> emit,
   ) async {
     try {
-      emit(const CustomerLoading());
+      // Ne pas émettre loading si on a déjà des clients chargés
+      if (state is! CustomersLoaded) {
+        emit(const CustomerLoading());
+      }
       final customers = await _repository.getCustomers(event.storeId);
       emit(CustomersLoaded(customers));
     } catch (e) {
@@ -38,7 +41,10 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     Emitter<CustomerState> emit,
   ) async {
     try {
-      emit(const CustomerLoading());
+      // Ne pas émettre loading si on a déjà des clients chargés
+      if (state is! CustomersLoaded) {
+        emit(const CustomerLoading());
+      }
       final customers = await _repository.searchCustomers(event.storeId, event.query);
       emit(CustomersLoaded(customers));
     } catch (e) {
@@ -128,7 +134,10 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
     Emitter<CustomerState> emit,
   ) async {
     try {
-      emit(const CustomerLoading());
+      // Ne pas émettre loading si on a déjà des clients chargés
+      if (state is! CustomersLoaded) {
+        emit(const CustomerLoading());
+      }
       final customers = await _repository.getCustomersWithCredit(event.storeId);
       emit(CustomersLoaded(customers));
     } catch (e) {

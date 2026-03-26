@@ -120,9 +120,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
           if (authState is AuthAuthenticatedWithStore) {
             storeId = authState.storeId;
           } else if (authState is AuthPinSessionActive) {
-            // For PIN session, we need to get the store ID from user data
-            // This will be handled in future implementation
-            storeId = null;
+            storeId = authState.user.storeId;
           }
 
           if (storeId == null) {
