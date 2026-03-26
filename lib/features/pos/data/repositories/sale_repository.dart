@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/data/local/app_database.dart' hide Sale, SalePayment;
 import '../../domain/entities/cart_item.dart';
@@ -129,18 +130,74 @@ class SaleRepository {
     final datePrefix =
         '${date.year}${date.month.toString().padLeft(2, '0')}${date.day.toString().padLeft(2, '0')}';
 
-    // TODO: Query database for today's count
-    // Pour l'instant, utiliser un compteur simple
-    final count = 1; // Sera remplacé par query DB
+    // Récupérer le prochain numéro séquentiel depuis la DB
+    final sequence = await database.saleDao.generateReceiptNumber(storeId);
 
-    final sequence = count.toString().padLeft(4, '0');
     return '$datePrefix-$sequence';
   }
 
-  /// Sauvegarder vente dans Drift
+  /// Sauvegarder vente dans Drift (offline-first)
   Future<void> _saveSaleToLocal(Sale sale) async {
-    // TODO: Implémenter avec les DAOs Drift
-    // Pour l'instant, juste retourner (données en mémoire)
-    return;
+    final now = DateTime.now().millisecondsSinceEpoch;
+
+    // Créer le SalesCompanion
+    final saleCompanion = SalesCompanion.insert(
+      id: sale.id,
+      storeId: sale.storeId,
+      posDeviceId: Value(sale.posDeviceId),
+      receiptNumber: sale.receiptNumber,
+      employeeId: Value(sale.employeeId),
+      customerId: Value(sale.customerId),
+      subtotal: Value(sale.subtotal),
+      taxAmount: Value(sale.taxAmount),
+      discountAmount: Value(sale.discountAmount),
+      total: sale.total,
+      changeDue: Value(sale.changeDue),
+      note: Value(sale.note),
+      synced: const Value(0), // Pas encore synchronisé
+      createdAt: now,
+      updatedAt: now,
+    );
+
+    // Créer les SaleItemsCompanion
+    final itemCompanions = sale.items.map((item) {
+      return SaleItemsCompanion.insert(
+        id: _uuid.v4(),
+        saleId: sale.id,
+        itemId: Value(item.itemId),
+        itemVariantId: Value(item.itemVariantId),
+        itemName: item.name,
+        quantity: Value(item.quantity),
+        unitPrice: item.unitPrice,
+        cost: Value(item.cost),
+        discountAmount: Value(item.totalDiscountAmount),
+        taxAmount: Value(item.totalTaxAmount),
+        total: item.lineTotal,
+        synced: const Value(0),
+        createdAt: now,
+        updatedAt: now,
+      );
+    }).toList();
+
+    // Créer les SalePaymentsCompanion
+    final paymentCompanions = sale.payments.map((payment) {
+      return SalePaymentsCompanion.insert(
+        id: payment.id,
+        saleId: payment.saleId,
+        paymentType: payment.paymentType.name, // Enum → String
+        amount: payment.amount,
+        paymentReference: Value(payment.paymentReference),
+        synced: const Value(0),
+        createdAt: now,
+        updatedAt: now,
+      );
+    }).toList();
+
+    // Insérer tout en transaction atomique
+    await database.saleDao.insertFullSale(
+      sale: saleCompanion,
+      items: itemCompanions,
+      payments: paymentCompanions,
+    );
   }
 }
