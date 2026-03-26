@@ -121,7 +121,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
             );
           } else if (state is AuthStoreCreated ||
               state is AuthAuthenticatedWithStore) {
-            context.go('/pin');
+            context.go('/pin-setup');
           }
         },
         child: SafeArea(

@@ -13,6 +13,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEmailSignInRequested>(_onEmailSignInRequested);
     on<AuthEmailSignUpRequested>(_onEmailSignUpRequested);
     on<AuthPinSignInRequested>(_onPinSignInRequested);
+    on<AuthPinSetupRequested>(_onPinSetupRequested);
     on<AuthSignOutRequested>(_onSignOutRequested);
     on<AuthPasswordResetRequested>(_onPasswordResetRequested);
     on<AuthStoreCreationRequested>(_onStoreCreationRequested);
@@ -120,6 +121,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
+      emit(AuthPinSessionActive(user: user));
+    } catch (e) {
+      emit(AuthError(message: _formatError(e.toString())));
+    }
+  }
+
+  Future<void> _onPinSetupRequested(
+    AuthPinSetupRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      // Sauvegarder le PIN dans le repository
+      await _authRepository.setupPin(
+        userId: event.userId,
+        pin: event.pin,
+      );
+
+      // Récupérer l'utilisateur mis à jour
+      final user = await _authRepository.getCurrentUser();
+      if (user == null) {
+        emit(const AuthError(message: 'Utilisateur non trouvé'));
+        return;
+      }
+
+      // Activer la session PIN immédiatement
       emit(AuthPinSessionActive(user: user));
     } catch (e) {
       emit(AuthError(message: _formatError(e.toString())));

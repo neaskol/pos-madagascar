@@ -79,6 +79,10 @@
   "pinEnterCode": "Entrez votre code PIN",
   "pinEmailLogin": "Connexion avec email",
   "pinIncorrect": "Code PIN incorrect",
+  "pinSetupTitle": "Créez votre code PIN",
+  "pinCreateMessage": "Choisissez un code PIN à 4 chiffres",
+  "pinConfirmMessage": "Confirmez votre code PIN",
+  "pinMismatch": "Les codes PIN ne correspondent pas",
 
   "errorInvalidEmail": "Email invalide",
   "errorPasswordTooShort": "Le mot de passe doit contenir au moins 8 caractères",

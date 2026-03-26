@@ -60,7 +60,12 @@ class _LoginScreenState extends State<LoginScreen> {
           } else if (state is AuthAuthenticatedNoStore) {
             context.go('/setup');
           } else if (state is AuthAuthenticatedWithStore) {
-            context.go('/pin');
+            // Vérifier si l'user a déjà un PIN configuré
+            if (state.user.pinHash == null || state.user.pinHash!.isEmpty) {
+              context.go('/pin-setup');
+            } else {
+              context.go('/pin');
+            }
           }
         },
         builder: (context, state) {

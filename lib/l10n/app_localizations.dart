@@ -494,6 +494,30 @@ abstract class AppLocalizations {
   /// **'Code PIN incorrect'**
   String get pinIncorrect;
 
+  /// No description provided for @pinSetupTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créez votre code PIN'**
+  String get pinSetupTitle;
+
+  /// No description provided for @pinCreateMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez un code PIN à 4 chiffres'**
+  String get pinCreateMessage;
+
+  /// No description provided for @pinConfirmMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Confirmez votre code PIN'**
+  String get pinConfirmMessage;
+
+  /// No description provided for @pinMismatch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les codes PIN ne correspondent pas'**
+  String get pinMismatch;
+
   /// No description provided for @errorInvalidEmail.
   ///
   /// In fr, this message translates to:

@@ -9,6 +9,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../../features/auth/presentation/screens/setup_wizard_screen.dart';
+import '../../features/auth/presentation/screens/pin_setup_screen.dart';
 import '../../features/auth/presentation/screens/pin_screen.dart';
 import '../../features/products/presentation/screens/products_list_screen.dart';
 import '../../features/products/presentation/screens/product_form_screen.dart';
@@ -111,6 +112,12 @@ class AppRouter {
       GoRoute(
         path: '/setup',
         builder: (context, state) => const SetupWizardScreen(),
+      ),
+
+      // PIN Setup (première configuration après setup wizard)
+      GoRoute(
+        path: '/pin-setup',
+        builder: (context, state) => const PinSetupScreen(),
       ),
 
       // PIN Screen

@@ -107,6 +107,20 @@ class AuthStoreCreationRequested extends AuthEvent {
       ];
 }
 
+/// Configuration initiale du PIN (après setup wizard)
+class AuthPinSetupRequested extends AuthEvent {
+  final String userId;
+  final String pin;
+
+  const AuthPinSetupRequested({
+    required this.userId,
+    required this.pin,
+  });
+
+  @override
+  List<Object?> get props => [userId, pin];
+}
+
 /// Charger les employés du magasin (pour écran PIN)
 class AuthLoadStoreEmployeesRequested extends AuthEvent {
   final String storeId;

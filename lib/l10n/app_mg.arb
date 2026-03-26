@@ -79,6 +79,10 @@
   "pinEnterCode": "Ampidiro ny code PIN-nao",
   "pinEmailLogin": "Fidirana miaraka amin'ny email",
   "pinIncorrect": "Code PIN diso",
+  "pinSetupTitle": "Mamorona code PIN",
+  "pinCreateMessage": "Mifidiana code PIN 4 tarehimarika",
+  "pinConfirmMessage": "Hamafiso ny code PIN-nao",
+  "pinMismatch": "Tsy mitovy ny code PIN",
 
   "errorInvalidEmail": "Email diso",
   "errorPasswordTooShort": "Ny teny miafina dia tokony ho 8 litera farafahakeliny",

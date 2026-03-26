@@ -214,6 +214,18 @@ class AppLocalizationsMg extends AppLocalizations {
   String get pinIncorrect => 'Code PIN diso';
 
   @override
+  String get pinSetupTitle => 'Mamorona code PIN';
+
+  @override
+  String get pinCreateMessage => 'Mifidiana code PIN 4 tarehimarika';
+
+  @override
+  String get pinConfirmMessage => 'Hamafiso ny code PIN-nao';
+
+  @override
+  String get pinMismatch => 'Tsy mitovy ny code PIN';
+
+  @override
   String get errorInvalidEmail => 'Email diso';
 
   @override

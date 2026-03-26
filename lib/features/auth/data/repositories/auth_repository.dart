@@ -266,6 +266,27 @@ class AuthRepository {
     return digest.toString();
   }
 
+  /// Configuration initiale du PIN (après setup wizard)
+  Future<void> setupPin({required String userId, required String pin}) async {
+    final pinHash = hashPin(pin);
+
+    // Mettre à jour en base
+    await _supabase
+        .from('users')
+        .update({'pin_hash': pinHash})
+        .eq('id', userId);
+
+    // Mettre à jour localement
+    await _userDao.updateUser(
+      UsersCompanion(
+        id: Value(userId),
+        pinHash: Value(pinHash),
+        synced: const Value(0),
+        updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
+      ),
+    );
+  }
+
   /// Récupérer tous les employés d'un magasin (pour l'écran PIN)
   Future<List<User>> getStoreEmployees(String storeId) async {
     try {

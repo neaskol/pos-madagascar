@@ -214,6 +214,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pinIncorrect => 'Code PIN incorrect';
 
   @override
+  String get pinSetupTitle => 'Créez votre code PIN';
+
+  @override
+  String get pinCreateMessage => 'Choisissez un code PIN à 4 chiffres';
+
+  @override
+  String get pinConfirmMessage => 'Confirmez votre code PIN';
+
+  @override
+  String get pinMismatch => 'Les codes PIN ne correspondent pas';
+
+  @override
   String get errorInvalidEmail => 'Email invalide';
 
   @override
