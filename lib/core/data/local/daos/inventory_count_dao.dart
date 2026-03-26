@@ -59,8 +59,8 @@ class InventoryCountDao extends DatabaseAccessor<AppDatabase>
       status: const Value('pending'),
       notes: Value(notes),
       createdBy: createdBy,
-      createdAt: Value(now),
-      updatedAt: Value(now),
+      createdAt: now,
+      updatedAt: now,
     );
 
     await into(inventoryCounts).insert(companion);
@@ -162,7 +162,7 @@ class InventoryCountDao extends DatabaseAccessor<AppDatabase>
       expectedStock: expectedStock,
       countedStock: Value(countedStock),
       difference: Value(difference),
-      updatedAt: Value(now),
+      updatedAt: now,
     );
 
     await into(inventoryCountItems).insert(companion);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/cart_bloc.dart';
@@ -74,6 +75,9 @@ class _PosScreenContent extends StatelessWidget {
           PopupMenuButton<String>(
             onSelected: (value) {
               switch (value) {
+                case 'history':
+                  context.push('/pos/receipts');
+                  break;
                 case 'clear':
                   _showClearCartDialog(context);
                   break;
@@ -87,6 +91,17 @@ class _PosScreenContent extends StatelessWidget {
               }
             },
             itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'history',
+                child: Row(
+                  children: [
+                    const Icon(Icons.history),
+                    const SizedBox(width: 8),
+                    Text(l10n.salesHistory),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
               PopupMenuItem(
                 value: 'clear',
                 child: Text(l10n.clearTicket),
