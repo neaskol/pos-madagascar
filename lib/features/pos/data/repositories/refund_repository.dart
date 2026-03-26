@@ -1,14 +1,16 @@
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/data/local/app_database.dart' hide Sale;
+import '../../../../core/data/remote/sync_service.dart';
 
 /// Repository pour les remboursements (offline-first)
 /// Différenciant #1 : Remboursements offline vs Loyverse bloqué
 class RefundRepository {
   final AppDatabase database;
+  final SyncService? syncService;
   final _uuid = const Uuid();
 
-  RefundRepository(this.database);
+  RefundRepository(this.database, {this.syncService});
 
   /// Créer un remboursement complet (offline-first)
   Future<String> createRefund({
@@ -71,7 +73,11 @@ class RefundRepository {
         throw Exception('Erreur transaction remboursement atomique: $e');
       }
 
-      // TODO: Sync vers Supabase en arrière-plan
+      // Sync immédiat vers Supabase en arrière-plan (non-blocking)
+      syncService?.forceSyncNow().catchError((e) {
+        // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
+        print('Background sync failed after refund creation: $e');
+      });
 
       return refundId;
     } catch (e) {

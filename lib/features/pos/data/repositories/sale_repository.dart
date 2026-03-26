@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/data/local/app_database.dart' hide Sale, SalePayment;
+import '../../../../core/data/remote/sync_service.dart';
 import '../../domain/entities/cart_item.dart';
 import '../../domain/entities/sale.dart';
 import '../../presentation/bloc/sale_event.dart';
@@ -8,9 +9,10 @@ import '../../presentation/bloc/sale_event.dart';
 /// Repository pour les ventes
 class SaleRepository {
   final AppDatabase database;
+  final SyncService? syncService;
   final _uuid = const Uuid();
 
-  SaleRepository(this.database);
+  SaleRepository(this.database, {this.syncService});
 
   /// Créer une vente (paiement)
   /// Supporte à la fois single payment (rétrocompatibilité) et multi-payment
@@ -99,7 +101,11 @@ class SaleRepository {
       // Sauvegarder dans Drift (local first)
       await _saveSaleToLocal(sale);
 
-      // TODO: Sync vers Supabase en arrière-plan
+      // Sync immédiat vers Supabase en arrière-plan (non-blocking)
+      syncService?.forceSyncNow().catchError((e) {
+        // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
+        print('Background sync failed after sale creation: $e');
+      });
 
       return sale;
     } catch (e) {

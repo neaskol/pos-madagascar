@@ -16,7 +16,7 @@ Charger ce fichier quand : démarrage d'un sprint, planification, `/start-sprint
 
 ## Phase 1 — Reproduire Loyverse (Sprints 1–4)
 
-### Sprint 1 — Fondation
+### Sprint 1 — Fondation ✅ COMPLÉTÉ (2026-03-26)
 **Référence manuel** : p.9-12 (Getting Started), p.139-149 (Employees), p.236-242 (Multi-stores)
 
 - [x] Projet Flutter : structure dossiers, pubspec.yaml, thème, go_router
@@ -30,6 +30,10 @@ Charger ce fichier quand : démarrage d'un sprint, planification, `/start-sprint
 - [x] Multi-magasins sous un compte
 - [x] Architecture modulaire : `StoreSettings` avec tous les toggles
 - [x] Navigation go_router avec guards par rôle
+- [x] **Sync bidirectionnelle complète** : Push (Drift → Supabase) + Pull (Supabase → Drift)
+- [x] **Protection perte de données** : sync immédiate après création/modification + sync périodique 30s
+- [x] **Récupération auto des données** au login (pull depuis Supabase)
+- [x] UI/UX : écran PIN layout corrigé (clavier numérique complet visible)
 
 ### Sprint 2 — Produits, Taxes & Stock
 **Référence manuel** : p.13-25 (Items, Categories, Taxes), p.65-66 (Modifiers), p.86-100 (Variants, CSV)

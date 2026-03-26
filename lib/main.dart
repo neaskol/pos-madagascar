@@ -170,11 +170,17 @@ class _MyAppState extends State<MyApp> {
         ),
         // Repository pour les ventes
         RepositoryProvider<SaleRepository>(
-          create: (context) => SaleRepository(widget.database),
+          create: (context) => SaleRepository(
+            widget.database,
+            syncService: context.read<SyncService>(),
+          ),
         ),
         // Repository pour les remboursements
         RepositoryProvider<RefundRepository>(
-          create: (context) => RefundRepository(widget.database),
+          create: (context) => RefundRepository(
+            widget.database,
+            syncService: context.read<SyncService>(),
+          ),
         ),
         // Repository pour les pages personnalisées
         RepositoryProvider<CustomPageRepositoryImpl>(
@@ -189,7 +195,10 @@ class _MyAppState extends State<MyApp> {
         ),
         // Repository pour les crédits
         RepositoryProvider<CreditRepository>(
-          create: (context) => CreditRepository(database: widget.database),
+          create: (context) => CreditRepository(
+            database: widget.database,
+            syncService: context.read<SyncService>(),
+          ),
         ),
         // Repository pour les réglages magasin
         RepositoryProvider<StoreSettingsRepository>(

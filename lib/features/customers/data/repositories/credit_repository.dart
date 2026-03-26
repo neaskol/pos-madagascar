@@ -1,15 +1,17 @@
 import 'package:drift/drift.dart';
 import '../../../../core/data/local/app_database.dart';
+import '../../../../core/data/remote/sync_service.dart';
 
 /// Repository for store credit management
 /// Handles offline-first credit sales with payment tracking
 /// Différenciant #3 - inexistant chez tous les concurrents
 class CreditRepository {
   final AppDatabase database;
+  final SyncService? syncService;
   final CreditDao _creditDao;
   final CustomerDao _customerDao;
 
-  CreditRepository({required this.database})
+  CreditRepository({required this.database, this.syncService})
       : _creditDao = database.creditDao,
         _customerDao = database.customerDao;
 
@@ -70,6 +72,12 @@ class CreditRepository {
     // Update customer credit balance
     await _customerDao.updateCustomerCreditBalance(customerId);
 
+    // Sync immédiat vers Supabase en arrière-plan (non-blocking)
+    syncService?.forceSyncNow().catchError((e) {
+      // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
+      print('Background sync failed after credit creation: $e');
+    });
+
     return id;
   }
 
@@ -105,6 +113,12 @@ class CreditRepository {
       // Update customer credit balance
       await _customerDao.updateCustomerCreditBalance(credit.customerId);
     }
+
+    // Sync immédiat vers Supabase en arrière-plan (non-blocking)
+    syncService?.forceSyncNow().catchError((e) {
+      // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
+      print('Background sync failed after credit payment: $e');
+    });
 
     return id;
   }

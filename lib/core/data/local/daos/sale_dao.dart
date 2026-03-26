@@ -134,4 +134,21 @@ class SaleDao extends DatabaseAccessor<AppDatabase> with _$SaleDaoMixin {
         .write(const SalePaymentsCompanion(synced: Value(1)));
     return rowsAffected > 0;
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) une vente depuis Supabase
+  Future<void> upsertSale(SalesCompanion sale) async {
+    await into(sales).insertOnConflictUpdate(sale);
+  }
+
+  /// Upsert un sale_item depuis Supabase
+  Future<void> upsertSaleItem(SaleItemsCompanion item) async {
+    await into(saleItems).insertOnConflictUpdate(item);
+  }
+
+  /// Upsert un sale_payment depuis Supabase
+  Future<void> upsertSalePayment(SalePaymentsCompanion payment) async {
+    await into(salePayments).insertOnConflictUpdate(payment);
+  }
 }

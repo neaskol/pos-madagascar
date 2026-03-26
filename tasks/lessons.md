@@ -169,6 +169,60 @@ Comme l'user n'existait pas dans Drift, `getUserById()` retournait `null` et le 
 
 ---
 
+## 2026-03-26 — PIN keypad layout hors écran
+
+**Contexte** : Lors du login par PIN, certains chiffres du pavé numérique apparaissaient hors écran.
+
+**Erreur** : Le `GridView` du pavé numérique était wrappé dans un `Expanded` sans `childAspectRatio`, causant des débordements.
+
+**Solution** :
+- Supprimé le widget `Expanded` autour du `GridView`
+- Ajouté `childAspectRatio: 1.2` pour des proportions correctes
+- Remplacé par un simple `Padding` avec `shrinkWrap: true`
+
+**Règle** :
+- **TOUJOURS définir `childAspectRatio`** dans GridView pour contrôler les proportions
+- **NE PAS utiliser `Expanded` avec GridView** si on utilise `shrinkWrap: true`
+- **TOUJOURS tester les layouts** sur plusieurs tailles d'écran
+- Les boutons circulaires nécessitent un aspect ratio > 1.0 pour rester visibles
+
+---
+
+## 2026-03-26 — Perte de données après réinstallation app
+
+**Contexte** : Produits et clients créés disparaissaient après désinstallation/réinstallation de l'app.
+
+**Erreur** :
+1. Sync périodique toutes les 5 minutes trop lente
+2. Désinstallation supprime la base Drift locale avant la sync
+3. Aucun pull depuis Supabase au login (sync unidirectionnelle seulement)
+
+**Solution** :
+**Partie 1 - Sync immédiate (Push)** :
+- Réduit intervalle sync de 5 minutes → 30 secondes
+- Ajouté sync forcée immédiate après création/modification/suppression
+- Throttling intelligent (10s minimum entre syncs auto)
+- ItemBloc et CustomerBloc déclenchent `forceSyncNow()` après opérations
+
+**Partie 2 - Récupération données (Pull)** :
+- Implémenté `syncFromRemote(storeId)` dans SyncService
+- Méthodes `_pullCategories()`, `_pullItems()`, `_pullCustomers()`
+- Ajouté `upsertCategory()` et `upsertItem()` dans DAOs
+- AuthBloc appelle `syncFromRemote()` après login réussi
+- Données marquées `synced: 1` après pull pour éviter re-push
+
+**Règle** :
+- **TOUJOURS synchroniser immédiatement** après les opérations critiques (create/update/delete)
+- **NE JAMAIS attendre > 1 minute** pour la première sync — risque de perte de données
+- **TOUJOURS implémenter sync bidirectionnelle** : Push ET Pull
+- **TOUJOURS récupérer les données au login** pour multi-device et recovery
+- **TOUJOURS utiliser `upsert` (insertOnConflictUpdate)** pour le pull sync
+- **TOUJOURS marquer `synced: 1`** les données pullées depuis Supabase
+- La sync périodique est un filet de sécurité, PAS la stratégie principale
+- Tester la perte de données : créer → désinstaller → réinstaller → login → vérifier
+
+---
+
 ## Leçons à venir...
 
-Phase 3 complétée (10 sous-phases). Les prochaines leçons seront ajoutées au fil de la Phase 4 et au-delà.
+Sprint 1 complété avec sync bidirectionnelle. Les prochaines leçons seront ajoutées au fil du Sprint 2+.
