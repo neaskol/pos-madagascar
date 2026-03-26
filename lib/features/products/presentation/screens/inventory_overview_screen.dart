@@ -10,6 +10,7 @@ import '../../../../core/theme/theme_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../inventory/presentation/widgets/inventory_history_tab.dart';
 import '../bloc/inventory_export_bloc.dart';
 import '../bloc/inventory_export_event.dart';
 import '../bloc/inventory_export_state.dart';
@@ -27,9 +28,23 @@ class InventoryOverviewScreen extends StatefulWidget {
       _InventoryOverviewScreenState();
 }
 
-class _InventoryOverviewScreenState extends State<InventoryOverviewScreen> {
+class _InventoryOverviewScreenState extends State<InventoryOverviewScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   String _stockFilter = 'all'; // 'all', 'low', 'out'
   String? _currentStoreId;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   List<Item> _filterAndSortItems(List<Item> items) {
     // Filter items that track stock
@@ -104,67 +119,83 @@ class _InventoryOverviewScreenState extends State<InventoryOverviewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.inventoryTitle),
+        bottom: TabBar(
+          controller: _tabController,
+          labelStyle: context.textPri,
+          tabs: const [
+            Tab(text: 'Vue d\'ensemble'),
+            Tab(text: 'Historique'),
+          ],
+        ),
         actions: [
-          // Export menu
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.download_outlined),
-            onSelected: (value) {
-              final authState = context.read<AuthBloc>().state;
-              String? storeId;
-              String storeName = 'POS Madagascar';
+          // Export menu - visible only on overview tab
+          AnimatedBuilder(
+            animation: _tabController,
+            builder: (context, child) {
+              if (_tabController.index == 0) {
+                return PopupMenuButton<String>(
+                  icon: const Icon(Icons.download_outlined),
+                  onSelected: (value) {
+                    final authState = context.read<AuthBloc>().state;
+                    String? storeId;
+                    String storeName = 'POS Madagascar';
 
-              if (authState is AuthAuthenticatedWithStore) {
-                storeId = authState.storeId;
-              }
+                    if (authState is AuthAuthenticatedWithStore) {
+                      storeId = authState.storeId;
+                    }
 
-              if (storeId == null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.inventoryExportStoreError),
-                    backgroundColor: context.danger,
-                  ),
+                    if (storeId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l10n.inventoryExportStoreError),
+                          backgroundColor: context.danger,
+                        ),
+                      );
+                      return;
+                    }
+
+                    final exportBloc = context.read<InventoryExportBloc>();
+
+                    if (value == 'pdf') {
+                      exportBloc.add(ExportInventoryToPdfEvent(
+                        storeId: storeId,
+                        storeName: storeName,
+                        filterType: _stockFilter,
+                      ));
+                    } else if (value == 'excel') {
+                      exportBloc.add(ExportInventoryToExcelEvent(
+                        storeId: storeId,
+                        storeName: storeName,
+                        filterType: _stockFilter,
+                      ));
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'pdf',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.picture_as_pdf_outlined, size: 20),
+                          const SizedBox(width: 12),
+                          Text(l10n.inventoryExportPdf),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'excel',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.table_chart_outlined, size: 20),
+                          const SizedBox(width: 12),
+                          Text(l10n.inventoryExportExcel),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
-                return;
               }
-
-              final exportBloc = context.read<InventoryExportBloc>();
-
-              if (value == 'pdf') {
-                exportBloc.add(ExportInventoryToPdfEvent(
-                  storeId: storeId,
-                  storeName: storeName,
-                  filterType: _stockFilter,
-                ));
-              } else if (value == 'excel') {
-                exportBloc.add(ExportInventoryToExcelEvent(
-                  storeId: storeId,
-                  storeName: storeName,
-                  filterType: _stockFilter,
-                ));
-              }
+              return const SizedBox.shrink();
             },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'pdf',
-                child: Row(
-                  children: [
-                    const Icon(Icons.picture_as_pdf_outlined, size: 20),
-                    const SizedBox(width: 12),
-                    Text(l10n.inventoryExportPdf),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'excel',
-                child: Row(
-                  children: [
-                    const Icon(Icons.table_chart_outlined, size: 20),
-                    const SizedBox(width: 12),
-                    Text(l10n.inventoryExportExcel),
-                  ],
-                ),
-              ),
-            ],
           ),
         ],
       ),
@@ -282,127 +313,143 @@ class _InventoryOverviewScreenState extends State<InventoryOverviewScreen> {
               final totalValue = _calculateTotalValue(allItems);
               final filteredItems = _filterAndSortItems(allItems);
 
-              return Column(
+              return TabBarView(
+                controller: _tabController,
                 children: [
-                  // Metrics section
-                  Container(
-                    padding: const EdgeInsets.all(AppSpacing.page),
-                    decoration: BoxDecoration(
-                      color: context.isDark
-                          ? AppColors.darkSurface
-                          : AppColors.lightBackground,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: context.border,
-                          width: 0.5,
-                        ),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.inventoryMetrics,
-                          style: AppTypography.bodySmall.copyWith(
-                            color: context.textSec,
-                            fontWeight: FontWeight.w600,
+                  // Tab 1: Vue d'ensemble
+                  Column(
+                    children: [
+                      // Metrics section
+                      Container(
+                        padding: const EdgeInsets.all(AppSpacing.page),
+                        decoration: BoxDecoration(
+                          color: context.isDark
+                              ? AppColors.darkSurface
+                              : AppColors.lightBackground,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: context.border,
+                              width: 0.5,
+                            ),
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.md),
-                        Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildMetricCard(
-                              context,
-                              l10n.inventoryOutOfStock,
-                              outOfStockCount.toString(),
-                              context.danger,
-                              Icons.error_outline,
+                            Text(
+                              l10n.inventoryMetrics,
+                              style: AppTypography.bodySmall.copyWith(
+                                color: context.textSec,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                            const SizedBox(width: AppSpacing.md),
-                            _buildMetricCard(
-                              context,
-                              l10n.inventoryLowStock,
-                              lowStockCount.toString(),
-                              context.warning,
-                              Icons.warning_amber_outlined,
-                            ),
-                            const SizedBox(width: AppSpacing.md),
-                            _buildMetricCard(
-                              context,
-                              l10n.inventoryTotalValue,
-                              totalValue > 0
-                                  ? '${numberFormat.format(totalValue)} Ar'
-                                  : '-',
-                              context.textPri,
-                              Icons.inventory_2_outlined,
+                            const SizedBox(height: AppSpacing.md),
+                            Row(
+                              children: [
+                                _buildMetricCard(
+                                  context,
+                                  l10n.inventoryOutOfStock,
+                                  outOfStockCount.toString(),
+                                  context.danger,
+                                  Icons.error_outline,
+                                ),
+                                const SizedBox(width: AppSpacing.md),
+                                _buildMetricCard(
+                                  context,
+                                  l10n.inventoryLowStock,
+                                  lowStockCount.toString(),
+                                  context.warning,
+                                  Icons.warning_amber_outlined,
+                                ),
+                                const SizedBox(width: AppSpacing.md),
+                                _buildMetricCard(
+                                  context,
+                                  l10n.inventoryTotalValue,
+                                  totalValue > 0
+                                      ? '${numberFormat.format(totalValue)} Ar'
+                                      : '-',
+                                  context.textPri,
+                                  Icons.inventory_2_outlined,
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
 
-                  // Filter chips
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.page,
-                      vertical: AppSpacing.md,
-                    ),
-                    child: Row(
-                      children: [
-                        _buildFilterChip(
-                          context,
-                          l10n.inventoryFilterAll,
-                          'all',
-                          trackedItems.length,
+                      // Filter chips
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.page,
+                          vertical: AppSpacing.md,
                         ),
-                        const SizedBox(width: AppSpacing.sm),
-                        _buildFilterChip(
-                          context,
-                          l10n.inventoryFilterLow,
-                          'low',
-                          lowStockCount,
-                        ),
-                        const SizedBox(width: AppSpacing.sm),
-                        _buildFilterChip(
-                          context,
-                          l10n.inventoryFilterOut,
-                          'out',
-                          outOfStockCount,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Items list
-                  Expanded(
-                    child: filteredItems.isEmpty
-                        ? _buildEmptyState(l10n)
-                        : RefreshIndicator(
-                            onRefresh: () async {
-                              if (storeId != null) {
-                                context
-                                    .read<ItemBloc>()
-                                    .add(LoadStoreItemsEvent(storeId));
-                              }
-                            },
-                            child: ListView.separated(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: AppSpacing.sm),
-                              itemCount: filteredItems.length,
-                              separatorBuilder: (context, index) => Divider(
-                                height: 0.5,
-                                color: context.border,
-                                indent: 76,
-                              ),
-                              itemBuilder: (context, index) {
-                                final item = filteredItems[index];
-                                return _buildStockItem(
-                                    item, l10n, numberFormat);
-                              },
+                        child: Row(
+                          children: [
+                            _buildFilterChip(
+                              context,
+                              l10n.inventoryFilterAll,
+                              'all',
+                              trackedItems.length,
                             ),
-                          ),
+                            const SizedBox(width: AppSpacing.sm),
+                            _buildFilterChip(
+                              context,
+                              l10n.inventoryFilterLow,
+                              'low',
+                              lowStockCount,
+                            ),
+                            const SizedBox(width: AppSpacing.sm),
+                            _buildFilterChip(
+                              context,
+                              l10n.inventoryFilterOut,
+                              'out',
+                              outOfStockCount,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Items list
+                      Expanded(
+                        child: filteredItems.isEmpty
+                            ? _buildEmptyState(l10n)
+                            : RefreshIndicator(
+                                onRefresh: () async {
+                                  if (storeId != null) {
+                                    context
+                                        .read<ItemBloc>()
+                                        .add(LoadStoreItemsEvent(storeId));
+                                  }
+                                },
+                                child: ListView.separated(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: AppSpacing.sm),
+                                  itemCount: filteredItems.length,
+                                  separatorBuilder: (context, index) => Divider(
+                                    height: 0.5,
+                                    color: context.border,
+                                    indent: 76,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final item = filteredItems[index];
+                                    return _buildStockItem(
+                                        item, l10n, numberFormat);
+                                  },
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
+
+                  // Tab 2: Historique
+                  storeId != null
+                      ? InventoryHistoryTab(storeId: storeId)
+                      : Center(
+                          child: Text(
+                            'Store ID not available',
+                            style: AppTypography.body.copyWith(color: context.textSec),
+                          ),
+                        ),
                 ],
               );
             },

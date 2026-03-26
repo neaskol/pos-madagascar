@@ -1336,4 +1336,94 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get importHelpText =>
       'Guide d\'import :\n\n1. Téléchargez le template CSV\n2. Remplissez vos produits (Nom et Prix obligatoires)\n3. Enregistrez le fichier au format CSV ou Excel\n4. Importez le fichier dans l\'application\n5. Vérifiez les données avant de confirmer\n\nFormats supportés : CSV, XLSX, XLS\n\nConseils :\n- Les SKU doivent être uniques\n- Les prix et coûts sont en Ariary (nombres entiers)\n- Les catégories doivent déjà exister dans l\'application\n- Les lignes invalides seront signalées avant l\'import';
+
+  @override
+  String get adjustmentNewTitle => 'Nouvel ajustement';
+
+  @override
+  String get adjustmentListTitle => 'Ajustements de stock';
+
+  @override
+  String get adjustmentSelectReason => 'Raison de l\'ajustement';
+
+  @override
+  String get adjustmentSearchItems => 'Rechercher un produit';
+
+  @override
+  String get adjustmentAddItems => 'Ajouter des produits';
+
+  @override
+  String get adjustmentNoItems => 'Aucun article ajouté';
+
+  @override
+  String get adjustmentNoItemsHint =>
+      'Recherchez et ajoutez des produits à ajuster';
+
+  @override
+  String get adjustmentCurrentStock => 'Stock actuel';
+
+  @override
+  String get adjustmentVariation => 'Variation';
+
+  @override
+  String get adjustmentStockAfter => 'Stock après';
+
+  @override
+  String get adjustmentValidate => 'Valider l\'ajustement';
+
+  @override
+  String get adjustmentCreated => 'Ajustement créé avec succès';
+
+  @override
+  String get adjustmentEmptyList => 'Aucun ajustement';
+
+  @override
+  String get adjustmentEmptyDescription =>
+      'Les ajustements de stock apparaîtront ici';
+
+  @override
+  String get adjustmentFilterAll => 'Tous';
+
+  @override
+  String adjustmentItemsCount(int count) {
+    return '$count articles';
+  }
+
+  @override
+  String get adjustmentTotalVariation => 'Variation totale';
+
+  @override
+  String adjustmentBy(String employee) {
+    return 'Par $employee';
+  }
+
+  @override
+  String get historyTitle => 'Historique';
+
+  @override
+  String get historyEmpty => 'Aucun mouvement';
+
+  @override
+  String get historyEmptyDescription =>
+      'L\'historique des mouvements de stock apparaîtra ici';
+
+  @override
+  String get historyFilterPeriod => 'Période';
+
+  @override
+  String get historyFilterLast7Days => '7 derniers jours';
+
+  @override
+  String get historyFilterLast30Days => '30 derniers jours';
+
+  @override
+  String get historyFilterThisMonth => 'Ce mois';
+
+  @override
+  String get historyFilterCustom => 'Personnalisé';
+
+  @override
+  String historyOn(String date) {
+    return 'Le $date';
+  }
 }

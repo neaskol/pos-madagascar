@@ -2641,6 +2641,168 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Guide d\'import :\n\n1. Téléchargez le template CSV\n2. Remplissez vos produits (Nom et Prix obligatoires)\n3. Enregistrez le fichier au format CSV ou Excel\n4. Importez le fichier dans l\'application\n5. Vérifiez les données avant de confirmer\n\nFormats supportés : CSV, XLSX, XLS\n\nConseils :\n- Les SKU doivent être uniques\n- Les prix et coûts sont en Ariary (nombres entiers)\n- Les catégories doivent déjà exister dans l\'application\n- Les lignes invalides seront signalées avant l\'import'**
   String get importHelpText;
+
+  /// No description provided for @adjustmentNewTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel ajustement'**
+  String get adjustmentNewTitle;
+
+  /// No description provided for @adjustmentListTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajustements de stock'**
+  String get adjustmentListTitle;
+
+  /// No description provided for @adjustmentSelectReason.
+  ///
+  /// In fr, this message translates to:
+  /// **'Raison de l\'ajustement'**
+  String get adjustmentSelectReason;
+
+  /// No description provided for @adjustmentSearchItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un produit'**
+  String get adjustmentSearchItems;
+
+  /// No description provided for @adjustmentAddItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter des produits'**
+  String get adjustmentAddItems;
+
+  /// No description provided for @adjustmentNoItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun article ajouté'**
+  String get adjustmentNoItems;
+
+  /// No description provided for @adjustmentNoItemsHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recherchez et ajoutez des produits à ajuster'**
+  String get adjustmentNoItemsHint;
+
+  /// No description provided for @adjustmentCurrentStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock actuel'**
+  String get adjustmentCurrentStock;
+
+  /// No description provided for @adjustmentVariation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Variation'**
+  String get adjustmentVariation;
+
+  /// No description provided for @adjustmentStockAfter.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock après'**
+  String get adjustmentStockAfter;
+
+  /// No description provided for @adjustmentValidate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider l\'ajustement'**
+  String get adjustmentValidate;
+
+  /// No description provided for @adjustmentCreated.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajustement créé avec succès'**
+  String get adjustmentCreated;
+
+  /// No description provided for @adjustmentEmptyList.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun ajustement'**
+  String get adjustmentEmptyList;
+
+  /// No description provided for @adjustmentEmptyDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les ajustements de stock apparaîtront ici'**
+  String get adjustmentEmptyDescription;
+
+  /// No description provided for @adjustmentFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get adjustmentFilterAll;
+
+  /// No description provided for @adjustmentItemsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} articles'**
+  String adjustmentItemsCount(int count);
+
+  /// No description provided for @adjustmentTotalVariation.
+  ///
+  /// In fr, this message translates to:
+  /// **'Variation totale'**
+  String get adjustmentTotalVariation;
+
+  /// No description provided for @adjustmentBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par {employee}'**
+  String adjustmentBy(String employee);
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get historyTitle;
+
+  /// No description provided for @historyEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun mouvement'**
+  String get historyEmpty;
+
+  /// No description provided for @historyEmptyDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'historique des mouvements de stock apparaîtra ici'**
+  String get historyEmptyDescription;
+
+  /// No description provided for @historyFilterPeriod.
+  ///
+  /// In fr, this message translates to:
+  /// **'Période'**
+  String get historyFilterPeriod;
+
+  /// No description provided for @historyFilterLast7Days.
+  ///
+  /// In fr, this message translates to:
+  /// **'7 derniers jours'**
+  String get historyFilterLast7Days;
+
+  /// No description provided for @historyFilterLast30Days.
+  ///
+  /// In fr, this message translates to:
+  /// **'30 derniers jours'**
+  String get historyFilterLast30Days;
+
+  /// No description provided for @historyFilterThisMonth.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce mois'**
+  String get historyFilterThisMonth;
+
+  /// No description provided for @historyFilterCustom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personnalisé'**
+  String get historyFilterCustom;
+
+  /// No description provided for @historyOn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le {date}'**
+  String historyOn(String date);
 }
 
 class _AppLocalizationsDelegate

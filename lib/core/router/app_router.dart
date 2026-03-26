@@ -23,6 +23,8 @@ import '../../features/store/presentation/screens/payment_settings_screen.dart';
 import '../../features/pos/presentation/screens/sales_history_screen.dart';
 import '../../features/pos/presentation/screens/receipt_detail_screen.dart';
 import '../../features/pos/presentation/screens/refund_screen.dart';
+import '../../features/inventory/presentation/screens/stock_adjustment_screen.dart';
+import '../../features/inventory/presentation/screens/adjustment_list_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -175,6 +177,18 @@ class AppRouter {
       GoRoute(
         path: '/inventory',
         builder: (context, state) => const InventoryOverviewScreen(),
+      ),
+
+      // Inventory - Liste des ajustements
+      GoRoute(
+        path: '/inventory/adjustments',
+        builder: (context, state) => const AdjustmentListScreen(),
+      ),
+
+      // Inventory - Nouvel ajustement
+      GoRoute(
+        path: '/inventory/adjustments/new',
+        builder: (context, state) => const StockAdjustmentScreen(),
       ),
 
       // Customers - Liste des clients

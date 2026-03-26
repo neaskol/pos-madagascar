@@ -534,5 +534,49 @@
   },
   "help": "Fanampiana",
   "importHelpText": "Torolalana fampidirana:\n\n1. Alao ny template CSV\n2. Fenoy ny vokatra (Anarana sy Vidiny tsy maintsy)\n3. Tehirizo ny rakitra amin'ny endrika CSV na Excel\n4. Ampidiro ny rakitra ao amin'ny application\n5. Jereo ny angon-drakitra alohan'ny hanamafisana\n\nEndrika raisina: CSV, XLSX, XLS\n\nTorohevitra:\n- Ny SKU dia tokony tsy misy mitovy\n- Ny vidiny sy ny vidin'ny fividianana dia amin'ny Ariary (isa integer)\n- Ny sokajy dia tokony efa misy ao amin'ny application\n- Ny andalana tsy marina dia ho ambara alohan'ny fampidirana",
-  "close": "Hidio"
+  "close": "Hidio",
+
+  "adjustmentNewTitle": "Fanitsiana vaovao",
+  "adjustmentListTitle": "Fanitsiana ny tahiry",
+  "adjustmentSelectReason": "Antony fanitsiana",
+  "adjustmentSearchItems": "Tadiavo vokatra",
+  "adjustmentAddItems": "Ampio vokatra",
+  "adjustmentNoItems": "Tsy misy vokatra nampiana",
+  "adjustmentNoItemsHint": "Tadiavo sy ampio vokatra hanaovana fanitsiana",
+  "adjustmentCurrentStock": "Tahiry ankehitriny",
+  "adjustmentVariation": "Fiovana",
+  "adjustmentStockAfter": "Tahiry aorian'ny",
+  "adjustmentValidate": "Hamarino ny fanitsiana",
+  "adjustmentCreated": "Fanitsiana noforonina soa aman-tsara",
+  "adjustmentEmptyList": "Tsy misy fanitsiana",
+  "adjustmentEmptyDescription": "Ny fanitsiana tahiry dia hiseho eto",
+  "adjustmentFilterAll": "Rehetra",
+  "adjustmentItemsCount": "{count} vokatra",
+  "@adjustmentItemsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "adjustmentTotalVariation": "Fiovana tanteraka",
+  "adjustmentBy": "Nataon'i {employee}",
+  "@adjustmentBy": {
+    "placeholders": {
+      "employee": {"type": "String"}
+    }
+  },
+
+  "historyTitle": "Tantara",
+  "historyEmpty": "Tsy misy fihetsiketsehana",
+  "historyEmptyDescription": "Ny tantaran'ny fihetsiketsehana tahiry dia hiseho eto",
+  "historyFilterPeriod": "Vanim-potoana",
+  "historyFilterLast7Days": "7 andro farany",
+  "historyFilterLast30Days": "30 andro farany",
+  "historyFilterThisMonth": "Ity volana ity",
+  "historyFilterCustom": "Safidy manokana",
+  "historyOn": "Ny {date}",
+  "@historyOn": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  }
 }

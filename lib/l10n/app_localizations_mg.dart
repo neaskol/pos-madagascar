@@ -1333,4 +1333,94 @@ class AppLocalizationsMg extends AppLocalizations {
   @override
   String get importHelpText =>
       'Torolalana fampidirana:\n\n1. Alao ny template CSV\n2. Fenoy ny vokatra (Anarana sy Vidiny tsy maintsy)\n3. Tehirizo ny rakitra amin\'ny endrika CSV na Excel\n4. Ampidiro ny rakitra ao amin\'ny application\n5. Jereo ny angon-drakitra alohan\'ny hanamafisana\n\nEndrika raisina: CSV, XLSX, XLS\n\nTorohevitra:\n- Ny SKU dia tokony tsy misy mitovy\n- Ny vidiny sy ny vidin\'ny fividianana dia amin\'ny Ariary (isa integer)\n- Ny sokajy dia tokony efa misy ao amin\'ny application\n- Ny andalana tsy marina dia ho ambara alohan\'ny fampidirana';
+
+  @override
+  String get adjustmentNewTitle => 'Fanitsiana vaovao';
+
+  @override
+  String get adjustmentListTitle => 'Fanitsiana ny tahiry';
+
+  @override
+  String get adjustmentSelectReason => 'Antony fanitsiana';
+
+  @override
+  String get adjustmentSearchItems => 'Tadiavo vokatra';
+
+  @override
+  String get adjustmentAddItems => 'Ampio vokatra';
+
+  @override
+  String get adjustmentNoItems => 'Tsy misy vokatra nampiana';
+
+  @override
+  String get adjustmentNoItemsHint =>
+      'Tadiavo sy ampio vokatra hanaovana fanitsiana';
+
+  @override
+  String get adjustmentCurrentStock => 'Tahiry ankehitriny';
+
+  @override
+  String get adjustmentVariation => 'Fiovana';
+
+  @override
+  String get adjustmentStockAfter => 'Tahiry aorian\'ny';
+
+  @override
+  String get adjustmentValidate => 'Hamarino ny fanitsiana';
+
+  @override
+  String get adjustmentCreated => 'Fanitsiana noforonina soa aman-tsara';
+
+  @override
+  String get adjustmentEmptyList => 'Tsy misy fanitsiana';
+
+  @override
+  String get adjustmentEmptyDescription =>
+      'Ny fanitsiana tahiry dia hiseho eto';
+
+  @override
+  String get adjustmentFilterAll => 'Rehetra';
+
+  @override
+  String adjustmentItemsCount(int count) {
+    return '$count vokatra';
+  }
+
+  @override
+  String get adjustmentTotalVariation => 'Fiovana tanteraka';
+
+  @override
+  String adjustmentBy(String employee) {
+    return 'Nataon\'i $employee';
+  }
+
+  @override
+  String get historyTitle => 'Tantara';
+
+  @override
+  String get historyEmpty => 'Tsy misy fihetsiketsehana';
+
+  @override
+  String get historyEmptyDescription =>
+      'Ny tantaran\'ny fihetsiketsehana tahiry dia hiseho eto';
+
+  @override
+  String get historyFilterPeriod => 'Vanim-potoana';
+
+  @override
+  String get historyFilterLast7Days => '7 andro farany';
+
+  @override
+  String get historyFilterLast30Days => '30 andro farany';
+
+  @override
+  String get historyFilterThisMonth => 'Ity volana ity';
+
+  @override
+  String get historyFilterCustom => 'Safidy manokana';
+
+  @override
+  String historyOn(String date) {
+    return 'Ny $date';
+  }
 }

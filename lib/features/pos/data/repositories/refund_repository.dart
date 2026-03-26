@@ -95,15 +95,58 @@ class RefundRepository {
   }
 
   /// Mettre à jour le stock après remboursement
+  /// Phase 3.14 : Enregistrement dans inventory_history
   Future<void> _updateStockAfterRefund(List<RefundItemData> items) async {
     for (final refundItem in items) {
-      // TODO: Récupérer l'item original depuis sale_items pour avoir item_id
-      // TODO: Vérifier si track_stock = true
-      // TODO: Incrémenter in_stock de la quantité remboursée
-      // TODO: Enregistrer dans inventory_history (si table existe)
+      try {
+        // 1. Récupérer le sale_item pour avoir l'item_id
+        final saleItem = await (database.select(database.saleItems)
+              ..where((tbl) => tbl.id.equals(refundItem.saleItemId)))
+            .getSingleOrNull();
 
-      // Pour l'instant, laisser en placeholder
-      // Sera implémenté dans Phase 3.14 avec inventory_history
+        if (saleItem == null) continue;
+
+        // 2. Récupérer l'item pour vérifier track_stock
+        final item = await (database.select(database.items)
+              ..where((tbl) => tbl.id.equals(saleItem.itemId)))
+            .getSingleOrNull();
+
+        if (item == null || item.trackStock == 0) continue;
+
+        // 3. Incrémenter le stock
+        final newStock = item.inStock + refundItem.quantity.toInt();
+
+        await (database.update(database.items)
+              ..where((tbl) => tbl.id.equals(item.id)))
+            .write(
+          ItemsCompanion(
+            inStock: Value(newStock),
+            updatedAt: Value(DateTime.now()),
+            synced: const Value(false),
+          ),
+        );
+
+        // 4. Enregistrer dans inventory_history
+        final movement = InventoryHistoryCompanion(
+          id: Value(_uuid.v4()),
+          storeId: Value(item.storeId),
+          itemId: Value(item.id),
+          itemVariantId: Value(saleItem.itemVariantId),
+          reason: const Value(1), // InventoryMovementReason.refund (index 1)
+          referenceId: Value(refundItem.saleItemId),
+          quantityChange: Value(refundItem.quantity),
+          quantityAfter: Value(newStock.toDouble()),
+          cost: Value(item.cost),
+          employeeId: const Value(null),
+          synced: const Value(false),
+          createdAt: Value(DateTime.now()),
+        );
+
+        await database.inventoryHistoryDao.insertMovement(movement);
+      } catch (e) {
+        // Log error mais continuer pour les autres items
+        print('Erreur mise à jour stock après refund: $e');
+      }
     }
   }
 }

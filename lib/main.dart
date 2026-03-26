@@ -35,6 +35,8 @@ import 'features/store/data/repositories/store_settings_repository.dart';
 import 'features/store/presentation/bloc/store_settings_bloc.dart';
 import 'features/products/data/repositories/inventory_export_repository.dart';
 import 'features/products/presentation/bloc/inventory_export_bloc.dart';
+import 'features/inventory/data/repositories/stock_adjustment_repository.dart';
+import 'features/inventory/presentation/bloc/stock_adjustment_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -129,6 +131,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<StoreSettingsRepository>(
           create: (context) => StoreSettingsRepository(database),
         ),
+        // Repository pour les ajustements de stock
+        RepositoryProvider<StockAdjustmentRepository>(
+          create: (context) => StockAdjustmentRepository(database),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -190,6 +196,12 @@ class MyApp extends StatelessWidget {
           BlocProvider<StoreSettingsBloc>(
             create: (context) => StoreSettingsBloc(
               context.read<StoreSettingsRepository>(),
+            ),
+          ),
+          // BLoC pour les ajustements de stock
+          BlocProvider<StockAdjustmentBloc>(
+            create: (context) => StockAdjustmentBloc(
+              repository: context.read<StockAdjustmentRepository>(),
             ),
           ),
           // BLoC pour les pages personnalisées
