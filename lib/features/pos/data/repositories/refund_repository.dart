@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/data/local/app_database.dart' hide Sale;
-import '../../domain/entities/sale.dart';
 
 /// Repository pour les remboursements (offline-first)
 /// Différenciant #1 : Remboursements offline vs Loyverse bloqué
@@ -108,21 +107,22 @@ class RefundRepository {
 
         // 2. Récupérer l'item pour vérifier track_stock
         final item = await (database.select(database.items)
-              ..where((tbl) => tbl.id.equals(saleItem.itemId)))
+              ..where((tbl) => tbl.id.equals(saleItem.itemId ?? '')))
             .getSingleOrNull();
 
         if (item == null || item.trackStock == 0) continue;
 
         // 3. Incrémenter le stock
         final newStock = item.inStock + refundItem.quantity.toInt();
+        final now = DateTime.now().millisecondsSinceEpoch;
 
         await (database.update(database.items)
               ..where((tbl) => tbl.id.equals(item.id)))
             .write(
           ItemsCompanion(
             inStock: Value(newStock),
-            updatedAt: Value(DateTime.now()),
-            synced: const Value(false),
+            updatedAt: Value(now),
+            synced: const Value(0),
           ),
         );
 
@@ -138,8 +138,8 @@ class RefundRepository {
           quantityAfter: Value(newStock.toDouble()),
           cost: Value(item.cost),
           employeeId: const Value(null),
-          synced: const Value(false),
-          createdAt: Value(DateTime.now()),
+          synced: const Value(0),
+          createdAt: Value(now),
         );
 
         await database.inventoryHistoryDao.insertMovement(movement);

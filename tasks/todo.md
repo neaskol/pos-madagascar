@@ -296,14 +296,15 @@
 - [x] Bouton "Confirmer le remboursement" (rouge, avec confirmation dialog)
 - [x] **Fonctionne offline** (synced=false, sync background)
 
-#### 3.12.5 — Mise à jour stock après refund ⚠️ (reporté à Phase 3.14)
-- [ ] Si item a `track_stock=true`, réincrémenter `in_stock` dans Drift
-- [ ] Enregistrer dans `inventory_history` (table n'existe pas encore → Phase 3.14)
-- [ ] Mise à jour locale immédiate, sync Supabase en background
+#### 3.12.5 — Mise à jour stock après refund ✅
+- [x] Si item a `track_stock=true`, réincrémenter `in_stock` dans Drift
+- [x] Enregistrer dans `inventory_history` (implémenté dans refund_repository.dart)
+- [x] Mise à jour locale immédiate, sync Supabase en background
+- [x] Correction erreurs Drift (types int pour timestamps et synced)
 
 #### 3.12.6 — Routes + Navigation ✅
 - [x] Ajouter routes dans app_router.dart : `/pos/receipts`, `/pos/receipts/:id`, `/pos/receipts/:id/refund`
-- [ ] Accès depuis menu POS (...) → "Historique ventes" (placeholder dans écran TODO)
+- [x] Accès depuis menu POS (...) → "Historique ventes" (bouton ajouté dans PopupMenu)
 - [x] Accès depuis détail reçu → "Rembourser"
 - [ ] Guard : refund accessible OWNER/ADMIN/MANAGER + CASHIER si permission activée (TODO permissions)
 
