@@ -73,14 +73,21 @@ class AuthRepository {
     String? phone,
   }) async {
     try {
+      print('🔵 [AUTH SIGNUP] Starting signup for: $email');
+
       final response = await _supabase.auth.signUp(
         email: email,
         password: password,
         data: {'name': name, 'phone': phone},
       );
 
+      print('🔵 [AUTH SIGNUP] Signup response user: ${response.user?.id}');
+      print('🔵 [AUTH SIGNUP] Session exists: ${response.session != null}');
+      print('🔵 [AUTH SIGNUP] Current user after signup: ${_supabase.auth.currentUser?.id}');
+
       return response.user;
     } catch (e) {
+      print('❌ [AUTH SIGNUP] Signup failed: $e');
       rethrow;
     }
   }
@@ -159,7 +166,11 @@ class AuthRepository {
     String timezone = 'Indian/Antananarivo',
   }) async {
     try {
+      print('🔵 [AUTH] Creating store: $name');
+      print('🔵 [AUTH] User ID: ${_supabase.auth.currentUser?.id}');
+
       // Créer le magasin dans Supabase
+      print('🔵 [AUTH] Inserting into stores table...');
       final storeRecord = await _supabase.from('stores').insert({
         'name': name,
         'address': address,
@@ -168,6 +179,8 @@ class AuthRepository {
         'currency': currency,
         'timezone': timezone,
       }).select().single();
+
+      print('✅ [AUTH] Store created: ${storeRecord['id']}');
 
       // Sauvegarder localement
       final store = StoresCompanion.insert(
@@ -186,10 +199,13 @@ class AuthRepository {
       // Mettre à jour l'utilisateur avec le store_id
       final currentUser = _supabase.auth.currentUser;
       if (currentUser != null) {
+        print('🔵 [AUTH] Updating user ${currentUser.id} with store_id...');
         await _supabase.from('users').update({
           'store_id': storeRecord['id'],
           'role': 'OWNER', // Premier utilisateur = OWNER
         }).eq('id', currentUser.id);
+
+        print('✅ [AUTH] User updated with store_id');
 
         // Mettre à jour localement
         final user = await _userDao.getUserById(currentUser.id).getSingleOrNull();
@@ -206,8 +222,13 @@ class AuthRepository {
         }
       }
 
+      print('✅ [AUTH] Store creation completed successfully');
       return storeRecord['id'];
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('❌ [AUTH] Store creation failed!');
+      print('❌ [AUTH] Error type: ${e.runtimeType}');
+      print('❌ [AUTH] Error: $e');
+      print('❌ [AUTH] Stack trace: $stackTrace');
       rethrow;
     }
   }
