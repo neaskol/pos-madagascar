@@ -185,7 +185,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
                     // Apply filter
                     if (_reasonFilter != null) {
                       adjustments = adjustments
-                          .where((adj) => adj.reason == _reasonFilter)
+                          .where((adj) => adj.reason == _reasonFilter!.index)
                           .toList();
                     }
 

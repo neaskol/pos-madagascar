@@ -228,7 +228,7 @@ class _InventoryHistoryTabState extends State<InventoryHistoryTab> {
               // Apply reason filter
               if (_reasonFilter != null) {
                 movements = movements
-                    .where((movement) => movement.reason == _reasonFilter)
+                    .where((movement) => movement.reason == _reasonFilter!.index)
                     .toList();
               }
 

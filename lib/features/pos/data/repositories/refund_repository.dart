@@ -53,14 +53,23 @@ class RefundRepository {
         );
       }).toList();
 
-      // Insérer en transaction
-      await database.refundDao.insertFullRefund(
-        refund: refund,
-        items: refundItems,
-      );
+      // Transaction atomique : refund + restauration stock + historique
+      // Drift rollback automatiquement en cas d'erreur
+      try {
+        await database.transaction(() async {
+          // 1. Insérer le refund et ses items
+          await database.refundDao.insertFullRefund(
+            refund: refund,
+            items: refundItems,
+          );
 
-      // Mettre à jour le stock des items remboursés
-      await _updateStockAfterRefund(items);
+          // 2. Restaurer le stock des items remboursés
+          await _updateStockAfterRefund(items);
+        });
+      } catch (e) {
+        // Transaction rollback automatiquement par Drift
+        throw Exception('Erreur transaction remboursement atomique: $e');
+      }
 
       // TODO: Sync vers Supabase en arrière-plan
 

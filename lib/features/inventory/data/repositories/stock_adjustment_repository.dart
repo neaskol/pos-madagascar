@@ -56,36 +56,42 @@ class StockAdjustmentRepository {
         );
       }
 
-      // Transaction : créer l'ajustement + mettre à jour le stock + enregistrer l'historique
-      await database.transaction(() async {
-        // 1. Insérer l'ajustement et ses items
-        await database.stockAdjustmentDao.insertFullAdjustment(
-          adjustment: adjustment,
-          items: adjustmentItems,
-        );
-
-        // 2. Mettre à jour le stock des items
-        for (final itemData in items) {
-          await _updateItemStock(
-            itemId: itemData.itemId,
-            variantId: itemData.itemVariantId,
-            newStock: itemData.quantityAfter,
+      // Transaction atomique : créer l'ajustement + mettre à jour le stock + enregistrer l'historique
+      // Drift rollback automatiquement en cas d'erreur
+      try {
+        await database.transaction(() async {
+          // 1. Insérer l'ajustement et ses items
+          await database.stockAdjustmentDao.insertFullAdjustment(
+            adjustment: adjustment,
+            items: adjustmentItems,
           );
 
-          // 3. Enregistrer dans l'historique
-          await _recordInventoryMovement(
-            storeId: storeId,
-            itemId: itemData.itemId,
-            variantId: itemData.itemVariantId,
-            reason: InventoryMovementReason.adjustment,
-            referenceId: adjustmentId,
-            quantityChange: itemData.quantityChange,
-            quantityAfter: itemData.quantityAfter,
-            cost: itemData.cost,
-            employeeId: createdBy,
-          );
-        }
-      });
+          // 2. Mettre à jour le stock des items
+          for (final itemData in items) {
+            await _updateItemStock(
+              itemId: itemData.itemId,
+              variantId: itemData.itemVariantId,
+              newStock: itemData.quantityAfter,
+            );
+
+            // 3. Enregistrer dans l'historique
+            await _recordInventoryMovement(
+              storeId: storeId,
+              itemId: itemData.itemId,
+              variantId: itemData.itemVariantId,
+              reason: InventoryMovementReason.adjustment,
+              referenceId: adjustmentId,
+              quantityChange: itemData.quantityChange,
+              quantityAfter: itemData.quantityAfter,
+              cost: itemData.cost,
+              employeeId: createdBy,
+            );
+          }
+        });
+      } catch (e) {
+        // Transaction rollback automatiquement par Drift
+        throw Exception('Erreur transaction ajustement atomique: $e');
+      }
 
       // TODO: Sync vers Supabase en arrière-plan
 
