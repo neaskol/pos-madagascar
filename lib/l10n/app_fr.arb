@@ -428,6 +428,37 @@
     }
   },
 
+  "inventoryExportPdf": "Exporter en PDF",
+  "inventoryExportExcel": "Exporter en Excel",
+  "inventoryExportShare": "Partager",
+  "inventoryExportPdfSuccess": "Inventaire exporté en PDF",
+  "inventoryExportExcelSuccess": "Inventaire exporté en Excel",
+  "inventoryExportPdfLoading": "Génération du PDF...",
+  "inventoryExportExcelLoading": "Génération du fichier Excel...",
+  "inventoryExportPdfSubject": "Inventaire - Export PDF",
+  "inventoryExportExcelSubject": "Inventaire - Export Excel",
+  "inventoryExportStoreError": "Impossible d'exporter : magasin non identifié",
+
+  "exportCsv": "Exporter CSV",
+  "exportPdf": "Exporter PDF",
+  "inventorySheet": "Feuille d'inventaire",
+  "printInventory": "Imprimer résumé",
+  "exportSuccess": "Export réussi",
+  "totalItems": "Total produits",
+  "totalStockValue": "Valeur stock (coût)",
+  "totalRetailValue": "Valeur retail",
+  "profitPotential": "Profit potentiel",
+  "exportingInventory": "Export en cours...",
+  "printingInventory": "Impression en cours...",
+  "printerNotConnected": "Imprimante non connectée",
+  "exportError": "Erreur d'export",
+  "printError": "Erreur d'impression",
+  "@inventoryUnitsRemaining": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "salesHistory": "Historique des ventes",
   "searchReceipts": "Rechercher un reçu",
   "receiptDetail": "Détail du reçu",

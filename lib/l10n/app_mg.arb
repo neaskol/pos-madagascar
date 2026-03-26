@@ -428,6 +428,37 @@
     }
   },
 
+  "inventoryExportPdf": "Avoaka PDF",
+  "inventoryExportExcel": "Avoaka Excel",
+  "inventoryExportShare": "Zarao",
+  "inventoryExportPdfSuccess": "Inventaire navoaka PDF",
+  "inventoryExportExcelSuccess": "Inventaire navoaka Excel",
+  "inventoryExportPdfLoading": "Mamorona PDF...",
+  "inventoryExportExcelLoading": "Mamorona rakitra Excel...",
+  "inventoryExportPdfSubject": "Inventaire - Famoahana PDF",
+  "inventoryExportExcelSubject": "Inventaire - Famoahana Excel",
+  "inventoryExportStoreError": "Tsy afaka navoaka: tsy fantatra ny magazay",
+
+  "exportCsv": "Avoaka CSV",
+  "exportPdf": "Avoaka PDF",
+  "inventorySheet": "Taratasy fanisana",
+  "printInventory": "Printy famintinana",
+  "exportSuccess": "Avoaka soa aman-tsara",
+  "totalItems": "Vokatra rehetra",
+  "totalStockValue": "Sandan'ny stock (vidiny)",
+  "totalRetailValue": "Sandan'ny fivarotana",
+  "profitPotential": "Tombony azo",
+  "exportingInventory": "Mamoaka...",
+  "printingInventory": "Manonta printy...",
+  "printerNotConnected": "Tsy misy printy mifandray",
+  "exportError": "Tsy nahomby ny famoahana",
+  "printError": "Tsy nahomby ny printy",
+  "@inventoryUnitsRemaining": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
   "salesHistory": "Tantaran'ny varotra",
   "searchReceipts": "Mitady tapakila",
   "receiptDetail": "Antsipiriany momba ny tapakila",

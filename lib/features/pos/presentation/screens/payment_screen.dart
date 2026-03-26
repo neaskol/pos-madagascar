@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/data/local/app_database.dart' hide Sale;
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/cart_item.dart';
 import '../../domain/entities/sale.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../../../customers/presentation/bloc/credit_bloc.dart';
+import '../../../customers/presentation/bloc/credit_event.dart';
 import '../../../store/presentation/bloc/store_settings_bloc.dart';
 import '../../../store/presentation/bloc/store_settings_state.dart';
 import '../bloc/sale_bloc.dart';
 import '../bloc/sale_event.dart';
 import '../bloc/sale_state.dart';
 import '../widgets/add_payment_dialog.dart';
+import '../widgets/credit_sale_dialog.dart';
+import '../widgets/customer_picker_dialog.dart';
 import '../widgets/mobile_money_payment_dialog.dart';
 import 'receipt_screen.dart';
 
@@ -66,6 +72,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
   // État pour mode split (multi-paiement)
   final List<PartialPayment> _partialPayments = [];
 
+  // Client sélectionné (pour vente à crédit)
+  Customer? _selectedCustomer;
+
   // Note optionnelle pour la vente
   final TextEditingController _noteController = TextEditingController();
 
@@ -108,7 +117,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Paiement'),
+          title: Text(AppLocalizations.of(context)!.paymentTitle),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.pop(),
@@ -120,14 +129,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
               child: DropdownButton<PaymentMode>(
                 value: _paymentMode,
                 underline: const SizedBox(),
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: PaymentMode.single,
                     child: Row(
                       children: [
-                        Icon(Icons.payment, size: 20),
-                        SizedBox(width: 8),
-                        Text('Paiement unique'),
+                        const Icon(Icons.payment, size: 20),
+                        const SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.paymentSingle),
                       ],
                     ),
                   ),
@@ -135,9 +144,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     value: PaymentMode.split,
                     child: Row(
                       children: [
-                        Icon(Icons.splitscreen, size: 20),
-                        SizedBox(width: 8),
-                        Text('Multi-paiement'),
+                        const Icon(Icons.splitscreen, size: 20),
+                        const SizedBox(width: 8),
+                        Text(AppLocalizations.of(context)!.paymentSplit),
                       ],
                     ),
                   ),
@@ -167,7 +176,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               child: Column(
                 children: [
                   Text(
-                    'Total à payer',
+                    AppLocalizations.of(context)!.paymentTotalToPay,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
@@ -209,10 +218,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   final isProcessing = state is SaleCreating;
 
                   // Validation différente selon le mode
-                  final canPay = _paymentMode == PaymentMode.single
-                      ? _selectedPaymentType == PaymentType.cash &&
-                          _amountReceived >= widget.total
-                      : _isSplitPaymentComplete;
+                  bool canPay;
+                  if (_paymentMode == PaymentMode.split) {
+                    canPay = _isSplitPaymentComplete;
+                  } else if (_selectedPaymentType == PaymentType.cash) {
+                    canPay = _amountReceived >= widget.total;
+                  } else if (_selectedPaymentType == PaymentType.credit) {
+                    canPay = true; // Credit flow handles its own validation via dialogs
+                  } else {
+                    canPay = true; // Card, MVola, Orange Money validated via their dialogs
+                  }
 
                   return FilledButton(
                     onPressed: canPay && !isProcessing
@@ -232,9 +247,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
-                        : const Text(
-                            'VALIDER LE PAIEMENT',
-                            style: TextStyle(
+                        : Text(
+                            AppLocalizations.of(context)!.paymentValidate,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -251,22 +266,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   // UI pour mode single (paiement unique)
   Widget _buildSinglePaymentUI() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Section type de paiement
         Text(
-          'Type de paiement',
+          l10n.paymentType,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
         _buildPaymentTypeGrid(),
         const SizedBox(height: 24),
 
+        // Section Crédit — afficher client sélectionné ou bouton sélectionner
+        if (_selectedPaymentType == PaymentType.credit) ...[
+          _buildCreditCustomerSection(l10n),
+          const SizedBox(height: 24),
+        ],
+
         // Section Cash (si sélectionné)
         if (_selectedPaymentType == PaymentType.cash) ...[
           Text(
-            'Montant reçu',
+            l10n.paymentAmountReceived,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 12),
@@ -293,7 +315,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Monnaie à rendre',
+                    l10n.changeDue,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: _changeDue >= 0
                               ? Colors.green[900]
@@ -316,7 +338,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  'Montant insuffisant',
+                  l10n.paymentInsufficient,
                   style: TextStyle(
                     color: Colors.red[900],
                     fontSize: 14,
@@ -332,7 +354,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         const Divider(),
         const SizedBox(height: 16),
         Text(
-          'Note (optionnel)',
+          l10n.noteOptional,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
@@ -341,11 +363,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
           maxLines: 3,
           maxLength: 200,
           decoration: InputDecoration(
-            hintText: 'Ajouter une note à cette vente...',
+            hintText: l10n.paymentNoteHint,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            helperText: 'Cette note apparaîtra sur le reçu',
+            helperText: l10n.paymentNoteHelper,
           ),
         ),
       ],
@@ -354,6 +376,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   // UI pour mode split (multi-paiement)
   Widget _buildSplitPaymentUI() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -373,7 +396,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           child: Column(
             children: [
               Text(
-                _remainingAmount > 0 ? 'Montant restant' : 'Paiement complet',
+                _remainingAmount > 0 ? l10n.paymentRemainingAmount : l10n.paymentComplete,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -407,7 +430,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Paiements ajoutés',
+                l10n.paymentAdded,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Text(
@@ -433,7 +456,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           OutlinedButton.icon(
             onPressed: () => _showAddPaymentDialog(),
             icon: const Icon(Icons.add),
-            label: const Text('Ajouter un paiement'),
+            label: Text(l10n.paymentAddPayment),
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(double.infinity, 48),
             ),
@@ -452,7 +475,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Divisez le paiement en plusieurs méthodes',
+                  l10n.paymentSplitDescription,
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 16,
@@ -461,7 +484,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Espèces, Carte, MVola, Orange Money',
+                  l10n.paymentSplitMethods,
                   style: TextStyle(
                     color: Colors.grey[500],
                     fontSize: 14,
@@ -477,7 +500,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         const Divider(),
         const SizedBox(height: 16),
         Text(
-          'Note (optionnel)',
+          l10n.noteOptional,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
@@ -486,11 +509,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
           maxLines: 3,
           maxLength: 200,
           decoration: InputDecoration(
-            hintText: 'Ajouter une note à cette vente...',
+            hintText: l10n.paymentNoteHint,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            helperText: 'Cette note apparaîtra sur le reçu',
+            helperText: l10n.paymentNoteHelper,
           ),
         ),
       ],
@@ -538,6 +561,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildPaymentTypeGrid() {
+    final l10n = AppLocalizations.of(context)!;
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -548,26 +572,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
       children: [
         _buildPaymentTypeCard(
           type: PaymentType.cash,
-          label: 'Espèces',
+          label: l10n.paymentCash,
           icon: Icons.payments,
         ),
         _buildPaymentTypeCard(
           type: PaymentType.card,
-          label: 'Carte bancaire',
+          label: l10n.paymentCard,
           icon: Icons.credit_card,
-          enabled: true, // Phase 3.2 - Activé
         ),
         _buildPaymentTypeCard(
           type: PaymentType.mvola,
-          label: 'MVola',
+          label: l10n.paymentMvola,
           icon: Icons.phone_android,
-          enabled: true, // Phase 3.2 - Activé
         ),
         _buildPaymentTypeCard(
           type: PaymentType.orangeMoney,
-          label: 'Orange Money',
+          label: l10n.paymentOrangeMoney,
           icon: Icons.phone_iphone,
-          enabled: true, // Phase 3.2 - Activé
+        ),
+        _buildPaymentTypeCard(
+          type: PaymentType.credit,
+          label: l10n.creditSale,
+          icon: Icons.account_balance_wallet,
         ),
       ],
     );
@@ -681,12 +707,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildCustomAmountInput() {
+    final l10n = AppLocalizations.of(context)!;
     return TextField(
       controller: _amountController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        labelText: 'Ou montant personnalisé',
-        hintText: 'Montant en Ariary',
+        labelText: l10n.paymentCustomAmount,
+        hintText: l10n.paymentCustomAmountHint,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -697,6 +724,95 @@ class _PaymentScreenState extends State<PaymentScreen> {
           _amountReceived = int.tryParse(value) ?? 0;
         });
       },
+    );
+  }
+
+  // Section crédit : afficher le client sélectionné ou inviter à en choisir un
+  Widget _buildCreditCustomerSection(AppLocalizations l10n) {
+    if (_selectedCustomer != null) {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.blue.withOpacity(0.3)),
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.blue.withOpacity(0.2),
+              child: Text(
+                _selectedCustomer!.name.isNotEmpty
+                    ? _selectedCustomer!.name[0].toUpperCase()
+                    : '?',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _selectedCustomer!.name,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  if (_selectedCustomer!.phone != null)
+                    Text(
+                      _selectedCustomer!.phone!,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                final customer = await showDialog<Customer>(
+                  context: context,
+                  builder: (context) => const CustomerPickerDialog(),
+                );
+                if (customer != null) {
+                  setState(() {
+                    _selectedCustomer = customer;
+                  });
+                }
+              },
+              child: Text(l10n.changeCustomer),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Aucun client sélectionné
+    return OutlinedButton.icon(
+      onPressed: () async {
+        final customer = await showDialog<Customer>(
+          context: context,
+          builder: (context) => const CustomerPickerDialog(),
+        );
+        if (customer != null) {
+          setState(() {
+            _selectedCustomer = customer;
+          });
+        }
+      },
+      icon: const Icon(Icons.person_add),
+      label: Text(l10n.selectCustomerForCredit),
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(double.infinity, 48),
+        foregroundColor: Colors.blue,
+        side: const BorderSide(color: Colors.blue),
+      ),
     );
   }
 
@@ -730,19 +846,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   // Obtenir le label d'un type de paiement
   String _getPaymentTypeLabel(PaymentType type) {
+    final l10n = AppLocalizations.of(context)!;
     switch (type) {
       case PaymentType.cash:
-        return 'Espèces';
+        return l10n.paymentCash;
       case PaymentType.card:
-        return 'Carte bancaire';
+        return l10n.paymentCard;
       case PaymentType.mvola:
-        return 'MVola';
+        return l10n.paymentMvola;
       case PaymentType.orangeMoney:
-        return 'Orange Money';
+        return l10n.paymentOrangeMoney;
       case PaymentType.credit:
-        return 'Crédit';
+        return l10n.creditSale;
       case PaymentType.custom:
-        return 'Autre';
+        return l10n.paymentOther;
     }
   }
 
@@ -765,11 +882,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<void> _processPayment(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final authState = context.read<AuthBloc>().state;
 
-    if (authState is! AuthAuthenticatedWithStore) {
+    String? storeId;
+    String? employeeId;
+    if (authState is AuthAuthenticatedWithStore) {
+      storeId = authState.storeId;
+      employeeId = authState.user.id;
+    } else if (authState is AuthPinSessionActive) {
+      storeId = authState.user.storeId;
+      employeeId = authState.user.id;
+    }
+
+    if (storeId == null || employeeId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erreur: utilisateur non authentifié')),
+        SnackBar(content: Text(l10n.paymentErrorNotAuthenticated)),
       );
       return;
     }
@@ -778,15 +906,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final note = _noteController.text.trim().isEmpty ? null : _noteController.text.trim();
 
     if (_paymentMode == PaymentMode.single) {
-      // Vérifier si c'est un paiement mobile money
+      // --- CREDIT SALE FLOW ---
+      if (_selectedPaymentType == PaymentType.credit) {
+        await _processCreditPayment(context, storeId, employeeId, note);
+        return;
+      }
+
+      // --- MOBILE MONEY FLOW ---
       if (_selectedPaymentType == PaymentType.mvola ||
           _selectedPaymentType == PaymentType.orangeMoney) {
-        // Récupérer les réglages du magasin pour le merchant number
         final settingsState = context.read<StoreSettingsBloc>().state;
 
         if (settingsState is! StoreSettingsLoaded) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Erreur: impossible de charger les réglages du magasin')),
+            SnackBar(content: Text(l10n.paymentErrorStoreSettings)),
           );
           return;
         }
@@ -800,13 +933,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
             SnackBar(
               content: Text(
                 _selectedPaymentType == PaymentType.mvola
-                    ? 'Erreur: numéro marchand MVola non configuré'
-                    : 'Erreur: numéro marchand Orange Money non configuré',
+                    ? l10n.paymentErrorMvolaMerchant
+                    : l10n.paymentErrorOrangeMoneyMerchant,
               ),
               action: SnackBarAction(
-                label: 'Configurer',
+                label: l10n.paymentConfigure,
                 onPressed: () {
-                  // TODO: Navigation vers les réglages (Phase 3.8 - Settings screen)
+                  context.go('/settings/payment-types');
                 },
               ),
             ),
@@ -814,7 +947,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
           return;
         }
 
-        // Afficher le dialog mobile money
         final reference = await showDialog<String>(
           context: context,
           barrierDismissible: false,
@@ -825,33 +957,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
         );
 
-        // Si l'utilisateur annule, ne pas créer la vente
         if (reference == null) return;
 
-        // Créer la vente avec la référence de transaction
         if (context.mounted) {
           context.read<SaleBloc>().add(
                 CreateSaleEvent(
-                  storeId: authState.storeId,
-                  employeeId: authState.user.id,
+                  storeId: storeId,
+                  employeeId: employeeId,
                   items: widget.items,
                   subtotal: widget.subtotal,
                   taxAmount: widget.taxAmount,
                   discountAmount: widget.discountAmount,
                   total: widget.total,
                   paymentType: _selectedPaymentType,
-                  amountReceived: widget.total, // Montant exact pour mobile money
+                  amountReceived: widget.total,
                   paymentReference: reference,
                   note: note,
                 ),
               );
         }
       } else {
-        // Mode single payment normal (cash, card, etc.)
+        // --- CASH / CARD FLOW ---
         context.read<SaleBloc>().add(
               CreateSaleEvent(
-                storeId: authState.storeId,
-                employeeId: authState.user.id,
+                storeId: storeId,
+                employeeId: employeeId,
                 items: widget.items,
                 subtotal: widget.subtotal,
                 taxAmount: widget.taxAmount,
@@ -864,7 +994,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             );
       }
     } else {
-      // Mode multi-payment (nouveau)
+      // --- MULTI-PAYMENT FLOW ---
       final paymentDataList = _partialPayments
           .map((p) => PaymentData(
                 type: p.type,
@@ -875,8 +1005,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
       context.read<SaleBloc>().add(
             CreateSaleEvent(
-              storeId: authState.storeId,
-              employeeId: authState.user.id,
+              storeId: storeId,
+              employeeId: employeeId,
               items: widget.items,
               subtotal: widget.subtotal,
               taxAmount: widget.taxAmount,
@@ -889,24 +1019,90 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
+  /// Process credit sale: customer picker → credit sale dialog → create sale + credit
+  Future<void> _processCreditPayment(
+    BuildContext context,
+    String storeId,
+    String employeeId,
+    String? note,
+  ) async {
+    // Step 1: Select customer (or use already selected)
+    Customer? customer = _selectedCustomer;
+    if (customer == null) {
+      customer = await showDialog<Customer>(
+        context: context,
+        builder: (context) => const CustomerPickerDialog(),
+      );
+
+      if (customer == null || !context.mounted) return;
+
+      setState(() {
+        _selectedCustomer = customer;
+      });
+    }
+
+    // Step 2: Show credit sale dialog (due date + notes)
+    if (!context.mounted) return;
+    final creditResult = await showDialog<CreditSaleResult>(
+      context: context,
+      builder: (context) => CreditSaleDialog(
+        customerName: customer!.name,
+        totalAmount: widget.total,
+      ),
+    );
+
+    if (creditResult == null || !context.mounted) return;
+
+    // Step 3: Create the sale with credit payment type
+    context.read<SaleBloc>().add(
+          CreateSaleEvent(
+            storeId: storeId,
+            employeeId: employeeId,
+            items: widget.items,
+            subtotal: widget.subtotal,
+            taxAmount: widget.taxAmount,
+            discountAmount: widget.discountAmount,
+            total: widget.total,
+            paymentType: PaymentType.credit,
+            amountReceived: 0, // No cash received for credit
+            customerId: customer.id,
+            note: note ?? creditResult.notes,
+          ),
+        );
+
+    // Step 4: Create the credit record
+    context.read<CreditBloc>().add(
+          CreateCreditEvent(
+            storeId: storeId,
+            customerId: customer.id,
+            amountTotal: widget.total,
+            dueDate: creditResult.dueDate,
+            notes: creditResult.notes,
+            createdBy: employeeId,
+          ),
+        );
+  }
+
   void _showPaymentSuccessDialog(BuildContext context, Sale sale) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (dialogContext) => AlertDialog(
+      builder: (dialogContext) {
+        final l10n = AppLocalizations.of(context)!;
+        return AlertDialog(
         icon: const Icon(
           Icons.check_circle,
           color: Colors.green,
           size: 64,
         ),
-        title: const Text('Paiement réussi'),
+        title: Text(l10n.paymentSuccess),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Reçu N° ${sale.receiptNumber}'),
+            Text(l10n.receiptNumber(sale.receiptNumber)),
             const SizedBox(height: 16),
             if (sale.changeDue > 0) ...[
-              const Text('Monnaie à rendre:'),
+              Text(l10n.changeDueLabel),
               Text(
                 _formatPrice(sale.changeDue),
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -924,7 +1120,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               Navigator.of(dialogContext).pop();
               context.go('/pos');
             },
-            child: const Text('Nouvelle vente'),
+            child: Text(l10n.newSale),
           ),
           FilledButton(
             onPressed: () {
@@ -936,10 +1132,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               );
             },
-            child: const Text('Voir reçu'),
+            child: Text(l10n.viewReceipt),
           ),
         ],
-      ),
+      );
+      },
     );
   }
 
