@@ -1,13 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../../../core/data/remote/sync_service.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
+import 'dart:developer' as developer;
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
+  final SyncService? _syncService;
 
-  AuthBloc({required AuthRepository authRepository})
+  AuthBloc({required AuthRepository authRepository, SyncService? syncService})
       : _authRepository = authRepository,
+        _syncService = syncService,
         super(AuthInitial()) {
     on<AuthCheckRequested>(_onCheckRequested);
     on<AuthEmailSignInRequested>(_onEmailSignInRequested);
@@ -39,6 +43,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       emit(AuthAuthenticatedWithStore(user: user, storeId: user.storeId!));
+
+      // Synchroniser les données depuis Supabase vers Drift (pull initial)
+      _pullDataFromSupabase(user.storeId!);
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }
@@ -75,6 +82,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       emit(AuthAuthenticatedWithStore(user: user, storeId: user.storeId!));
+
+      // Synchroniser les données depuis Supabase vers Drift (pull initial)
+      _pullDataFromSupabase(user.storeId!);
     } catch (e) {
       emit(AuthError(message: _formatError(e.toString())));
     }
@@ -250,5 +260,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return 'Pas de connexion internet';
     }
     return error;
+  }
+
+  /// Récupère les données depuis Supabase en arrière-plan
+  void _pullDataFromSupabase(String storeId) {
+    if (_syncService != null) {
+      developer.log('Triggering pull sync from Supabase for store: $storeId', name: 'AuthBloc');
+      _syncService.syncFromRemote(storeId).then((result) {
+        if (result.isSuccess) {
+          developer.log(
+            'Pull sync completed: ${result.summary}',
+            name: 'AuthBloc',
+          );
+        } else if (result.hasErrors) {
+          developer.log(
+            'Pull sync had errors: ${result.errors.join(", ")}',
+            name: 'AuthBloc',
+          );
+        } else if (result.skipped) {
+          developer.log(
+            'Pull sync skipped (no connection or no data)',
+            name: 'AuthBloc',
+          );
+        }
+      }).catchError((e) {
+        developer.log(
+          'Pull sync failed',
+          name: 'AuthBloc',
+          error: e,
+        );
+      });
+    }
   }
 }

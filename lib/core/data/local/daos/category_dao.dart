@@ -18,6 +18,10 @@ class CategoryDao extends DatabaseAccessor<AppDatabase>
   Future<int> insertCategory(CategoriesCompanion category) =>
       into(categories).insert(category);
 
+  /// Insère ou met à jour une catégorie (upsert) - utilisé pour la sync
+  Future<void> upsertCategory(CategoriesCompanion category) =>
+      into(categories).insertOnConflictUpdate(category);
+
   /// Met à jour une catégorie existante et marque comme non synchronisée
   Future<bool> updateCategory(CategoriesCompanion category) async {
     final rowsAffected = await (update(categories)

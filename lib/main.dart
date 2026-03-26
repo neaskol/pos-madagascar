@@ -210,6 +210,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authRepository: context.read<AuthRepository>(),
+              syncService: context.read<SyncService>(),
             )..add(AuthCheckRequested()),
           ),
           // BLoC pour les catégories

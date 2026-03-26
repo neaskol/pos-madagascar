@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:drift/drift.dart';
 import '../local/app_database.dart';
 import 'dart:developer' as developer;
 
@@ -324,9 +325,167 @@ class SyncService {
   /// Cette méthode est appelée après l'authentification initiale pour télécharger
   /// toutes les données du magasin de l'utilisateur depuis Supabase vers Drift.
   ///
-  /// TODO: Implémenter quand on aura besoin du téléchargement initial
-  Future<void> syncFromRemote(String storeId) async {
-    throw UnimplementedError('Pull sync not yet implemented - will be needed for initial data load');
+  /// [storeId] - ID du magasin dont on veut récupérer les données
+  /// [forceRefresh] - Si true, efface et recharge toutes les données
+  Future<SyncResult> syncFromRemote(String storeId, {bool forceRefresh = false}) async {
+    final result = SyncResult();
+
+    try {
+      developer.log('Starting pull sync from Supabase for store: $storeId', name: 'SyncService');
+
+      // Vérifier la connexion internet
+      if (!await _hasInternetConnection()) {
+        developer.log('No internet connection - skipping pull sync', name: 'SyncService');
+        result.skipped = true;
+        return result;
+      }
+
+      // Synchroniser chaque table dans l'ordre (respect des foreign keys)
+      await _pullCategories(storeId, result);
+      await _pullItems(storeId, result);
+      await _pullCustomers(storeId, result);
+
+      developer.log('Pull sync completed: ${result.summary}', name: 'SyncService');
+    } catch (e, stack) {
+      developer.log(
+        'Pull sync failed',
+        name: 'SyncService',
+        error: e,
+        stackTrace: stack,
+      );
+      result.errors.add(e.toString());
+    }
+
+    return result;
+  }
+
+  /// Récupère les catégories depuis Supabase
+  Future<void> _pullCategories(String storeId, SyncResult result) async {
+    try {
+      final remoteCategories = await _supabase
+          .from('categories')
+          .select()
+          .eq('store_id', storeId)
+          .order('sort_order');
+
+      for (final categoryData in remoteCategories) {
+        try {
+          final companion = CategoriesCompanion(
+            id: Value(categoryData['id'] as String),
+            storeId: Value(categoryData['store_id'] as String),
+            name: Value(categoryData['name'] as String),
+            color: Value(categoryData['color'] as String?),
+            sortOrder: Value(categoryData['sort_order'] as int? ?? 0),
+            updatedAt: Value(DateTime.parse(categoryData['updated_at'] as String).millisecondsSinceEpoch),
+            deletedAt: categoryData['deleted_at'] != null
+                ? Value(DateTime.parse(categoryData['deleted_at'] as String).millisecondsSinceEpoch)
+                : const Value(null),
+            synced: const Value(1), // Marqué comme synchronisé
+          );
+
+          await _localDb.categoryDao.upsertCategory(companion);
+          result.categoriesSynced++;
+        } catch (e) {
+          developer.log('Failed to pull category ${categoryData['id']}', name: 'SyncService', error: e);
+          result.errors.add('Category ${categoryData['name']}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to pull categories', name: 'SyncService', error: e);
+      result.errors.add('Categories: $e');
+    }
+  }
+
+  /// Récupère les items depuis Supabase
+  Future<void> _pullItems(String storeId, SyncResult result) async {
+    try {
+      final remoteItems = await _supabase
+          .from('items')
+          .select()
+          .eq('store_id', storeId)
+          .order('name');
+
+      for (final itemData in remoteItems) {
+        try {
+          final companion = ItemsCompanion(
+            id: Value(itemData['id'] as String),
+            storeId: Value(itemData['store_id'] as String),
+            categoryId: Value(itemData['category_id'] as String?),
+            name: Value(itemData['name'] as String),
+            description: Value(itemData['description'] as String?),
+            sku: Value(itemData['sku'] as String?),
+            barcode: Value(itemData['barcode'] as String?),
+            price: Value(itemData['price'] as int),
+            cost: Value(itemData['cost'] as int? ?? 0),
+            costIsPercentage: Value(itemData['cost_is_percentage'] as int? ?? 0),
+            soldBy: Value(itemData['sold_by'] as String? ?? 'piece'),
+            availableForSale: Value(itemData['available_for_sale'] as int? ?? 1),
+            trackStock: Value(itemData['track_stock'] as int? ?? 0),
+            inStock: Value(itemData['in_stock'] as int? ?? 0),
+            lowStockThreshold: Value(itemData['low_stock_threshold'] as int? ?? 0),
+            isComposite: Value(itemData['is_composite'] as int? ?? 0),
+            useProduction: Value(itemData['use_production'] as int? ?? 0),
+            imageUrl: Value(itemData['image_url'] as String?),
+            averageCost: Value(itemData['average_cost'] as int? ?? 0),
+            updatedAt: Value(DateTime.parse(itemData['updated_at'] as String).millisecondsSinceEpoch),
+            deletedAt: itemData['deleted_at'] != null
+                ? Value(DateTime.parse(itemData['deleted_at'] as String).millisecondsSinceEpoch)
+                : const Value(null),
+            synced: const Value(1), // Marqué comme synchronisé
+          );
+
+          await _localDb.itemDao.upsertItem(companion);
+          result.itemsSynced++;
+        } catch (e) {
+          developer.log('Failed to pull item ${itemData['id']}', name: 'SyncService', error: e);
+          result.errors.add('Item ${itemData['name']}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to pull items', name: 'SyncService', error: e);
+      result.errors.add('Items: $e');
+    }
+  }
+
+  /// Récupère les clients depuis Supabase
+  Future<void> _pullCustomers(String storeId, SyncResult result) async {
+    try {
+      final remoteCustomers = await _supabase
+          .from('customers')
+          .select()
+          .eq('store_id', storeId)
+          .order('name');
+
+      for (final customerData in remoteCustomers) {
+        try {
+          final companion = CustomersCompanion(
+            id: Value(customerData['id'] as String),
+            storeId: Value(customerData['store_id'] as String),
+            name: Value(customerData['name'] as String),
+            phone: Value(customerData['phone'] as String?),
+            email: Value(customerData['email'] as String?),
+            loyaltyCardBarcode: Value(customerData['loyalty_card_barcode'] as String?),
+            totalVisits: Value(customerData['total_visits'] as int? ?? 0),
+            totalSpent: Value(customerData['total_spent'] as int? ?? 0),
+            creditBalance: Value(customerData['credit_balance'] as int? ?? 0),
+            notes: Value(customerData['notes'] as String?),
+            createdBy: Value(customerData['created_by'] as String?),
+            createdAt: Value(DateTime.parse(customerData['created_at'] as String).millisecondsSinceEpoch),
+            updatedAt: Value(DateTime.parse(customerData['updated_at'] as String).millisecondsSinceEpoch),
+            synced: const Value(1), // Marqué comme synchronisé
+          );
+
+          await _localDb.customerDao.upsertCustomer(companion);
+          result.customersSynced++;
+        } catch (e) {
+          developer.log('Failed to pull customer ${customerData['id']}', name: 'SyncService', error: e);
+          result.errors.add('Customer ${customerData['name']}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to pull customers', name: 'SyncService', error: e);
+      result.errors.add('Customers: $e');
+    }
   }
 
   /// Subscribe to real-time changes from Supabase

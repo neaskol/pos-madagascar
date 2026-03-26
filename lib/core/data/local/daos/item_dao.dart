@@ -26,6 +26,10 @@ class ItemDao extends DatabaseAccessor<AppDatabase> with _$ItemDaoMixin {
   Future<int> insertItem(ItemsCompanion item) =>
       into(items).insert(item);
 
+  /// Insère ou met à jour un item (upsert) - utilisé pour la sync
+  Future<void> upsertItem(ItemsCompanion item) =>
+      into(items).insertOnConflictUpdate(item);
+
   /// Met à jour un item existant et marque comme non synchronisé
   Future<bool> updateItem(ItemsCompanion item) async {
     final rowsAffected = await (update(items)
