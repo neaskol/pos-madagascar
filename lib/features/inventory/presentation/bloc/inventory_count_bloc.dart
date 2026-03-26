@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/data/local/app_database.dart';
 import '../../data/repositories/inventory_count_repository.dart';
+import '../../domain/entities/inventory_count.dart';
+import '../../domain/entities/inventory_count_item.dart';
 import 'inventory_count_event.dart';
 import 'inventory_count_state.dart';
 
@@ -205,7 +208,7 @@ class InventoryCountBloc
     _InventoryCountsUpdated event,
     Emitter<InventoryCountState> emit,
   ) async {
-    emit(InventoryCountsLoaded(event.counts as List));
+    emit(InventoryCountsLoaded(event.counts));
   }
 
   Future<void> _onInternalDetailsUpdated(
@@ -230,7 +233,7 @@ class InventoryCountBloc
 
 // Internal events for stream updates
 class _InventoryCountsUpdated extends InventoryCountEvent {
-  final List counts;
+  final List<InventoryCount> counts;
 
   const _InventoryCountsUpdated(this.counts);
 
@@ -248,9 +251,9 @@ class _InventoryCountDetailsUpdated extends InventoryCountEvent {
 }
 
 class _InventoryCountDetailsData {
-  final dynamic count;
-  final List<dynamic> items;
-  final dynamic summary;
+  final InventoryCount count;
+  final List<InventoryCountItem> items;
+  final InventoryCountSummary summary;
 
   _InventoryCountDetailsData({
     required this.count,

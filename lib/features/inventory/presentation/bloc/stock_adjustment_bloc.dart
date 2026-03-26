@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/data/local/app_database.dart';
 import '../../data/repositories/stock_adjustment_repository.dart';
 import 'stock_adjustment_event.dart';
 import 'stock_adjustment_state.dart';
@@ -18,6 +19,9 @@ class StockAdjustmentBloc
     on<LoadAdjustmentItems>(_onLoadAdjustmentItems);
     on<LoadInventoryHistory>(_onLoadInventoryHistory);
     on<LoadItemHistory>(_onLoadItemHistory);
+    on<_AdjustmentsUpdated>(_handleAdjustmentsUpdated);
+    on<_AdjustmentItemsUpdated>(_handleAdjustmentItemsUpdated);
+    on<_HistoryUpdated>(_handleHistoryUpdated);
   }
 
   Future<void> _onLoadStockAdjustments(
@@ -128,7 +132,7 @@ class StockAdjustmentBloc
 // ─── ÉVÉNEMENTS INTERNES ─────────────────────────────────
 
 class _AdjustmentsUpdated extends StockAdjustmentEvent {
-  final List adjustments;
+  final List<StockAdjustment> adjustments;
 
   const _AdjustmentsUpdated(this.adjustments);
 
@@ -137,8 +141,8 @@ class _AdjustmentsUpdated extends StockAdjustmentEvent {
 }
 
 class _AdjustmentItemsUpdated extends StockAdjustmentEvent {
-  final adjustment;
-  final List items;
+  final StockAdjustment adjustment;
+  final List<StockAdjustmentItem> items;
 
   const _AdjustmentItemsUpdated(this.adjustment, this.items);
 
@@ -147,7 +151,7 @@ class _AdjustmentItemsUpdated extends StockAdjustmentEvent {
 }
 
 class _HistoryUpdated extends StockAdjustmentEvent {
-  final List movements;
+  final List<InventoryHistory> movements;
 
   const _HistoryUpdated(this.movements);
 
@@ -162,7 +166,7 @@ extension _InternalHandlers on StockAdjustmentBloc {
     _AdjustmentsUpdated event,
     Emitter<StockAdjustmentState> emit,
   ) {
-    emit(StockAdjustmentsLoaded(event.adjustments as List));
+    emit(StockAdjustmentsLoaded(event.adjustments));
   }
 
   void _handleAdjustmentItemsUpdated(
@@ -171,7 +175,7 @@ extension _InternalHandlers on StockAdjustmentBloc {
   ) {
     emit(AdjustmentItemsLoaded(
       adjustment: event.adjustment,
-      items: event.items as List,
+      items: event.items,
     ));
   }
 
@@ -179,6 +183,6 @@ extension _InternalHandlers on StockAdjustmentBloc {
     _HistoryUpdated event,
     Emitter<StockAdjustmentState> emit,
   ) {
-    emit(InventoryHistoryLoaded(event.movements as List));
+    emit(InventoryHistoryLoaded(event.movements));
   }
 }

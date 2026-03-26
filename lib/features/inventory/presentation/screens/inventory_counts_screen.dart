@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -82,7 +81,7 @@ class _InventoryCountsScreenState extends State<InventoryCountsScreen> {
         },
         backgroundColor: context.isDark ? AppColors.darkTextPrimary : AppColors.lightTextPrimary,
         foregroundColor: context.isDark ? AppColors.darkBackground : AppColors.lightBackground,
-        child: const Icon(LucideIcons.plus),
+        child: const Icon(Icons.add),
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
@@ -90,7 +89,7 @@ class _InventoryCountsScreenState extends State<InventoryCountsScreen> {
           if (authState is AuthAuthenticatedWithStore) {
             storeId = authState.storeId;
           } else if (authState is AuthPinSessionActive) {
-            storeId = authState.storeId;
+            storeId = authState.user.storeId;
           }
 
           if (storeId == null) {
@@ -274,7 +273,7 @@ class _InventoryCountsScreenState extends State<InventoryCountsScreen> {
               Row(
                 children: [
                   Icon(
-                    count.type == 'full' ? LucideIcons.package : LucideIcons.packageCheck,
+                    count.type == 'full' ? Icons.inventory_2_outlined : Icons.check_box_outlined,
                     size: 16,
                     color: context.textSec,
                   ),
@@ -288,7 +287,7 @@ class _InventoryCountsScreenState extends State<InventoryCountsScreen> {
                   ),
                   const Spacer(),
                   Icon(
-                    LucideIcons.clipboardList,
+                    Icons.assignment_outlined,
                     size: 14,
                     color: context.textSec,
                   ),
@@ -319,7 +318,7 @@ class _InventoryCountsScreenState extends State<InventoryCountsScreen> {
               Row(
                 children: [
                   Icon(
-                    LucideIcons.user,
+                    Icons.person_outline,
                     size: 14,
                     color: context.textSec,
                   ),
@@ -348,7 +347,7 @@ class _InventoryCountsScreenState extends State<InventoryCountsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              LucideIcons.clipboardList,
+              Icons.assignment_outlined,
               size: 48,
               color: context.textHint,
             ),

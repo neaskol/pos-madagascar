@@ -660,5 +660,33 @@
   },
   "inventoryCountingConfirmYes": "Terminer",
   "inventoryCountingCompleted": "Inventaire terminé avec succès",
-  "inventoryCountingNotAllCounted": "Tous les articles doivent être comptés avant de terminer"
+  "inventoryCountingNotAllCounted": "Tous les articles doivent être comptés avant de terminer",
+  "inventoryCompleteTitle": "Terminer l'inventaire",
+  "inventoryTotalItems": "Total articles",
+  "inventoryCounted": "Articles comptés",
+  "inventoryDiscrepancies": "Écarts détectés",
+  "inventoryNotAllCounted": "Tous les articles doivent être comptés",
+  "inventoryComplete": "Terminer",
+  "inventoryCompletedSuccess": "Inventaire terminé avec succès",
+  "inventoryItemsCounted": "articles comptés",
+  "inventoryCompleted": "Terminé",
+  "inventoryExpected": "Attendu",
+  "inventoryExpectedStock": "Stock attendu",
+  "inventoryCountedStock": "Stock compté",
+  "inventoryEnterCount": "Entrer le comptage",
+  "inventoryDifference": "Différence",
+  "noResults": "Aucun résultat",
+  "tryDifferentSearch": "Essayez une recherche différente",
+  "inventoryStatusPending": "En attente",
+  "inventoryStatusInProgress": "En cours",
+  "inventoryStatusCompleted": "Terminé",
+  "inventoryTypeFull": "Complet",
+  "inventoryTypePartial": "Partiel",
+  "inventoryCreatedBy": "Créé par {name}",
+  "@inventoryCreatedBy": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "inventoryCountsEmptyHint": "Aucun inventaire. Appuyez sur + pour commencer."
 }

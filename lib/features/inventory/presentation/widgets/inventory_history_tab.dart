@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../domain/enums/inventory_movement_reason.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -78,16 +79,12 @@ class _InventoryHistoryTabState extends State<InventoryHistoryTab> {
         return 'Remboursement';
       case InventoryMovementReason.adjustment:
         return 'Ajustement';
-      case InventoryMovementReason.receive:
-        return l10n.inventoryReasonReceive;
-      case InventoryMovementReason.loss:
-        return l10n.inventoryReasonLoss;
-      case InventoryMovementReason.damage:
-        return l10n.inventoryReasonDamage;
+      case InventoryMovementReason.purchaseOrder:
+        return 'Réception';
       case InventoryMovementReason.transfer:
         return 'Transfert';
-      case InventoryMovementReason.inventoryCount:
-        return l10n.inventoryReasonCount;
+      case InventoryMovementReason.other:
+        return 'Autre';
     }
   }
 
@@ -99,31 +96,25 @@ class _InventoryHistoryTabState extends State<InventoryHistoryTab> {
         return Icons.keyboard_return_outlined;
       case InventoryMovementReason.adjustment:
         return Icons.tune_outlined;
-      case InventoryMovementReason.receive:
+      case InventoryMovementReason.purchaseOrder:
         return Icons.add_circle_outline;
-      case InventoryMovementReason.loss:
-        return Icons.remove_circle_outline;
-      case InventoryMovementReason.damage:
-        return Icons.broken_image_outlined;
       case InventoryMovementReason.transfer:
         return Icons.swap_horiz_outlined;
-      case InventoryMovementReason.inventoryCount:
-        return Icons.inventory_outlined;
+      case InventoryMovementReason.other:
+        return Icons.more_horiz;
     }
   }
 
   Color _getReasonColor(InventoryMovementReason reason) {
     switch (reason) {
       case InventoryMovementReason.sale:
-      case InventoryMovementReason.loss:
-      case InventoryMovementReason.damage:
         return context.danger;
       case InventoryMovementReason.refund:
-      case InventoryMovementReason.receive:
+      case InventoryMovementReason.purchaseOrder:
         return context.success;
       case InventoryMovementReason.adjustment:
       case InventoryMovementReason.transfer:
-      case InventoryMovementReason.inventoryCount:
+      case InventoryMovementReason.other:
         return context.accent;
     }
   }
@@ -331,12 +322,12 @@ class _InventoryHistoryTabState extends State<InventoryHistoryTab> {
   }
 
   Widget _buildMovementTile(
-    InventoryHistoryEntry movement,
+    InventoryHistory movement,
     AppLocalizations l10n,
     DateFormat dateFormat,
     NumberFormat numberFormat,
   ) {
-    final reason = movement.reason;
+    final reason = InventoryMovementReason.values[movement.reason];
     final reasonColor = _getReasonColor(reason);
     final reasonIcon = _getReasonIcon(reason);
 
@@ -413,7 +404,7 @@ class _InventoryHistoryTabState extends State<InventoryHistoryTab> {
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
-                  dateFormat.format(movement.createdAt),
+                  dateFormat.format(DateTime.fromMillisecondsSinceEpoch(movement.createdAt)),
                   style: AppTypography.bodySmall.copyWith(
                     color: context.textSec,
                     fontSize: 11,

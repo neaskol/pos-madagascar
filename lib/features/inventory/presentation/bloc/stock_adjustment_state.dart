@@ -40,7 +40,7 @@ class AdjustmentItemsLoaded extends StockAdjustmentState {
 
 /// Historique des mouvements chargé
 class InventoryHistoryLoaded extends StockAdjustmentState {
-  final List<InventoryHistoryEntry> movements;
+  final List<InventoryHistory> movements;
 
   const InventoryHistoryLoaded(this.movements);
 

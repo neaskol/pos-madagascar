@@ -1,5 +1,3 @@
-import 'package:uuid/uuid.dart';
-import 'package:drift/drift.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../domain/entities/inventory_count.dart' as entity;
 import '../../domain/entities/inventory_count_item.dart' as entity;
@@ -7,7 +5,6 @@ import '../../domain/entities/inventory_count_item.dart' as entity;
 /// Repository for inventory counts with offline-first pattern
 class InventoryCountRepository {
   final AppDatabase database;
-  final _uuid = const Uuid();
 
   InventoryCountRepository(this.database);
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -77,7 +76,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
 
           return AlertDialog(
             icon: Icon(
-              allCounted ? LucideIcons.checkCircle : LucideIcons.alertCircle,
+              allCounted ? Icons.check_circle : Icons.error_outline,
               color: allCounted ? context.success : context.warning,
               size: 48,
             ),
@@ -114,7 +113,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
                     child: Row(
                       children: [
                         Icon(
-                          LucideIcons.alertTriangle,
+                          Icons.warning_amber,
                           color: context.warning,
                           size: 20,
                         ),
@@ -269,7 +268,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
                         child: _buildSummaryCard(
                           l10n.inventoryTotalItems,
                           summary.totalItems.toString(),
-                          LucideIcons.package,
+                          Icons.inventory_2_outlined,
                           context.textPri,
                         ),
                       ),
@@ -278,7 +277,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
                         child: _buildSummaryCard(
                           l10n.inventoryCounted,
                           summary.countedItems.toString(),
-                          LucideIcons.checkCircle,
+                          Icons.check_circle,
                           context.success,
                         ),
                       ),
@@ -287,7 +286,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
                         child: _buildSummaryCard(
                           l10n.inventoryDiscrepancies,
                           summary.discrepancies.toString(),
-                          LucideIcons.alertTriangle,
+                          Icons.warning_amber,
                           summary.discrepancies > 0 ? context.danger : context.success,
                         ),
                       ),
@@ -305,10 +304,10 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
                           controller: _searchController,
                           decoration: InputDecoration(
                             hintText: l10n.search,
-                            prefixIcon: const Icon(LucideIcons.search),
+                            prefixIcon: const Icon(Icons.search),
                             suffixIcon: _searchController.text.isNotEmpty
                                 ? IconButton(
-                                    icon: const Icon(LucideIcons.x),
+                                    icon: const Icon(Icons.close),
                                     onPressed: () {
                                       _searchController.clear();
                                       setState(() {});
@@ -321,7 +320,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
                       ),
                       const SizedBox(width: AppSpacing.md),
                       IconButton(
-                        icon: const Icon(LucideIcons.scan),
+                        icon: const Icon(Icons.qr_code_scanner),
                         onPressed: () {
                           // TODO: Implement barcode scanning
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -478,7 +477,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
               // Status indicator
               if (isCounted)
                 Icon(
-                  hasDiscrepancy ? LucideIcons.alertCircle : LucideIcons.checkCircle,
+                  hasDiscrepancy ? Icons.error_outline : Icons.check_circle,
                   color: hasDiscrepancy ? context.danger : context.success,
                   size: 24,
                 ),
@@ -613,7 +612,7 @@ class _InventoryCountingScreenState extends State<InventoryCountingScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              LucideIcons.search,
+              Icons.search,
               size: 48,
               color: context.textHint,
             ),

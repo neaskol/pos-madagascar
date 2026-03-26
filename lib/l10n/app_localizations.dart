@@ -3078,6 +3078,144 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Tous les articles doivent être comptés avant de terminer'**
   String get inventoryCountingNotAllCounted;
+
+  /// No description provided for @inventoryCompleteTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer l\'inventaire'**
+  String get inventoryCompleteTitle;
+
+  /// No description provided for @inventoryTotalItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total articles'**
+  String get inventoryTotalItems;
+
+  /// No description provided for @inventoryCounted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Articles comptés'**
+  String get inventoryCounted;
+
+  /// No description provided for @inventoryDiscrepancies.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écarts détectés'**
+  String get inventoryDiscrepancies;
+
+  /// No description provided for @inventoryNotAllCounted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les articles doivent être comptés'**
+  String get inventoryNotAllCounted;
+
+  /// No description provided for @inventoryComplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get inventoryComplete;
+
+  /// No description provided for @inventoryCompletedSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire terminé avec succès'**
+  String get inventoryCompletedSuccess;
+
+  /// No description provided for @inventoryItemsCounted.
+  ///
+  /// In fr, this message translates to:
+  /// **'articles comptés'**
+  String get inventoryItemsCounted;
+
+  /// No description provided for @inventoryCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminé'**
+  String get inventoryCompleted;
+
+  /// No description provided for @inventoryExpected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendu'**
+  String get inventoryExpected;
+
+  /// No description provided for @inventoryExpectedStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock attendu'**
+  String get inventoryExpectedStock;
+
+  /// No description provided for @inventoryCountedStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock compté'**
+  String get inventoryCountedStock;
+
+  /// No description provided for @inventoryEnterCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Entrer le comptage'**
+  String get inventoryEnterCount;
+
+  /// No description provided for @inventoryDifference.
+  ///
+  /// In fr, this message translates to:
+  /// **'Différence'**
+  String get inventoryDifference;
+
+  /// No description provided for @noResults.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun résultat'**
+  String get noResults;
+
+  /// No description provided for @tryDifferentSearch.
+  ///
+  /// In fr, this message translates to:
+  /// **'Essayez une recherche différente'**
+  String get tryDifferentSearch;
+
+  /// No description provided for @inventoryStatusPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente'**
+  String get inventoryStatusPending;
+
+  /// No description provided for @inventoryStatusInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get inventoryStatusInProgress;
+
+  /// No description provided for @inventoryStatusCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminé'**
+  String get inventoryStatusCompleted;
+
+  /// No description provided for @inventoryTypeFull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Complet'**
+  String get inventoryTypeFull;
+
+  /// No description provided for @inventoryTypePartial.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partiel'**
+  String get inventoryTypePartial;
+
+  /// No description provided for @inventoryCreatedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Créé par {name}'**
+  String inventoryCreatedBy(String name);
+
+  /// No description provided for @inventoryCountsEmptyHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun inventaire. Appuyez sur + pour commencer.'**
+  String get inventoryCountsEmptyHint;
 }
 
 class _AppLocalizationsDelegate

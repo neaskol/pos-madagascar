@@ -1584,4 +1584,76 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get inventoryCountingNotAllCounted =>
       'Tous les articles doivent être comptés avant de terminer';
+
+  @override
+  String get inventoryCompleteTitle => 'Terminer l\'inventaire';
+
+  @override
+  String get inventoryTotalItems => 'Total articles';
+
+  @override
+  String get inventoryCounted => 'Articles comptés';
+
+  @override
+  String get inventoryDiscrepancies => 'Écarts détectés';
+
+  @override
+  String get inventoryNotAllCounted => 'Tous les articles doivent être comptés';
+
+  @override
+  String get inventoryComplete => 'Terminer';
+
+  @override
+  String get inventoryCompletedSuccess => 'Inventaire terminé avec succès';
+
+  @override
+  String get inventoryItemsCounted => 'articles comptés';
+
+  @override
+  String get inventoryCompleted => 'Terminé';
+
+  @override
+  String get inventoryExpected => 'Attendu';
+
+  @override
+  String get inventoryExpectedStock => 'Stock attendu';
+
+  @override
+  String get inventoryCountedStock => 'Stock compté';
+
+  @override
+  String get inventoryEnterCount => 'Entrer le comptage';
+
+  @override
+  String get inventoryDifference => 'Différence';
+
+  @override
+  String get noResults => 'Aucun résultat';
+
+  @override
+  String get tryDifferentSearch => 'Essayez une recherche différente';
+
+  @override
+  String get inventoryStatusPending => 'En attente';
+
+  @override
+  String get inventoryStatusInProgress => 'En cours';
+
+  @override
+  String get inventoryStatusCompleted => 'Terminé';
+
+  @override
+  String get inventoryTypeFull => 'Complet';
+
+  @override
+  String get inventoryTypePartial => 'Partiel';
+
+  @override
+  String inventoryCreatedBy(String name) {
+    return 'Créé par $name';
+  }
+
+  @override
+  String get inventoryCountsEmptyHint =>
+      'Aucun inventaire. Appuyez sur + pour commencer.';
 }

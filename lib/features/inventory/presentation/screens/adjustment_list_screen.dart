@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/enums/adjustment_reason.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -94,7 +95,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
           if (authState is AuthAuthenticatedWithStore) {
             storeId = authState.storeId;
           } else if (authState is AuthPinSessionActive) {
-            storeId = authState.storeId;
+            storeId = authState.user.storeId;
           }
 
           if (storeId == null) {
@@ -296,7 +297,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
-              dateFormat.format(adjustment.createdAt),
+              dateFormat.format(DateTime.fromMillisecondsSinceEpoch(adjustment.createdAt)),
               style: AppTypography.body.copyWith(
                 color: context.textPri,
                 fontWeight: FontWeight.w600,
@@ -324,7 +325,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
                 ),
               ),
               const SizedBox(width: AppSpacing.md),
-              if (adjustment.employeeId != null) ...[
+              if (adjustment.createdBy.isNotEmpty) ...[
                 Icon(
                   Icons.person_outline,
                   size: 14,
@@ -487,7 +488,7 @@ class _AdjustmentListScreenState extends State<AdjustmentListScreen> {
                         const SizedBox(height: AppSpacing.sm),
                         Text(
                           DateFormat('dd/MM/yyyy HH:mm', 'fr')
-                              .format(adjustment.createdAt),
+                              .format(DateTime.fromMillisecondsSinceEpoch(adjustment.createdAt)),
                           style: AppTypography.body.copyWith(
                             color: this.context.textPri,
                             fontWeight: FontWeight.w600,
