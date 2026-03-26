@@ -16,8 +16,10 @@ import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
 import 'features/products/data/repositories/category_repository.dart';
 import 'features/products/data/repositories/item_repository.dart';
+import 'features/products/data/repositories/item_import_repository.dart';
 import 'features/products/presentation/bloc/category_bloc.dart';
 import 'features/products/presentation/bloc/item_bloc.dart';
+import 'features/products/presentation/bloc/item_import_bloc.dart';
 import 'features/pos/data/repositories/sale_repository.dart';
 import 'features/pos/data/repositories/refund_repository.dart';
 import 'features/pos/data/repositories/custom_page_repository_impl.dart';
@@ -31,6 +33,8 @@ import 'features/customers/presentation/bloc/customer_bloc.dart';
 import 'features/customers/presentation/bloc/credit_bloc.dart';
 import 'features/store/data/repositories/store_settings_repository.dart';
 import 'features/store/presentation/bloc/store_settings_bloc.dart';
+import 'features/products/data/repositories/inventory_export_repository.dart';
+import 'features/products/presentation/bloc/inventory_export_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +95,13 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<ItemRepository>(
           create: (context) => ItemRepository(database),
         ),
+        // Repository pour l'import d'items
+        RepositoryProvider<ItemImportRepository>(
+          create: (context) => ItemImportRepository(
+            context.read<ItemRepository>(),
+            database,
+          ),
+        ),
         // Repository pour les ventes
         RepositoryProvider<SaleRepository>(
           create: (context) => SaleRepository(database),
@@ -137,6 +148,18 @@ class MyApp extends StatelessWidget {
           BlocProvider<ItemBloc>(
             create: (context) => ItemBloc(
               context.read<ItemRepository>(),
+            ),
+          ),
+          // BLoC pour l'import d'items
+          BlocProvider<ItemImportBloc>(
+            create: (context) => ItemImportBloc(
+              context.read<ItemImportRepository>(),
+            ),
+          ),
+          // BLoC pour l'export d'inventaire
+          BlocProvider<InventoryExportBloc>(
+            create: (context) => InventoryExportBloc(
+              InventoryExportRepository(database),
             ),
           ),
           // BLoC pour les ventes (paiement)

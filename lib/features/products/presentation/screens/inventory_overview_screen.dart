@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -9,6 +10,9 @@ import '../../../../core/theme/theme_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
+import '../bloc/inventory_export_bloc.dart';
+import '../bloc/inventory_export_event.dart';
+import '../bloc/inventory_export_state.dart';
 import '../bloc/item_bloc.dart';
 import '../bloc/item_event.dart';
 import '../bloc/item_state.dart';
@@ -100,8 +104,132 @@ class _InventoryOverviewScreenState extends State<InventoryOverviewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.inventoryTitle),
+        actions: [
+          // Export menu
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.download_outlined),
+            onSelected: (value) {
+              final authState = context.read<AuthBloc>().state;
+              String? storeId;
+              String storeName = 'POS Madagascar';
+
+              if (authState is AuthAuthenticatedWithStore) {
+                storeId = authState.storeId;
+              }
+
+              if (storeId == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.inventoryExportStoreError),
+                    backgroundColor: context.danger,
+                  ),
+                );
+                return;
+              }
+
+              final exportBloc = context.read<InventoryExportBloc>();
+
+              if (value == 'pdf') {
+                exportBloc.add(ExportInventoryToPdfEvent(
+                  storeId: storeId,
+                  storeName: storeName,
+                  filterType: _stockFilter,
+                ));
+              } else if (value == 'excel') {
+                exportBloc.add(ExportInventoryToExcelEvent(
+                  storeId: storeId,
+                  storeName: storeName,
+                  filterType: _stockFilter,
+                ));
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'pdf',
+                child: Row(
+                  children: [
+                    const Icon(Icons.picture_as_pdf_outlined, size: 20),
+                    const SizedBox(width: 12),
+                    Text(l10n.inventoryExportPdf),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'excel',
+                child: Row(
+                  children: [
+                    const Icon(Icons.table_chart_outlined, size: 20),
+                    const SizedBox(width: 12),
+                    Text(l10n.inventoryExportExcel),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
-      body: BlocBuilder<AuthBloc, AuthState>(
+      body: BlocListener<InventoryExportBloc, InventoryExportState>(
+        listener: (context, exportState) {
+          if (exportState is InventoryExportSuccess) {
+            // Partager le fichier
+            Share.shareXFiles(
+              [XFile(exportState.file.path)],
+              subject: exportState.exportType == 'pdf'
+                  ? l10n.inventoryExportPdfSubject
+                  : l10n.inventoryExportExcelSubject,
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  exportState.exportType == 'pdf'
+                      ? l10n.inventoryExportPdfSuccess
+                      : l10n.inventoryExportExcelSuccess,
+                ),
+                backgroundColor: context.success,
+                action: SnackBarAction(
+                  label: l10n.inventoryExportShare,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    Share.shareXFiles([XFile(exportState.file.path)]);
+                  },
+                ),
+              ),
+            );
+          } else if (exportState is InventoryExportError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(exportState.message),
+                backgroundColor: context.danger,
+              ),
+            );
+          } else if (exportState is InventoryExportLoading) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      exportState.exportType == 'pdf'
+                          ? l10n.inventoryExportPdfLoading
+                          : l10n.inventoryExportExcelLoading,
+                    ),
+                  ],
+                ),
+                duration: const Duration(seconds: 5),
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {
           String? storeId;
           if (authState is AuthAuthenticatedWithStore) {
@@ -280,6 +408,7 @@ class _InventoryOverviewScreenState extends State<InventoryOverviewScreen> {
             },
           );
         },
+      ),
       ),
     );
   }
