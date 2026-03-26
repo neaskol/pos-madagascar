@@ -12,11 +12,15 @@ import '../../features/auth/presentation/screens/setup_wizard_screen.dart';
 import '../../features/auth/presentation/screens/pin_screen.dart';
 import '../../features/products/presentation/screens/products_list_screen.dart';
 import '../../features/products/presentation/screens/product_form_screen.dart';
+import '../../features/products/presentation/screens/inventory_overview_screen.dart';
 import '../../features/pos/presentation/screens/pos_screen.dart';
 import '../../features/customers/presentation/screens/customer_list_screen.dart';
 import '../../features/customers/presentation/screens/customer_form_screen.dart';
 import '../../features/customers/presentation/screens/customer_detail_screen.dart';
 import '../../features/store/presentation/screens/payment_settings_screen.dart';
+import '../../features/pos/presentation/screens/sales_history_screen.dart';
+import '../../features/pos/presentation/screens/receipt_detail_screen.dart';
+import '../../features/pos/presentation/screens/refund_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -114,6 +118,30 @@ class AppRouter {
         builder: (context, state) => const PosScreen(),
       ),
 
+      // POS - Historique des ventes (reçus)
+      GoRoute(
+        path: '/pos/receipts',
+        builder: (context, state) => const SalesHistoryScreen(),
+      ),
+
+      // POS - Détail d'un reçu
+      GoRoute(
+        path: '/pos/receipts/:id',
+        builder: (context, state) {
+          final receiptId = state.pathParameters['id']!;
+          return ReceiptDetailScreen(receiptId: receiptId);
+        },
+      ),
+
+      // POS - Remboursement
+      GoRoute(
+        path: '/pos/receipts/:id/refund',
+        builder: (context, state) {
+          final receiptId = state.pathParameters['id']!;
+          return RefundScreen(receiptId: receiptId);
+        },
+      ),
+
       // Products - Liste des produits
       GoRoute(
         path: '/products',
@@ -133,6 +161,12 @@ class AppRouter {
           final itemId = state.pathParameters['id']!;
           return ProductFormScreen(itemId: itemId);
         },
+      ),
+
+      // Inventory - Vue d'ensemble stock
+      GoRoute(
+        path: '/inventory',
+        builder: (context, state) => const InventoryOverviewScreen(),
       ),
 
       // Customers - Liste des clients

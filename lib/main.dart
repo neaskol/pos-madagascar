@@ -19,8 +19,10 @@ import 'features/products/data/repositories/item_repository.dart';
 import 'features/products/presentation/bloc/category_bloc.dart';
 import 'features/products/presentation/bloc/item_bloc.dart';
 import 'features/pos/data/repositories/sale_repository.dart';
+import 'features/pos/data/repositories/refund_repository.dart';
 import 'features/pos/data/repositories/custom_page_repository_impl.dart';
 import 'features/pos/presentation/bloc/sale_bloc.dart';
+import 'features/pos/presentation/bloc/refund_bloc.dart';
 import 'features/pos/presentation/bloc/custom_page_bloc.dart';
 import 'features/pos/presentation/bloc/custom_page_event.dart';
 import 'features/customers/data/repositories/customer_repository.dart';
@@ -93,6 +95,10 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<SaleRepository>(
           create: (context) => SaleRepository(database),
         ),
+        // Repository pour les remboursements
+        RepositoryProvider<RefundRepository>(
+          create: (context) => RefundRepository(database),
+        ),
         // Repository pour les pages personnalisées
         RepositoryProvider<CustomPageRepositoryImpl>(
           create: (context) => CustomPageRepositoryImpl(
@@ -137,6 +143,12 @@ class MyApp extends StatelessWidget {
           BlocProvider<SaleBloc>(
             create: (context) => SaleBloc(
               context.read<SaleRepository>(),
+            ),
+          ),
+          // BLoC pour les remboursements
+          BlocProvider<RefundBloc>(
+            create: (context) => RefundBloc(
+              repository: context.read<RefundRepository>(),
             ),
           ),
           // BLoC pour les clients
