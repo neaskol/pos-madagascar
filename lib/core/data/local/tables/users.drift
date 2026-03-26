@@ -1,7 +1,7 @@
 -- Table users (utilisateurs)
 CREATE TABLE users (
   id TEXT PRIMARY KEY NOT NULL,
-  store_id TEXT NOT NULL,
+  store_id TEXT,
   name TEXT NOT NULL,
   email TEXT,
   phone TEXT,

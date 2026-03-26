@@ -43,9 +43,9 @@ class AuthRepository {
           // Sauvegarder localement
           final user = UsersCompanion.insert(
             id: userRecord['id'],
-            storeId: userRecord['store_id'],
+            storeId: Value(userRecord['store_id']),
             name: userRecord['name'],
-            email: userRecord['email'],
+            email: Value(userRecord['email']),
             phone: Value(userRecord['phone']),
             role: userRecord['role'],
             pinHash: Value(userRecord['pin_hash']),
@@ -118,9 +118,9 @@ class AuthRepository {
           // Mettre à jour localement
           final userCompanion = UsersCompanion.insert(
             id: userRecord['id'],
-            storeId: userRecord['store_id'],
+            storeId: Value(userRecord['store_id']),
             name: userRecord['name'],
-            email: userRecord['email'],
+            email: Value(userRecord['email']),
             phone: Value(userRecord['phone']),
             role: userRecord['role'],
             pinHash: Value(userRecord['pin_hash']),
@@ -286,9 +286,9 @@ class AuthRepository {
       for (final record in usersRecords) {
         final user = UsersCompanion.insert(
           id: record['id'],
-          storeId: record['store_id'],
+          storeId: Value(record['store_id']),
           name: record['name'],
-          email: record['email'],
+          email: Value(record['email']),
           phone: Value(record['phone']),
           role: record['role'],
           pinHash: Value(record['pin_hash']),
