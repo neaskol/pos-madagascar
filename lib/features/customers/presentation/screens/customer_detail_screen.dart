@@ -663,16 +663,28 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen>
   }
 
   Future<void> _launchWhatsApp(String phone) async {
-    final cleanPhone = phone.replaceAll(RegExp(r'\D'), '');
+    var cleanPhone = phone.replaceAll(RegExp(r'\D'), '');
+
+    // Convertir les numéros malgaches au format international
+    // 03x... → 261 3x...
+    if (cleanPhone.startsWith('0') && cleanPhone.length == 10) {
+      cleanPhone = '261${cleanPhone.substring(1)}';
+    }
+    // Si pas de code pays, ajouter +261
+    if (!cleanPhone.startsWith('261') && cleanPhone.length <= 10) {
+      cleanPhone = '261$cleanPhone';
+    }
+
     final url = Uri.parse('https://wa.me/$cleanPhone');
 
-    if (await canLaunchUrl(url)) {
+    try {
       await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
+    } catch (_) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Impossible d\'ouvrir WhatsApp'),
+            content: Text(l10n.whatsappError),
             backgroundColor: context.danger,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(

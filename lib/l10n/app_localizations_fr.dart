@@ -1266,6 +1266,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get sendWhatsApp => 'Envoyer par WhatsApp';
 
   @override
+  String get whatsappError => 'Impossible d\'ouvrir WhatsApp';
+
+  @override
   String get originalItems => 'Articles originaux';
 
   @override
@@ -1704,4 +1707,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get inventoryHistory => 'Historique';
+
+  @override
+  String get navPos => 'Caisse';
+
+  @override
+  String get navProducts => 'Produits';
+
+  @override
+  String get navCustomers => 'Clients';
+
+  @override
+  String get navReports => 'Rapports';
+
+  @override
+  String get navSettings => 'Réglages';
+
+  @override
+  String get reportsTitle => 'Rapports';
+
+  @override
+  String get reportsComingSoon => 'Les rapports arrivent bientôt';
 }

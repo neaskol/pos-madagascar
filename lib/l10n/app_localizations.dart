@@ -2516,6 +2516,12 @@ abstract class AppLocalizations {
   /// **'Envoyer par WhatsApp'**
   String get sendWhatsApp;
 
+  /// No description provided for @whatsappError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'ouvrir WhatsApp'**
+  String get whatsappError;
+
   /// No description provided for @originalItems.
   ///
   /// In fr, this message translates to:
@@ -3306,6 +3312,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Historique'**
   String get inventoryHistory;
+
+  /// No description provided for @navPos.
+  ///
+  /// In fr, this message translates to:
+  /// **'Caisse'**
+  String get navPos;
+
+  /// No description provided for @navProducts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Produits'**
+  String get navProducts;
+
+  /// No description provided for @navCustomers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clients'**
+  String get navCustomers;
+
+  /// No description provided for @navReports.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapports'**
+  String get navReports;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réglages'**
+  String get navSettings;
+
+  /// No description provided for @reportsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rapports'**
+  String get reportsTitle;
+
+  /// No description provided for @reportsComingSoon.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les rapports arrivent bientôt'**
+  String get reportsComingSoon;
 }
 
 class _AppLocalizationsDelegate

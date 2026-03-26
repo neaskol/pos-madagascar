@@ -18,9 +18,9 @@ class StoreDao extends DatabaseAccessor<AppDatabase> with _$StoreDaoMixin {
   // Utiliser .get() pour Future<List<T>>, .getSingleOrNull() pour Future<T?>,
   // .watch() pour Stream<List<T>>, .watchSingleOrNull() pour Stream<T?>
 
-  /// Insère un nouveau magasin
+  /// Insère ou met à jour un magasin (upsert)
   Future<int> insertStore(StoresCompanion store) =>
-      into(stores).insert(store);
+      into(stores).insertOnConflictUpdate(store);
 
   /// Met à jour un magasin existant et marque comme non synchronisé
   Future<bool> updateStore(StoresCompanion store) async {

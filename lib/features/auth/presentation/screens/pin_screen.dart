@@ -186,8 +186,9 @@ class _PinScreenState extends State<PinScreen> {
         crossAxisCount: 3,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.85,
+        childAspectRatio: 1.0,
       ),
+      shrinkWrap: true,
       itemCount: _employees.length,
       itemBuilder: (context, index) {
         final employee = _employees[index];
@@ -207,8 +208,8 @@ class _PinScreenState extends State<PinScreen> {
         children: [
           // Avatar
           Container(
-            width: 64,
-            height: 64,
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
               color: avatarColor.withOpacity(0.15),
               shape: BoxShape.circle,
@@ -221,7 +222,7 @@ class _PinScreenState extends State<PinScreen> {
               child: Text(
                 initials,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: avatarColor,
                 ),
@@ -229,20 +230,22 @@ class _PinScreenState extends State<PinScreen> {
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           // Nom
-          Text(
-            employee.name,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: isDark
-                  ? AppColors.darkTextPrimary
-                  : AppColors.lightTextPrimary,
+          Flexible(
+            child: Text(
+              employee.name,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: isDark
+                    ? AppColors.darkTextPrimary
+                    : AppColors.lightTextPrimary,
+              ),
             ),
           ),
         ],
@@ -355,6 +358,7 @@ class _PinScreenState extends State<PinScreen> {
               crossAxisCount: 3,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
+              shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: [
                 _buildNumberButton('1', isDark),

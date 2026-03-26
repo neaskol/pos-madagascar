@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../pos/presentation/screens/barcode_scanner_screen.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -90,6 +91,17 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     itemBloc.add(LoadItemByIdEvent(widget.itemId!));
   }
 
+  /// Récupérer le storeId depuis l'état d'authentification
+  String _getStoreId() {
+    final authState = context.read<AuthBloc>().state;
+    if (authState is AuthPinSessionActive) {
+      return authState.user.storeId ?? '';
+    } else if (authState is AuthAuthenticatedWithStore) {
+      return authState.storeId;
+    }
+    return '';
+  }
+
   /// Calculer la marge en Ariary
   int _calculateMarginAmount() {
     final price = int.tryParse(_priceController.text) ?? 0;
@@ -139,9 +151,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     // ID du magasin depuis l'état d'authentification
     final authState = context.read<AuthBloc>().state;
-    final storeId = authState is AuthAuthenticatedWithStore
-        ? authState.storeId
-        : '';
+    String storeId = '';
+    if (authState is AuthPinSessionActive) {
+      storeId = authState.user.storeId ?? '';
+    } else if (authState is AuthAuthenticatedWithStore) {
+      storeId = authState.storeId;
+    }
     if (storeId.isEmpty) return;
 
     if (widget.itemId == null) {
@@ -468,11 +483,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         // Catégorie
         StreamBuilder<List<Category>>(
           stream: context.read<CategoryRepository>()
-              .watchStoreCategories(
-                (context.read<AuthBloc>().state is AuthAuthenticatedWithStore)
-                    ? (context.read<AuthBloc>().state as AuthAuthenticatedWithStore).storeId
-                    : '',
-              ),
+              .watchStoreCategories(_getStoreId()),
           builder: (context, snapshot) {
             final categories = snapshot.data ?? [];
             return DropdownButtonFormField<String>(
@@ -539,11 +550,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
             hintText: l10n.productFormBarcodeHint,
             suffixIcon: IconButton(
               icon: const Icon(Icons.qr_code_scanner),
-              onPressed: () {
-                // TODO: Implémenter scan
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Scan barcode - À implémenter')),
+              onPressed: () async {
+                final barcode = await Navigator.push<String>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const BarcodeScannerScreen(),
+                  ),
                 );
+                if (barcode != null && mounted) {
+                  _barcodeController.text = barcode;
+                }
               },
             ),
           ),

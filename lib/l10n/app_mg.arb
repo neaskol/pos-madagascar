@@ -495,6 +495,7 @@
   "cash": "Vola madinika",
   "print": "Manonta",
   "sendWhatsApp": "Alefa amin'ny WhatsApp",
+  "whatsappError": "Tsy afaka manokatra WhatsApp",
   "originalItems": "Entana tany am-boalohany",
   "itemsToRefund": "Entana haverina vola",
   "selectItemsToRefund": "Safidio ny entana haverina vola",
@@ -690,5 +691,13 @@
     "placeholders": {
       "count": {"type": "int"}
     }
-  }
+  },
+
+  "navPos": "Vola",
+  "navProducts": "Vokatra",
+  "navCustomers": "Mpanjifa",
+  "navReports": "Tatitra",
+  "navSettings": "Fandaminana",
+  "reportsTitle": "Tatitra",
+  "reportsComingSoon": "Ho avy tsy ho ela ny tatitra"
 }

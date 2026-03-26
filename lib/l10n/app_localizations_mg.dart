@@ -1263,6 +1263,9 @@ class AppLocalizationsMg extends AppLocalizations {
   String get sendWhatsApp => 'Alefa amin\'ny WhatsApp';
 
   @override
+  String get whatsappError => 'Tsy afaka manokatra WhatsApp';
+
+  @override
   String get originalItems => 'Entana tany am-boalohany';
 
   @override
@@ -1700,4 +1703,25 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get inventoryHistory => 'Tantara';
+
+  @override
+  String get navPos => 'Vola';
+
+  @override
+  String get navProducts => 'Vokatra';
+
+  @override
+  String get navCustomers => 'Mpanjifa';
+
+  @override
+  String get navReports => 'Tatitra';
+
+  @override
+  String get navSettings => 'Fandaminana';
+
+  @override
+  String get reportsTitle => 'Tatitra';
+
+  @override
+  String get reportsComingSoon => 'Ho avy tsy ho ela ny tatitra';
 }

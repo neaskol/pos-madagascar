@@ -80,6 +80,7 @@ class CustomerRepository {
 
     await _customerDao.upsertCustomer(CustomersCompanion(
       id: Value(id),
+      storeId: Value(customer.storeId),
       name: name != null ? Value(name) : Value(customer.name),
       phone: phone != null ? Value(phone) : Value(customer.phone),
       email: email != null ? Value(email) : Value(customer.email),
@@ -87,6 +88,7 @@ class CustomerRepository {
           ? Value(loyaltyCardBarcode)
           : Value(customer.loyaltyCardBarcode),
       notes: notes != null ? Value(notes) : Value(customer.notes),
+      createdAt: Value(customer.createdAt),
       updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
       synced: const Value(0), // Mark as unsynced
     ));

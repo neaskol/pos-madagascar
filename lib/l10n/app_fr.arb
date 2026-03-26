@@ -495,6 +495,7 @@
   "cash": "Espèces",
   "print": "Imprimer",
   "sendWhatsApp": "Envoyer par WhatsApp",
+  "whatsappError": "Impossible d'ouvrir WhatsApp",
   "originalItems": "Articles originaux",
   "itemsToRefund": "Articles à rembourser",
   "selectItemsToRefund": "Sélectionnez les articles à rembourser",
@@ -725,5 +726,13 @@
     "placeholders": {
       "count": {"type": "int"}
     }
-  }
+  },
+
+  "navPos": "Caisse",
+  "navProducts": "Produits",
+  "navCustomers": "Clients",
+  "navReports": "Rapports",
+  "navSettings": "Réglages",
+  "reportsTitle": "Rapports",
+  "reportsComingSoon": "Les rapports arrivent bientôt"
 }
