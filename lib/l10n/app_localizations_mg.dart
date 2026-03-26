@@ -1318,13 +1318,13 @@ class AppLocalizationsMg extends AppLocalizations {
   String get importComplete => 'Vita ny fampidirana';
 
   @override
-  String importSuccessMessage(int success, int total) {
-    return 'Vokatra $success nampidirina tamin\'ny $total';
+  String importSuccessMessage(int count) {
+    return '$count vokatra nampidirina soa aman-tsara';
   }
 
   @override
   String importErrorsMessage(int count) {
-    return 'Andalana $count misy fahadisoana tsy nampidirina';
+    return '$count fahadisoana nitranga';
   }
 
   @override
@@ -1332,7 +1332,7 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get importHelpText =>
-      'Torolalana fampidirana:\n\n1. Alao ny template CSV\n2. Fenoy ny vokatra (Anarana sy Vidiny tsy maintsy)\n3. Tehirizo ny rakitra amin\'ny endrika CSV na Excel\n4. Ampidiro ny rakitra ao amin\'ny application\n5. Jereo ny angon-drakitra alohan\'ny hanamafisana\n\nEndrika raisina: CSV, XLSX, XLS\n\nTorohevitra:\n- Ny SKU dia tokony tsy misy mitovy\n- Ny vidiny sy ny vidin\'ny fividianana dia amin\'ny Ariary (isa integer)\n- Ny sokajy dia tokony efa misy ao amin\'ny application\n- Ny andalana tsy marina dia ho ambara alohan\'ny fampidirana';
+      'Ampidiro ny vokatrao avy amin\'ny rakitra CSV na Excel. Alefaso ny maodely mba hahitana ny endrika andrasana.';
 
   @override
   String get adjustmentNewTitle => 'Fanitsiana vaovao';
@@ -1680,6 +1680,12 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String inventoryItemsSelected(int count) {
-    return '$count articles sélectionnés';
+    return 'Voafidy $count zavatra';
   }
+
+  @override
+  String get inventoryOverview => 'Topo-maso';
+
+  @override
+  String get inventoryHistory => 'Tantara';
 }

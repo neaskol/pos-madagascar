@@ -121,10 +121,10 @@ class _InventoryOverviewScreenState extends State<InventoryOverviewScreen>
         title: Text(l10n.inventoryTitle),
         bottom: TabBar(
           controller: _tabController,
-          labelStyle: context.textPri,
-          tabs: const [
-            Tab(text: 'Vue d\'ensemble'),
-            Tab(text: 'Historique'),
+          labelStyle: AppTypography.body,
+          tabs: [
+            Tab(text: l10n.inventoryOverview),
+            Tab(text: l10n.inventoryHistory),
           ],
         ),
         actions: [

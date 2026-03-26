@@ -1321,13 +1321,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get importComplete => 'Import terminé';
 
   @override
-  String importSuccessMessage(int success, int total) {
-    return '$success produits importés sur $total';
+  String importSuccessMessage(int count) {
+    return '$count produits importés avec succès';
   }
 
   @override
   String importErrorsMessage(int count) {
-    return '$count lignes avec des erreurs n\'ont pas été importées';
+    return '$count erreurs rencontrées';
   }
 
   @override
@@ -1335,7 +1335,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get importHelpText =>
-      'Guide d\'import :\n\n1. Téléchargez le template CSV\n2. Remplissez vos produits (Nom et Prix obligatoires)\n3. Enregistrez le fichier au format CSV ou Excel\n4. Importez le fichier dans l\'application\n5. Vérifiez les données avant de confirmer\n\nFormats supportés : CSV, XLSX, XLS\n\nConseils :\n- Les SKU doivent être uniques\n- Les prix et coûts sont en Ariary (nombres entiers)\n- Les catégories doivent déjà exister dans l\'application\n- Les lignes invalides seront signalées avant l\'import';
+      'Importez vos produits depuis un fichier CSV ou Excel. Téléchargez le modèle pour voir le format attendu.';
 
   @override
   String get adjustmentNewTitle => 'Nouvel ajustement';
@@ -1686,4 +1686,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String inventoryItemsSelected(int count) {
     return '$count articles sélectionnés';
   }
+
+  @override
+  String get inventoryOverview => 'Vue d\'ensemble';
+
+  @override
+  String get inventoryHistory => 'Historique';
 }

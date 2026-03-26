@@ -21,3 +21,26 @@ class AppSpacing {
   static const double xxl  = 32.0;
   static const double page = 16.0;  // padding horizontal standard
 }
+
+// ─── COMPATIBILITÉ AVEC LES ANCIENS ÉCRANS ───────────────────────────────────
+
+class AppDimensions {
+  AppDimensions._();
+
+  // Spacing aliases
+  static const double paddingSmall = AppSpacing.sm;
+  static const double paddingMedium = AppSpacing.md;
+  static const double paddingLarge = AppSpacing.lg;
+  static const double paddingExtraLarge = AppSpacing.xl;
+
+  static const double spacingSmall = AppSpacing.sm;
+  static const double spacingMedium = AppSpacing.md;
+  static const double spacingLarge = AppSpacing.lg;
+  static const double spacingExtraLarge = AppSpacing.xl;
+
+  // Radius aliases
+  static const double radiusSmall = AppRadius.sm;
+  static const double radiusMedium = AppRadius.md;
+  static const double radiusLarge = AppRadius.lg;
+  static const double radiusCard = AppRadius.card;
+}

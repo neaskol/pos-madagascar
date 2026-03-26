@@ -702,5 +702,24 @@
     "placeholders": {
       "count": {"type": "int"}
     }
+  },
+
+  "inventoryOverview": "Vue d'ensemble",
+  "inventoryHistory": "Historique",
+  "help": "Aide",
+  "importHelpText": "Importez vos produits depuis un fichier CSV ou Excel. Téléchargez le modèle pour voir le format attendu.",
+  "close": "Fermer",
+  "importComplete": "Import terminé",
+  "importSuccessMessage": "{count} produits importés avec succès",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importErrorsMessage": "{count} erreurs rencontrées",
+  "@importErrorsMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
   }
 }

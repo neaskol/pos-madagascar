@@ -62,4 +62,13 @@ class AppTypography {
   static TextStyle get amountChange => GoogleFonts.sora(
     fontSize: 24, fontWeight: FontWeight.w700, letterSpacing: -0.3,
   );
+
+  // ─── ALIAS POUR COMPATIBILITÉ ────────────────────────────────────────────
+  // Utilisés par les anciens écrans
+
+  static TextStyle get heading3 => sectionTitle;
+  static TextStyle get heading4 => sectionTitle;
+  static TextStyle get body1 => body;
+  static TextStyle get body2 => body;
+  static TextStyle get caption => bodySmall;
 }

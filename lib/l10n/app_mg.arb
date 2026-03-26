@@ -660,5 +660,31 @@
   },
   "inventoryCountingConfirmYes": "Vita",
   "inventoryCountingCompleted": "Vita soa aman-tsara ny fanisana",
-  "inventoryCountingNotAllCounted": "Ny vokatra rehetra dia tokony voaisa alohan'ny hamitana"
+  "inventoryCountingNotAllCounted": "Ny vokatra rehetra dia tokony voaisa alohan'ny hamitana",
+
+  "inventoryItemsSelected": "Voafidy {count} zavatra",
+  "@inventoryItemsSelected": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "inventoryOverview": "Topo-maso",
+  "inventoryHistory": "Tantara",
+  "help": "Fanampiana",
+  "importHelpText": "Ampidiro ny vokatrao avy amin'ny rakitra CSV na Excel. Alefaso ny maodely mba hahitana ny endrika andrasana.",
+  "close": "Hidio",
+  "importComplete": "Vita ny fampidirana",
+  "importSuccessMessage": "{count} vokatra nampidirina soa aman-tsara",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "importErrorsMessage": "{count} fahadisoana nitranga",
+  "@importErrorsMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  }
 }

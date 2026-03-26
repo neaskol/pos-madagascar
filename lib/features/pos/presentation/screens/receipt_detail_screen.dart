@@ -36,22 +36,22 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: AppColors.lightBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundPrimary,
+        backgroundColor: AppColors.lightBackground,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          icon: const Icon(Icons.arrow_back, color: AppColors.lightTextPrimary),
           onPressed: () => context.pop(),
         ),
         title: Text(
           l10n.receiptDetail,
-          style: AppTypography.heading3.copyWith(color: AppColors.textPrimary),
+          style: AppTypography.screenTitle.copyWith(color: AppColors.lightTextPrimary),
         ),
         actions: [
           // Menu plus d'options
           PopupMenuButton<String>(
-            icon: Icon(Icons.more_vert, color: AppColors.textPrimary),
+            icon: const Icon(Icons.more_vert, color: AppColors.lightTextPrimary),
             onSelected: (value) {
               switch (value) {
                 case 'print':
@@ -67,8 +67,8 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                 value: 'print',
                 child: Row(
                   children: [
-                    Icon(Icons.print, size: 20, color: AppColors.textPrimary),
-                    const SizedBox(width: AppDimensions.paddingSmall),
+                    const Icon(Icons.print, size: 20, color: AppColors.lightTextPrimary),
+                    const SizedBox(width: AppSpacing.sm),
                     Text(l10n.print),
                   ],
                 ),
@@ -77,8 +77,8 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                 value: 'whatsapp',
                 child: Row(
                   children: [
-                    Icon(Icons.send, size: 20, color: AppColors.textPrimary),
-                    const SizedBox(width: AppDimensions.paddingSmall),
+                    const Icon(Icons.send, size: 20, color: AppColors.lightTextPrimary),
+                    const SizedBox(width: AppSpacing.sm),
                     Text(l10n.sendWhatsApp),
                   ],
                 ),
@@ -93,7 +93,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: AppColors.danger,
+                backgroundColor: AppColors.dangerLight,
               ),
             );
           }
@@ -105,28 +105,28 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Header du reçu
                       _buildReceiptHeader(l10n),
-                      const SizedBox(height: AppDimensions.paddingLarge),
+                      const SizedBox(height: AppSpacing.xl),
 
                       // Liste des items
                       _buildItemsList(l10n),
-                      const SizedBox(height: AppDimensions.paddingLarge),
+                      const SizedBox(height: AppSpacing.xl),
 
                       // Totaux
                       _buildTotals(l10n),
-                      const SizedBox(height: AppDimensions.paddingLarge),
+                      const SizedBox(height: AppSpacing.xl),
 
                       // Modes de paiement
                       _buildPaymentMethods(l10n),
 
                       // Message si déjà remboursé
                       if (isRefunded) ...[
-                        const SizedBox(height: AppDimensions.paddingLarge),
+                        const SizedBox(height: AppSpacing.xl),
                         _buildRefundedMessage(l10n, state as RefundLoaded),
                       ],
                     ],
@@ -154,11 +154,11 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
     final timeFormatter = DateFormat('HH:mm');
 
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        border: Border.all(color: AppColors.borderLight),
+        color: AppColors.lightSurface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.lightBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,29 +166,29 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(AppDimensions.paddingSmall),
+                padding: const EdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
+                  color: AppColors.lightAccent.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
-                child: Icon(Icons.receipt_long, color: AppColors.primary, size: 24),
+                child: const Icon(Icons.receipt_long, color: AppColors.lightAccent, size: 24),
               ),
-              const SizedBox(width: AppDimensions.paddingMedium),
+              const SizedBox(width: AppSpacing.lg),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       receiptNumber,
-                      style: AppTypography.heading3.copyWith(
-                        color: AppColors.textPrimary,
+                      style: AppTypography.sectionTitle.copyWith(
+                        color: AppColors.lightTextPrimary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
                       '${dateFormatter.format(dateTime)} • ${timeFormatter.format(dateTime)}',
-                      style: AppTypography.caption.copyWith(
-                        color: AppColors.textSecondary,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -196,11 +196,11 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
               ),
             ],
           ),
-          const SizedBox(height: AppDimensions.paddingMedium),
+          const SizedBox(height: AppSpacing.lg),
           const Divider(height: 1),
-          const SizedBox(height: AppDimensions.paddingMedium),
+          const SizedBox(height: AppSpacing.lg),
           _buildInfoRow(l10n.employee, employee),
-          const SizedBox(height: AppDimensions.paddingSmall),
+          const SizedBox(height: AppSpacing.sm),
           _buildInfoRow(l10n.cashRegister, cashRegister),
         ],
       ),
@@ -213,12 +213,12 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
       children: [
         Text(
           label,
-          style: AppTypography.body2.copyWith(color: AppColors.textSecondary),
+          style: AppTypography.body.copyWith(color: AppColors.lightTextSecondary),
         ),
         Text(
           value,
-          style: AppTypography.body2.copyWith(
-            color: AppColors.textPrimary,
+          style: AppTypography.body.copyWith(
+            color: AppColors.lightTextPrimary,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -229,27 +229,27 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
   Widget _buildItemsList(AppLocalizations l10n) {
     // TODO: Charger les vrais items depuis le BLoC
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        border: Border.all(color: AppColors.borderLight),
+        color: AppColors.lightSurface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.lightBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             l10n.items,
-            style: AppTypography.heading4.copyWith(
-              color: AppColors.textPrimary,
+            style: AppTypography.sectionTitle.copyWith(
+              color: AppColors.lightTextPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: AppDimensions.paddingMedium),
+          const SizedBox(height: AppSpacing.lg),
           // TODO: Afficher les items réels
           Text(
             l10n.noItems,
-            style: AppTypography.body2.copyWith(color: AppColors.textSecondary),
+            style: AppTypography.body.copyWith(color: AppColors.lightTextSecondary),
           ),
         ],
       ),
@@ -265,27 +265,27 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
     final total = 12000;
 
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        border: Border.all(color: AppColors.borderLight),
+        color: AppColors.lightSurface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.lightBorder),
       ),
       child: Column(
         children: [
           _buildTotalRow(l10n.subtotal, subtotal, amountFormatter),
           if (tax > 0) ...[
-            const SizedBox(height: AppDimensions.paddingSmall),
+            const SizedBox(height: AppSpacing.sm),
             _buildTotalRow(l10n.tax, tax, amountFormatter),
           ],
           if (discount > 0) ...[
-            const SizedBox(height: AppDimensions.paddingSmall),
+            const SizedBox(height: AppSpacing.sm),
             _buildTotalRow(l10n.discount, -discount, amountFormatter,
-                color: AppColors.danger),
+                color: AppColors.dangerLight),
           ],
-          const SizedBox(height: AppDimensions.paddingSmall),
+          const SizedBox(height: AppSpacing.sm),
           const Divider(height: 1),
-          const SizedBox(height: AppDimensions.paddingSmall),
+          const SizedBox(height: AppSpacing.sm),
           _buildTotalRow(l10n.total, total, amountFormatter, isBold: true),
         ],
       ),
@@ -304,15 +304,15 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
       children: [
         Text(
           label,
-          style: AppTypography.body2.copyWith(
-            color: color ?? AppColors.textSecondary,
+          style: AppTypography.body.copyWith(
+            color: color ?? AppColors.lightTextSecondary,
             fontWeight: isBold ? FontWeight.w600 : FontWeight.w500,
           ),
         ),
         Text(
           '${formatter.format(amount)} Ar',
-          style: (isBold ? AppTypography.heading4 : AppTypography.body2).copyWith(
-            color: color ?? AppColors.textPrimary,
+          style: (isBold ? AppTypography.sectionTitle : AppTypography.body).copyWith(
+            color: color ?? AppColors.lightTextPrimary,
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w600,
           ),
         ),
@@ -323,27 +323,27 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
   Widget _buildPaymentMethods(AppLocalizations l10n) {
     // TODO: Charger les vrais paiements depuis le BLoC
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        border: Border.all(color: AppColors.borderLight),
+        color: AppColors.lightSurface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.lightBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             l10n.paymentMethod,
-            style: AppTypography.heading4.copyWith(
-              color: AppColors.textPrimary,
+            style: AppTypography.sectionTitle.copyWith(
+              color: AppColors.lightTextPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: AppDimensions.paddingMedium),
+          const SizedBox(height: AppSpacing.lg),
           // TODO: Afficher les paiements réels
           Text(
             l10n.cash,
-            style: AppTypography.body2.copyWith(color: AppColors.textSecondary),
+            style: AppTypography.body.copyWith(color: AppColors.lightTextSecondary),
           ),
         ],
       ),
@@ -352,20 +352,20 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
 
   Widget _buildRefundedMessage(AppLocalizations l10n, RefundLoaded state) {
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.dangerLight.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-        border: Border.all(color: AppColors.danger),
+        color: AppColors.dangerBgLight,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.dangerLight),
       ),
       child: Row(
         children: [
-          Icon(Icons.info_outline, color: AppColors.danger),
-          const SizedBox(width: AppDimensions.paddingMedium),
+          const Icon(Icons.info_outline, color: AppColors.dangerLight),
+          const SizedBox(width: AppSpacing.lg),
           Expanded(
             child: Text(
               l10n.alreadyRefunded,
-              style: AppTypography.body2.copyWith(color: AppColors.danger),
+              style: AppTypography.body.copyWith(color: AppColors.dangerLight),
             ),
           ),
         ],
@@ -375,11 +375,11 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
 
   Widget _buildRefundButton(AppLocalizations l10n, bool isRefunded) {
     return Container(
-      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: const BoxDecoration(
+        color: AppColors.lightSurface,
         border: Border(
-          top: BorderSide(color: AppColors.borderLight),
+          top: BorderSide(color: AppColors.lightBorder),
         ),
       ),
       child: SafeArea(
@@ -393,20 +393,20 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
                     context.push('/pos/receipts/${widget.receiptId}/refund');
                   },
             style: ElevatedButton.styleFrom(
-              backgroundColor: isRefunded ? AppColors.borderLight : AppColors.danger,
-              foregroundColor: AppColors.white,
+              backgroundColor: isRefunded ? AppColors.lightBorder : AppColors.dangerLight,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(
-                vertical: AppDimensions.paddingMedium,
+                vertical: AppSpacing.lg,
               ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
               elevation: 0,
             ),
             child: Text(
               l10n.refund,
-              style: AppTypography.body1.copyWith(
-                color: AppColors.white,
+              style: AppTypography.button.copyWith(
+                color: Colors.white,
                 fontWeight: FontWeight.w600,
               ),
             ),

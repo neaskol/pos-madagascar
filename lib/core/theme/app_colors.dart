@@ -45,4 +45,28 @@ class AppColors {
   static const successLight      = Color(0xFF2E7D52);
   static const successBgDark     = Color(0xFF0E2018);
   static const successBgLight    = Color(0xFFE8F5EE);
+
+  // ─── ALIAS POUR COMPATIBILITÉ ────────────────────────────────────────────
+  // Utilisés par les anciens écrans, mapping vers les vraies couleurs
+
+  // Texte
+  static const textPrimary = lightTextPrimary;
+  static const textSecondary = lightTextSecondary;
+  static const textTertiary = lightTextTertiary;
+
+  // Backgrounds
+  static const backgroundPrimary = lightBackground;
+  static const backgroundSecondary = lightSurface;
+
+  // Borders
+  static const borderLight = lightBorder;
+
+  // Couleurs sémantiques simplifiées
+  static const primary = lightAccent;
+  static const danger = dangerLight;
+  static const warning = warningLight;
+  static const success = successLight;
+
+  // Blanc
+  static const white = Color(0xFFFFFFFF);
 }

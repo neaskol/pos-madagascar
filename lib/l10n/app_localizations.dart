@@ -2621,13 +2621,13 @@ abstract class AppLocalizations {
   /// No description provided for @importSuccessMessage.
   ///
   /// In fr, this message translates to:
-  /// **'{success} produits importés sur {total}'**
-  String importSuccessMessage(int success, int total);
+  /// **'{count} produits importés avec succès'**
+  String importSuccessMessage(int count);
 
   /// No description provided for @importErrorsMessage.
   ///
   /// In fr, this message translates to:
-  /// **'{count} lignes avec des erreurs n\'ont pas été importées'**
+  /// **'{count} erreurs rencontrées'**
   String importErrorsMessage(int count);
 
   /// No description provided for @help.
@@ -2639,7 +2639,7 @@ abstract class AppLocalizations {
   /// No description provided for @importHelpText.
   ///
   /// In fr, this message translates to:
-  /// **'Guide d\'import :\n\n1. Téléchargez le template CSV\n2. Remplissez vos produits (Nom et Prix obligatoires)\n3. Enregistrez le fichier au format CSV ou Excel\n4. Importez le fichier dans l\'application\n5. Vérifiez les données avant de confirmer\n\nFormats supportés : CSV, XLSX, XLS\n\nConseils :\n- Les SKU doivent être uniques\n- Les prix et coûts sont en Ariary (nombres entiers)\n- Les catégories doivent déjà exister dans l\'application\n- Les lignes invalides seront signalées avant l\'import'**
+  /// **'Importez vos produits depuis un fichier CSV ou Excel. Téléchargez le modèle pour voir le format attendu.'**
   String get importHelpText;
 
   /// No description provided for @adjustmentNewTitle.
@@ -3270,6 +3270,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{count} articles sélectionnés'**
   String inventoryItemsSelected(int count);
+
+  /// No description provided for @inventoryOverview.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vue d\'ensemble'**
+  String get inventoryOverview;
+
+  /// No description provided for @inventoryHistory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique'**
+  String get inventoryHistory;
 }
 
 class _AppLocalizationsDelegate
