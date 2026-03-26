@@ -1423,4 +1423,161 @@ class AppLocalizationsMg extends AppLocalizations {
   String historyOn(String date) {
     return 'Ny $date';
   }
+
+  @override
+  String get inventoryCountsTitle => 'Fanisana tahiry';
+
+  @override
+  String get inventoryCountsEmpty => 'Tsy misy fanisana';
+
+  @override
+  String get inventoryCountsEmptyDescription =>
+      'Ny fanisana ara-batana dia hiseho eto';
+
+  @override
+  String get inventoryCountsFilterAll => 'Rehetra';
+
+  @override
+  String get inventoryCountsFilterPending => 'Miandry';
+
+  @override
+  String get inventoryCountsFilterInProgress => 'Mandeha';
+
+  @override
+  String get inventoryCountsFilterCompleted => 'Vita';
+
+  @override
+  String get inventoryCountTypeFull => 'Feno';
+
+  @override
+  String get inventoryCountTypePartial => 'Ampahany';
+
+  @override
+  String get inventoryCountStatusPending => 'Miandry';
+
+  @override
+  String get inventoryCountStatusInProgress => 'Mandeha';
+
+  @override
+  String get inventoryCountStatusCompleted => 'Vita';
+
+  @override
+  String inventoryCountItemsCount(int count) {
+    return '$count vokatra';
+  }
+
+  @override
+  String inventoryCountCreatedBy(String employee) {
+    return 'Nataon\'i $employee';
+  }
+
+  @override
+  String get newInventoryCountTitle => 'Fanisana vaovao';
+
+  @override
+  String get newInventoryCountTypeLabel => 'Karazana fanisana';
+
+  @override
+  String get newInventoryCountTypeFullTitle => 'Fanisana feno';
+
+  @override
+  String get newInventoryCountTypeFullDescription =>
+      'Hanisa ny vokatra rehetra ao an-trano fivarotana';
+
+  @override
+  String get newInventoryCountTypePartialTitle => 'Fanisana ampahany';
+
+  @override
+  String get newInventoryCountTypePartialDescription =>
+      'Hanisa vokatra sasany ihany';
+
+  @override
+  String get newInventoryCountNotes => 'Fanamarihana (tsy voatery)';
+
+  @override
+  String get newInventoryCountNotesHint =>
+      'Ampio fanamarihana momba ity fanisana ity';
+
+  @override
+  String get newInventoryCountSelectItems => 'Safidio ny vokatra hisaina';
+
+  @override
+  String get newInventoryCountSearchItems => 'Tadiavo vokatra';
+
+  @override
+  String get newInventoryCountNoItemsSelected => 'Tsy misy vokatra voafidy';
+
+  @override
+  String newInventoryCountItemsSelected(int count) {
+    return '$count vokatra voafidy';
+  }
+
+  @override
+  String get newInventoryCountStartCounting => 'Atombohy ny fanisana';
+
+  @override
+  String newInventoryCountCurrentStock(String stock) {
+    return 'Tahiry ankehitriny : $stock';
+  }
+
+  @override
+  String get inventoryCountingTitle => 'Fanisana mandeha';
+
+  @override
+  String inventoryCountingProgress(int counted, int total) {
+    return '$counted / $total voaisa';
+  }
+
+  @override
+  String get inventoryCountingTotalItems => 'Vokatra rehetra';
+
+  @override
+  String get inventoryCountingCounted => 'Voaisa';
+
+  @override
+  String get inventoryCountingDiscrepancies => 'Tsy mitovy';
+
+  @override
+  String get inventoryCountingSearchItems => 'Tadiavo vokatra';
+
+  @override
+  String get inventoryCountingScanBarcode => 'Zahao ny barcode';
+
+  @override
+  String get inventoryCountingExpectedStock => 'Tahiry andrasana';
+
+  @override
+  String get inventoryCountingCountedStock => 'Tahiry voaisa';
+
+  @override
+  String get inventoryCountingDifference => 'Tsy mitovy';
+
+  @override
+  String get inventoryCountingEnterQuantity => 'Ampidiro ny isa';
+
+  @override
+  String get inventoryCountingComplete => 'Vita ny fanisana';
+
+  @override
+  String get inventoryCountingConfirmTitle => 'Vita ny fanisana?';
+
+  @override
+  String inventoryCountingConfirmMessage(
+    int total,
+    int counted,
+    int discrepancies,
+    String difference,
+  ) {
+    return 'Famintinana ny fanisana:\n\n• Vokatra rehetra : $total\n• Vokatra voaisa : $counted\n• Tsy mitovy hita : $discrepancies\n• Tsy mitovy tanteraka : $difference\n\nTe hamita ity fanisana ity ve ianao?';
+  }
+
+  @override
+  String get inventoryCountingConfirmYes => 'Vita';
+
+  @override
+  String get inventoryCountingCompleted => 'Vita soa aman-tsara ny fanisana';
+
+  @override
+  String get inventoryCountingNotAllCounted =>
+      'Ny vokatra rehetra dia tokony voaisa alohan\'ny hamitana';
 }

@@ -578,5 +578,87 @@
     "placeholders": {
       "date": {"type": "String"}
     }
-  }
+  },
+
+  "inventoryCountsTitle": "Fanisana tahiry",
+  "inventoryCountsEmpty": "Tsy misy fanisana",
+  "inventoryCountsEmptyDescription": "Ny fanisana ara-batana dia hiseho eto",
+  "inventoryCountsFilterAll": "Rehetra",
+  "inventoryCountsFilterPending": "Miandry",
+  "inventoryCountsFilterInProgress": "Mandeha",
+  "inventoryCountsFilterCompleted": "Vita",
+  "inventoryCountTypeFull": "Feno",
+  "inventoryCountTypePartial": "Ampahany",
+  "inventoryCountStatusPending": "Miandry",
+  "inventoryCountStatusInProgress": "Mandeha",
+  "inventoryCountStatusCompleted": "Vita",
+  "inventoryCountItemsCount": "{count} vokatra",
+  "@inventoryCountItemsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "inventoryCountCreatedBy": "Nataon'i {employee}",
+  "@inventoryCountCreatedBy": {
+    "placeholders": {
+      "employee": {"type": "String"}
+    }
+  },
+
+  "newInventoryCountTitle": "Fanisana vaovao",
+  "newInventoryCountTypeLabel": "Karazana fanisana",
+  "newInventoryCountTypeFullTitle": "Fanisana feno",
+  "newInventoryCountTypeFullDescription": "Hanisa ny vokatra rehetra ao an-trano fivarotana",
+  "newInventoryCountTypePartialTitle": "Fanisana ampahany",
+  "newInventoryCountTypePartialDescription": "Hanisa vokatra sasany ihany",
+  "newInventoryCountNotes": "Fanamarihana (tsy voatery)",
+  "newInventoryCountNotesHint": "Ampio fanamarihana momba ity fanisana ity",
+  "newInventoryCountSelectItems": "Safidio ny vokatra hisaina",
+  "newInventoryCountSearchItems": "Tadiavo vokatra",
+  "newInventoryCountNoItemsSelected": "Tsy misy vokatra voafidy",
+  "newInventoryCountItemsSelected": "{count} vokatra voafidy",
+  "@newInventoryCountItemsSelected": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "newInventoryCountStartCounting": "Atombohy ny fanisana",
+  "newInventoryCountCurrentStock": "Tahiry ankehitriny : {stock}",
+  "@newInventoryCountCurrentStock": {
+    "placeholders": {
+      "stock": {"type": "String"}
+    }
+  },
+
+  "inventoryCountingTitle": "Fanisana mandeha",
+  "inventoryCountingProgress": "{counted} / {total} voaisa",
+  "@inventoryCountingProgress": {
+    "placeholders": {
+      "counted": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "inventoryCountingTotalItems": "Vokatra rehetra",
+  "inventoryCountingCounted": "Voaisa",
+  "inventoryCountingDiscrepancies": "Tsy mitovy",
+  "inventoryCountingSearchItems": "Tadiavo vokatra",
+  "inventoryCountingScanBarcode": "Zahao ny barcode",
+  "inventoryCountingExpectedStock": "Tahiry andrasana",
+  "inventoryCountingCountedStock": "Tahiry voaisa",
+  "inventoryCountingDifference": "Tsy mitovy",
+  "inventoryCountingEnterQuantity": "Ampidiro ny isa",
+  "inventoryCountingComplete": "Vita ny fanisana",
+  "inventoryCountingConfirmTitle": "Vita ny fanisana?",
+  "inventoryCountingConfirmMessage": "Famintinana ny fanisana:\n\n• Vokatra rehetra : {total}\n• Vokatra voaisa : {counted}\n• Tsy mitovy hita : {discrepancies}\n• Tsy mitovy tanteraka : {difference}\n\nTe hamita ity fanisana ity ve ianao?",
+  "@inventoryCountingConfirmMessage": {
+    "placeholders": {
+      "total": {"type": "int"},
+      "counted": {"type": "int"},
+      "discrepancies": {"type": "int"},
+      "difference": {"type": "String"}
+    }
+  },
+  "inventoryCountingConfirmYes": "Vita",
+  "inventoryCountingCompleted": "Vita soa aman-tsara ny fanisana",
+  "inventoryCountingNotAllCounted": "Ny vokatra rehetra dia tokony voaisa alohan'ny hamitana"
 }

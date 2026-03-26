@@ -1426,4 +1426,162 @@ class AppLocalizationsFr extends AppLocalizations {
   String historyOn(String date) {
     return 'Le $date';
   }
+
+  @override
+  String get inventoryCountsTitle => 'Inventaires';
+
+  @override
+  String get inventoryCountsEmpty => 'Aucun inventaire';
+
+  @override
+  String get inventoryCountsEmptyDescription =>
+      'Les inventaires physiques apparaîtront ici';
+
+  @override
+  String get inventoryCountsFilterAll => 'Tous';
+
+  @override
+  String get inventoryCountsFilterPending => 'En attente';
+
+  @override
+  String get inventoryCountsFilterInProgress => 'En cours';
+
+  @override
+  String get inventoryCountsFilterCompleted => 'Terminés';
+
+  @override
+  String get inventoryCountTypeFull => 'Complet';
+
+  @override
+  String get inventoryCountTypePartial => 'Partiel';
+
+  @override
+  String get inventoryCountStatusPending => 'En attente';
+
+  @override
+  String get inventoryCountStatusInProgress => 'En cours';
+
+  @override
+  String get inventoryCountStatusCompleted => 'Terminé';
+
+  @override
+  String inventoryCountItemsCount(int count) {
+    return '$count articles';
+  }
+
+  @override
+  String inventoryCountCreatedBy(String employee) {
+    return 'Par $employee';
+  }
+
+  @override
+  String get newInventoryCountTitle => 'Nouvel inventaire';
+
+  @override
+  String get newInventoryCountTypeLabel => 'Type d\'inventaire';
+
+  @override
+  String get newInventoryCountTypeFullTitle => 'Inventaire complet';
+
+  @override
+  String get newInventoryCountTypeFullDescription =>
+      'Compter tous les produits du magasin';
+
+  @override
+  String get newInventoryCountTypePartialTitle => 'Inventaire partiel';
+
+  @override
+  String get newInventoryCountTypePartialDescription =>
+      'Compter seulement certains produits';
+
+  @override
+  String get newInventoryCountNotes => 'Notes (optionnel)';
+
+  @override
+  String get newInventoryCountNotesHint =>
+      'Ajouter des remarques sur cet inventaire';
+
+  @override
+  String get newInventoryCountSelectItems =>
+      'Sélectionner les produits à compter';
+
+  @override
+  String get newInventoryCountSearchItems => 'Rechercher un produit';
+
+  @override
+  String get newInventoryCountNoItemsSelected => 'Aucun produit sélectionné';
+
+  @override
+  String newInventoryCountItemsSelected(int count) {
+    return '$count produits sélectionnés';
+  }
+
+  @override
+  String get newInventoryCountStartCounting => 'Commencer le comptage';
+
+  @override
+  String newInventoryCountCurrentStock(String stock) {
+    return 'Stock actuel : $stock';
+  }
+
+  @override
+  String get inventoryCountingTitle => 'Comptage en cours';
+
+  @override
+  String inventoryCountingProgress(int counted, int total) {
+    return '$counted / $total comptés';
+  }
+
+  @override
+  String get inventoryCountingTotalItems => 'Total articles';
+
+  @override
+  String get inventoryCountingCounted => 'Comptés';
+
+  @override
+  String get inventoryCountingDiscrepancies => 'Écarts';
+
+  @override
+  String get inventoryCountingSearchItems => 'Rechercher un produit';
+
+  @override
+  String get inventoryCountingScanBarcode => 'Scanner un code-barres';
+
+  @override
+  String get inventoryCountingExpectedStock => 'Stock attendu';
+
+  @override
+  String get inventoryCountingCountedStock => 'Stock compté';
+
+  @override
+  String get inventoryCountingDifference => 'Écart';
+
+  @override
+  String get inventoryCountingEnterQuantity => 'Saisir la quantité';
+
+  @override
+  String get inventoryCountingComplete => 'Terminer l\'inventaire';
+
+  @override
+  String get inventoryCountingConfirmTitle => 'Terminer l\'inventaire ?';
+
+  @override
+  String inventoryCountingConfirmMessage(
+    int total,
+    int counted,
+    int discrepancies,
+    String difference,
+  ) {
+    return 'Résumé de l\'inventaire :\n\n• Total articles : $total\n• Articles comptés : $counted\n• Écarts détectés : $discrepancies\n• Écart total : $difference\n\nVoulez-vous finaliser cet inventaire ?';
+  }
+
+  @override
+  String get inventoryCountingConfirmYes => 'Terminer';
+
+  @override
+  String get inventoryCountingCompleted => 'Inventaire terminé avec succès';
+
+  @override
+  String get inventoryCountingNotAllCounted =>
+      'Tous les articles doivent être comptés avant de terminer';
 }

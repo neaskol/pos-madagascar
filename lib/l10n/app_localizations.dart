@@ -2803,6 +2803,281 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Le {date}'**
   String historyOn(String date);
+
+  /// No description provided for @inventoryCountsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaires'**
+  String get inventoryCountsTitle;
+
+  /// No description provided for @inventoryCountsEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun inventaire'**
+  String get inventoryCountsEmpty;
+
+  /// No description provided for @inventoryCountsEmptyDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les inventaires physiques apparaîtront ici'**
+  String get inventoryCountsEmptyDescription;
+
+  /// No description provided for @inventoryCountsFilterAll.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous'**
+  String get inventoryCountsFilterAll;
+
+  /// No description provided for @inventoryCountsFilterPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente'**
+  String get inventoryCountsFilterPending;
+
+  /// No description provided for @inventoryCountsFilterInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get inventoryCountsFilterInProgress;
+
+  /// No description provided for @inventoryCountsFilterCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminés'**
+  String get inventoryCountsFilterCompleted;
+
+  /// No description provided for @inventoryCountTypeFull.
+  ///
+  /// In fr, this message translates to:
+  /// **'Complet'**
+  String get inventoryCountTypeFull;
+
+  /// No description provided for @inventoryCountTypePartial.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partiel'**
+  String get inventoryCountTypePartial;
+
+  /// No description provided for @inventoryCountStatusPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente'**
+  String get inventoryCountStatusPending;
+
+  /// No description provided for @inventoryCountStatusInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours'**
+  String get inventoryCountStatusInProgress;
+
+  /// No description provided for @inventoryCountStatusCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminé'**
+  String get inventoryCountStatusCompleted;
+
+  /// No description provided for @inventoryCountItemsCount.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} articles'**
+  String inventoryCountItemsCount(int count);
+
+  /// No description provided for @inventoryCountCreatedBy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Par {employee}'**
+  String inventoryCountCreatedBy(String employee);
+
+  /// No description provided for @newInventoryCountTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel inventaire'**
+  String get newInventoryCountTitle;
+
+  /// No description provided for @newInventoryCountTypeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Type d\'inventaire'**
+  String get newInventoryCountTypeLabel;
+
+  /// No description provided for @newInventoryCountTypeFullTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire complet'**
+  String get newInventoryCountTypeFullTitle;
+
+  /// No description provided for @newInventoryCountTypeFullDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compter tous les produits du magasin'**
+  String get newInventoryCountTypeFullDescription;
+
+  /// No description provided for @newInventoryCountTypePartialTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire partiel'**
+  String get newInventoryCountTypePartialTitle;
+
+  /// No description provided for @newInventoryCountTypePartialDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compter seulement certains produits'**
+  String get newInventoryCountTypePartialDescription;
+
+  /// No description provided for @newInventoryCountNotes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes (optionnel)'**
+  String get newInventoryCountNotes;
+
+  /// No description provided for @newInventoryCountNotesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouter des remarques sur cet inventaire'**
+  String get newInventoryCountNotesHint;
+
+  /// No description provided for @newInventoryCountSelectItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sélectionner les produits à compter'**
+  String get newInventoryCountSelectItems;
+
+  /// No description provided for @newInventoryCountSearchItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un produit'**
+  String get newInventoryCountSearchItems;
+
+  /// No description provided for @newInventoryCountNoItemsSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun produit sélectionné'**
+  String get newInventoryCountNoItemsSelected;
+
+  /// No description provided for @newInventoryCountItemsSelected.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} produits sélectionnés'**
+  String newInventoryCountItemsSelected(int count);
+
+  /// No description provided for @newInventoryCountStartCounting.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le comptage'**
+  String get newInventoryCountStartCounting;
+
+  /// No description provided for @newInventoryCountCurrentStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock actuel : {stock}'**
+  String newInventoryCountCurrentStock(String stock);
+
+  /// No description provided for @inventoryCountingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptage en cours'**
+  String get inventoryCountingTitle;
+
+  /// No description provided for @inventoryCountingProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{counted} / {total} comptés'**
+  String inventoryCountingProgress(int counted, int total);
+
+  /// No description provided for @inventoryCountingTotalItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total articles'**
+  String get inventoryCountingTotalItems;
+
+  /// No description provided for @inventoryCountingCounted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Comptés'**
+  String get inventoryCountingCounted;
+
+  /// No description provided for @inventoryCountingDiscrepancies.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écarts'**
+  String get inventoryCountingDiscrepancies;
+
+  /// No description provided for @inventoryCountingSearchItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un produit'**
+  String get inventoryCountingSearchItems;
+
+  /// No description provided for @inventoryCountingScanBarcode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Scanner un code-barres'**
+  String get inventoryCountingScanBarcode;
+
+  /// No description provided for @inventoryCountingExpectedStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock attendu'**
+  String get inventoryCountingExpectedStock;
+
+  /// No description provided for @inventoryCountingCountedStock.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stock compté'**
+  String get inventoryCountingCountedStock;
+
+  /// No description provided for @inventoryCountingDifference.
+  ///
+  /// In fr, this message translates to:
+  /// **'Écart'**
+  String get inventoryCountingDifference;
+
+  /// No description provided for @inventoryCountingEnterQuantity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Saisir la quantité'**
+  String get inventoryCountingEnterQuantity;
+
+  /// No description provided for @inventoryCountingComplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer l\'inventaire'**
+  String get inventoryCountingComplete;
+
+  /// No description provided for @inventoryCountingConfirmTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer l\'inventaire ?'**
+  String get inventoryCountingConfirmTitle;
+
+  /// No description provided for @inventoryCountingConfirmMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résumé de l\'inventaire :\n\n• Total articles : {total}\n• Articles comptés : {counted}\n• Écarts détectés : {discrepancies}\n• Écart total : {difference}\n\nVoulez-vous finaliser cet inventaire ?'**
+  String inventoryCountingConfirmMessage(
+    int total,
+    int counted,
+    int discrepancies,
+    String difference,
+  );
+
+  /// No description provided for @inventoryCountingConfirmYes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get inventoryCountingConfirmYes;
+
+  /// No description provided for @inventoryCountingCompleted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire terminé avec succès'**
+  String get inventoryCountingCompleted;
+
+  /// No description provided for @inventoryCountingNotAllCounted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les articles doivent être comptés avant de terminer'**
+  String get inventoryCountingNotAllCounted;
 }
 
 class _AppLocalizationsDelegate

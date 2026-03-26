@@ -578,5 +578,87 @@
     "placeholders": {
       "date": {"type": "String"}
     }
-  }
+  },
+
+  "inventoryCountsTitle": "Inventaires",
+  "inventoryCountsEmpty": "Aucun inventaire",
+  "inventoryCountsEmptyDescription": "Les inventaires physiques apparaîtront ici",
+  "inventoryCountsFilterAll": "Tous",
+  "inventoryCountsFilterPending": "En attente",
+  "inventoryCountsFilterInProgress": "En cours",
+  "inventoryCountsFilterCompleted": "Terminés",
+  "inventoryCountTypeFull": "Complet",
+  "inventoryCountTypePartial": "Partiel",
+  "inventoryCountStatusPending": "En attente",
+  "inventoryCountStatusInProgress": "En cours",
+  "inventoryCountStatusCompleted": "Terminé",
+  "inventoryCountItemsCount": "{count} articles",
+  "@inventoryCountItemsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "inventoryCountCreatedBy": "Par {employee}",
+  "@inventoryCountCreatedBy": {
+    "placeholders": {
+      "employee": {"type": "String"}
+    }
+  },
+
+  "newInventoryCountTitle": "Nouvel inventaire",
+  "newInventoryCountTypeLabel": "Type d'inventaire",
+  "newInventoryCountTypeFullTitle": "Inventaire complet",
+  "newInventoryCountTypeFullDescription": "Compter tous les produits du magasin",
+  "newInventoryCountTypePartialTitle": "Inventaire partiel",
+  "newInventoryCountTypePartialDescription": "Compter seulement certains produits",
+  "newInventoryCountNotes": "Notes (optionnel)",
+  "newInventoryCountNotesHint": "Ajouter des remarques sur cet inventaire",
+  "newInventoryCountSelectItems": "Sélectionner les produits à compter",
+  "newInventoryCountSearchItems": "Rechercher un produit",
+  "newInventoryCountNoItemsSelected": "Aucun produit sélectionné",
+  "newInventoryCountItemsSelected": "{count} produits sélectionnés",
+  "@newInventoryCountItemsSelected": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "newInventoryCountStartCounting": "Commencer le comptage",
+  "newInventoryCountCurrentStock": "Stock actuel : {stock}",
+  "@newInventoryCountCurrentStock": {
+    "placeholders": {
+      "stock": {"type": "String"}
+    }
+  },
+
+  "inventoryCountingTitle": "Comptage en cours",
+  "inventoryCountingProgress": "{counted} / {total} comptés",
+  "@inventoryCountingProgress": {
+    "placeholders": {
+      "counted": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "inventoryCountingTotalItems": "Total articles",
+  "inventoryCountingCounted": "Comptés",
+  "inventoryCountingDiscrepancies": "Écarts",
+  "inventoryCountingSearchItems": "Rechercher un produit",
+  "inventoryCountingScanBarcode": "Scanner un code-barres",
+  "inventoryCountingExpectedStock": "Stock attendu",
+  "inventoryCountingCountedStock": "Stock compté",
+  "inventoryCountingDifference": "Écart",
+  "inventoryCountingEnterQuantity": "Saisir la quantité",
+  "inventoryCountingComplete": "Terminer l'inventaire",
+  "inventoryCountingConfirmTitle": "Terminer l'inventaire ?",
+  "inventoryCountingConfirmMessage": "Résumé de l'inventaire :\n\n• Total articles : {total}\n• Articles comptés : {counted}\n• Écarts détectés : {discrepancies}\n• Écart total : {difference}\n\nVoulez-vous finaliser cet inventaire ?",
+  "@inventoryCountingConfirmMessage": {
+    "placeholders": {
+      "total": {"type": "int"},
+      "counted": {"type": "int"},
+      "discrepancies": {"type": "int"},
+      "difference": {"type": "String"}
+    }
+  },
+  "inventoryCountingConfirmYes": "Terminer",
+  "inventoryCountingCompleted": "Inventaire terminé avec succès",
+  "inventoryCountingNotAllCounted": "Tous les articles doivent être comptés avant de terminer"
 }

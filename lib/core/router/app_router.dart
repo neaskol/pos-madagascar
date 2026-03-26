@@ -25,6 +25,9 @@ import '../../features/pos/presentation/screens/receipt_detail_screen.dart';
 import '../../features/pos/presentation/screens/refund_screen.dart';
 import '../../features/inventory/presentation/screens/stock_adjustment_screen.dart';
 import '../../features/inventory/presentation/screens/adjustment_list_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_counts_screen.dart';
+import '../../features/inventory/presentation/screens/new_inventory_count_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_counting_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -189,6 +192,27 @@ class AppRouter {
       GoRoute(
         path: '/inventory/adjustments/new',
         builder: (context, state) => const StockAdjustmentScreen(),
+      ),
+
+      // Inventory - Comptages
+      GoRoute(
+        path: '/inventory/counts',
+        builder: (context, state) => const InventoryCountsScreen(),
+      ),
+
+      // Inventory - Nouveau comptage
+      GoRoute(
+        path: '/inventory/counts/new',
+        builder: (context, state) => const NewInventoryCountScreen(),
+      ),
+
+      // Inventory - Écran de comptage
+      GoRoute(
+        path: '/inventory/counts/:id',
+        builder: (context, state) {
+          final countId = state.pathParameters['id']!;
+          return InventoryCountingScreen(countId: countId);
+        },
       ),
 
       // Customers - Liste des clients

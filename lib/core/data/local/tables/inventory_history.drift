@@ -18,7 +18,7 @@ CREATE TABLE inventory_history (
   FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE,
   FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
   FOREIGN KEY (item_variant_id) REFERENCES item_variants(id) ON DELETE CASCADE
-);
+) AS InventoryHistory;
 
 CREATE INDEX idx_inventory_history_store_id ON inventory_history(store_id);
 CREATE INDEX idx_inventory_history_item_id ON inventory_history(item_id);

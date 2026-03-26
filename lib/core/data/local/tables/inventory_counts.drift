@@ -1,0 +1,31 @@
+import '../app_database.dart';
+
+-- Inventaires physiques (comptage de stock)
+-- type: 'full' | 'partial'
+-- status: 'pending' | 'in_progress' | 'completed'
+CREATE TABLE inventory_counts (
+  id TEXT NOT NULL UNIQUE DEFAULT (lower(hex(randomblob(16)))),
+  store_id TEXT NOT NULL,
+  type TEXT NOT NULL DEFAULT 'full',
+  status TEXT NOT NULL DEFAULT 'pending',
+  notes TEXT,
+  created_by TEXT NOT NULL,
+  created_at INTEGER NOT NULL, -- timestamp in milliseconds
+  completed_at INTEGER, -- timestamp in milliseconds
+  updated_at INTEGER NOT NULL, -- timestamp in milliseconds
+  deleted_at INTEGER, -- timestamp in milliseconds
+  synced INTEGER NOT NULL DEFAULT 0, -- 0 = false, 1 = true
+  row_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+) AS InventoryCount;
+
+-- Query all counts for a store
+getCountsByStore: SELECT * FROM inventory_counts WHERE store_id = :storeId AND deleted_at IS NULL ORDER BY created_at DESC;
+
+-- Query by status
+getCountsByStoreAndStatus: SELECT * FROM inventory_counts WHERE store_id = :storeId AND status = :status AND deleted_at IS NULL ORDER BY created_at DESC;
+
+-- Get single count
+getInventoryCountById: SELECT * FROM inventory_counts WHERE id = :countId;
+
+-- Get unsynced counts
+getUnsyncedInventoryCounts: SELECT * FROM inventory_counts WHERE synced = 0 AND deleted_at IS NULL;

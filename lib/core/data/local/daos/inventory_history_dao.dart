@@ -11,15 +11,15 @@ class InventoryHistoryDao extends DatabaseAccessor<AppDatabase>
   InventoryHistoryDao(AppDatabase db) : super(db);
 
   /// Insère un mouvement de stock
-  Future<int> insertMovement(Insertable<InventoryHistoryEntry> movement) =>
+  Future<int> insertMovement(Insertable<InventoryHistory> movement) =>
       into(inventoryHistory).insert(movement);
 
   /// Stream des mouvements d'un item spécifique
-  Stream<List<InventoryHistoryEntry>> watchMovementsByItem(String itemId) =>
+  Stream<List<InventoryHistory>> watchMovementsByItem(String itemId) =>
       getMovementsByItem(itemId).watch();
 
   /// Stream des mouvements d'un magasin avec filtres optionnels
-  Stream<List<InventoryHistoryEntry>> watchMovementsByStore(
+  Stream<List<InventoryHistory>> watchMovementsByStore(
     String storeId, {
     DateTime? dateFrom,
     DateTime? dateTo,

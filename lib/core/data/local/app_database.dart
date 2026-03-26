@@ -23,6 +23,7 @@ import 'daos/dining_option_dao.dart';
 import 'daos/pos_device_dao.dart';
 import 'daos/stock_adjustment_dao.dart';
 import 'daos/inventory_history_dao.dart';
+import 'daos/inventory_count_dao.dart';
 
 // Export DAOs for use in repositories
 export 'daos/store_dao.dart';
@@ -43,6 +44,7 @@ export 'daos/dining_option_dao.dart';
 export 'daos/pos_device_dao.dart';
 export 'daos/stock_adjustment_dao.dart';
 export 'daos/inventory_history_dao.dart';
+export 'daos/inventory_count_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -72,6 +74,8 @@ part 'app_database.g.dart';
     'tables/stock_adjustments.drift',
     'tables/stock_adjustment_items.drift',
     'tables/inventory_history.drift',
+    'tables/inventory_counts.drift',
+    'tables/inventory_count_items.drift',
   },
   daos: [
     StoreDao,
@@ -92,6 +96,7 @@ part 'app_database.g.dart';
     PosDeviceDao,
     StockAdjustmentDao,
     InventoryHistoryDao,
+    InventoryCountDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
