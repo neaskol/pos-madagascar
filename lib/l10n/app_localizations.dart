@@ -2168,6 +2168,150 @@ abstract class AppLocalizations {
   /// **'{count} en stock'**
   String inventoryUnitsRemaining(int count);
 
+  /// No description provided for @inventoryExportPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter en PDF'**
+  String get inventoryExportPdf;
+
+  /// No description provided for @inventoryExportExcel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter en Excel'**
+  String get inventoryExportExcel;
+
+  /// No description provided for @inventoryExportShare.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get inventoryExportShare;
+
+  /// No description provided for @inventoryExportPdfSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire exporté en PDF'**
+  String get inventoryExportPdfSuccess;
+
+  /// No description provided for @inventoryExportExcelSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire exporté en Excel'**
+  String get inventoryExportExcelSuccess;
+
+  /// No description provided for @inventoryExportPdfLoading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Génération du PDF...'**
+  String get inventoryExportPdfLoading;
+
+  /// No description provided for @inventoryExportExcelLoading.
+  ///
+  /// In fr, this message translates to:
+  /// **'Génération du fichier Excel...'**
+  String get inventoryExportExcelLoading;
+
+  /// No description provided for @inventoryExportPdfSubject.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire - Export PDF'**
+  String get inventoryExportPdfSubject;
+
+  /// No description provided for @inventoryExportExcelSubject.
+  ///
+  /// In fr, this message translates to:
+  /// **'Inventaire - Export Excel'**
+  String get inventoryExportExcelSubject;
+
+  /// No description provided for @inventoryExportStoreError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'exporter : magasin non identifié'**
+  String get inventoryExportStoreError;
+
+  /// No description provided for @exportCsv.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter CSV'**
+  String get exportCsv;
+
+  /// No description provided for @exportPdf.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter PDF'**
+  String get exportPdf;
+
+  /// No description provided for @inventorySheet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Feuille d\'inventaire'**
+  String get inventorySheet;
+
+  /// No description provided for @printInventory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Imprimer résumé'**
+  String get printInventory;
+
+  /// No description provided for @exportSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export réussi'**
+  String get exportSuccess;
+
+  /// No description provided for @totalItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Total produits'**
+  String get totalItems;
+
+  /// No description provided for @totalStockValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur stock (coût)'**
+  String get totalStockValue;
+
+  /// No description provided for @totalRetailValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur retail'**
+  String get totalRetailValue;
+
+  /// No description provided for @profitPotential.
+  ///
+  /// In fr, this message translates to:
+  /// **'Profit potentiel'**
+  String get profitPotential;
+
+  /// No description provided for @exportingInventory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Export en cours...'**
+  String get exportingInventory;
+
+  /// No description provided for @printingInventory.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impression en cours...'**
+  String get printingInventory;
+
+  /// No description provided for @printerNotConnected.
+  ///
+  /// In fr, this message translates to:
+  /// **'Imprimante non connectée'**
+  String get printerNotConnected;
+
+  /// No description provided for @exportError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur d\'export'**
+  String get exportError;
+
+  /// No description provided for @printError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur d\'impression'**
+  String get printError;
+
   /// No description provided for @salesHistory.
   ///
   /// In fr, this message translates to:
@@ -2401,6 +2545,102 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Autre'**
   String get paymentOther;
+
+  /// No description provided for @importItems.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer des produits'**
+  String get importItems;
+
+  /// No description provided for @importItemsDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importez vos produits depuis un fichier CSV ou Excel.\nTéléchargez d\'abord le template pour voir le format attendu.'**
+  String get importItemsDescription;
+
+  /// No description provided for @selectFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisir un fichier'**
+  String get selectFile;
+
+  /// No description provided for @downloadTemplate.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger le template'**
+  String get downloadTemplate;
+
+  /// No description provided for @fileFormat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Format du fichier'**
+  String get fileFormat;
+
+  /// No description provided for @fileFormatDescription.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le fichier doit contenir les colonnes suivantes : Nom, SKU, Code-barres, Catégorie, Prix, Coût, Stock, Seuil d\'alerte, Description.\nSeuls le Nom et le Prix sont obligatoires.'**
+  String get fileFormatDescription;
+
+  /// No description provided for @parsingFile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Analyse du fichier en cours...'**
+  String get parsingFile;
+
+  /// No description provided for @valid.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valides'**
+  String get valid;
+
+  /// No description provided for @errors.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreurs'**
+  String get errors;
+
+  /// No description provided for @importValidRows.
+  ///
+  /// In fr, this message translates to:
+  /// **'Importer {count} produits valides'**
+  String importValidRows(int count);
+
+  /// No description provided for @importing.
+  ///
+  /// In fr, this message translates to:
+  /// **'Import en cours...'**
+  String get importing;
+
+  /// No description provided for @importComplete.
+  ///
+  /// In fr, this message translates to:
+  /// **'Import terminé'**
+  String get importComplete;
+
+  /// No description provided for @importSuccessMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'{success} produits importés sur {total}'**
+  String importSuccessMessage(int success, int total);
+
+  /// No description provided for @importErrorsMessage.
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} lignes avec des erreurs n\'ont pas été importées'**
+  String importErrorsMessage(int count);
+
+  /// No description provided for @help.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aide'**
+  String get help;
+
+  /// No description provided for @importHelpText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Guide d\'import :\n\n1. Téléchargez le template CSV\n2. Remplissez vos produits (Nom et Prix obligatoires)\n3. Enregistrez le fichier au format CSV ou Excel\n4. Importez le fichier dans l\'application\n5. Vérifiez les données avant de confirmer\n\nFormats supportés : CSV, XLSX, XLS\n\nConseils :\n- Les SKU doivent être uniques\n- Les prix et coûts sont en Ariary (nombres entiers)\n- Les catégories doivent déjà exister dans l\'application\n- Les lignes invalides seront signalées avant l\'import'**
+  String get importHelpText;
 }
 
 class _AppLocalizationsDelegate

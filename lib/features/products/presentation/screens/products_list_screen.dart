@@ -106,6 +106,13 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.productsTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.file_upload_outlined),
+            tooltip: l10n.importItems,
+            onPressed: () => context.push('/products/import'),
+          ),
+        ],
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, authState) {

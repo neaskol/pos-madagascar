@@ -1,0 +1,11 @@
+Name,SKU,Barcode,Category,Price,Cost,InStock,LowStockThreshold,Description
+Café Arabica 250g,CAFE-001,1234567890123,Boisson,15000,10000,50,10,Café arabica premium en grain 250g
+Thé Vert,THE-001,2345678901234,Boisson,5000,3000,100,15,Thé vert en sachet - Boite de 25
+Pain de Mie,PAIN-001,3456789012345,Alimentation,3500,2000,30,5,Pain de mie complet - Tranche 500g
+Eau Minérale 1.5L,EAU-001,4567890123456,Boisson,1500,800,200,20,Eau minérale naturelle 1.5 litres
+Riz Local 5kg,RIZ-001,5678901234567,Alimentation,25000,18000,80,10,Riz blanc local de qualité supérieure 5kg
+Savon Antibactérien,SAVON-001,6789012345678,Hygiène,4000,2500,60,8,Savon antibactérien pour les mains
+Huile Végétale 1L,HUILE-001,7890123456789,Alimentation,8000,5500,40,5,Huile végétale pure 1 litre
+Dentifrice Menthe,DENT-001,8901234567890,Hygiène,3000,1800,75,12,Dentifrice au fluor saveur menthe fraîche
+Lait Concentré,LAIT-001,9012345678901,Alimentation,4500,3000,90,15,Lait concentré sucré - Boite 397g
+Jus d'Orange 1L,JUS-001,0123456789012,Boisson,6000,4000,55,10,Jus d'orange 100% pur fruit 1 litre

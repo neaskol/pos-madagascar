@@ -1090,6 +1090,79 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get inventoryExportPdf => 'Exporter en PDF';
+
+  @override
+  String get inventoryExportExcel => 'Exporter en Excel';
+
+  @override
+  String get inventoryExportShare => 'Partager';
+
+  @override
+  String get inventoryExportPdfSuccess => 'Inventaire exporté en PDF';
+
+  @override
+  String get inventoryExportExcelSuccess => 'Inventaire exporté en Excel';
+
+  @override
+  String get inventoryExportPdfLoading => 'Génération du PDF...';
+
+  @override
+  String get inventoryExportExcelLoading => 'Génération du fichier Excel...';
+
+  @override
+  String get inventoryExportPdfSubject => 'Inventaire - Export PDF';
+
+  @override
+  String get inventoryExportExcelSubject => 'Inventaire - Export Excel';
+
+  @override
+  String get inventoryExportStoreError =>
+      'Impossible d\'exporter : magasin non identifié';
+
+  @override
+  String get exportCsv => 'Exporter CSV';
+
+  @override
+  String get exportPdf => 'Exporter PDF';
+
+  @override
+  String get inventorySheet => 'Feuille d\'inventaire';
+
+  @override
+  String get printInventory => 'Imprimer résumé';
+
+  @override
+  String get exportSuccess => 'Export réussi';
+
+  @override
+  String get totalItems => 'Total produits';
+
+  @override
+  String get totalStockValue => 'Valeur stock (coût)';
+
+  @override
+  String get totalRetailValue => 'Valeur retail';
+
+  @override
+  String get profitPotential => 'Profit potentiel';
+
+  @override
+  String get exportingInventory => 'Export en cours...';
+
+  @override
+  String get printingInventory => 'Impression en cours...';
+
+  @override
+  String get printerNotConnected => 'Imprimante non connectée';
+
+  @override
+  String get exportError => 'Erreur d\'export';
+
+  @override
+  String get printError => 'Erreur d\'impression';
+
+  @override
   String get salesHistory => 'Historique des ventes';
 
   @override
@@ -1206,4 +1279,61 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get paymentOther => 'Autre';
+
+  @override
+  String get importItems => 'Importer des produits';
+
+  @override
+  String get importItemsDescription =>
+      'Importez vos produits depuis un fichier CSV ou Excel.\nTéléchargez d\'abord le template pour voir le format attendu.';
+
+  @override
+  String get selectFile => 'Choisir un fichier';
+
+  @override
+  String get downloadTemplate => 'Télécharger le template';
+
+  @override
+  String get fileFormat => 'Format du fichier';
+
+  @override
+  String get fileFormatDescription =>
+      'Le fichier doit contenir les colonnes suivantes : Nom, SKU, Code-barres, Catégorie, Prix, Coût, Stock, Seuil d\'alerte, Description.\nSeuls le Nom et le Prix sont obligatoires.';
+
+  @override
+  String get parsingFile => 'Analyse du fichier en cours...';
+
+  @override
+  String get valid => 'Valides';
+
+  @override
+  String get errors => 'Erreurs';
+
+  @override
+  String importValidRows(int count) {
+    return 'Importer $count produits valides';
+  }
+
+  @override
+  String get importing => 'Import en cours...';
+
+  @override
+  String get importComplete => 'Import terminé';
+
+  @override
+  String importSuccessMessage(int success, int total) {
+    return '$success produits importés sur $total';
+  }
+
+  @override
+  String importErrorsMessage(int count) {
+    return '$count lignes avec des erreurs n\'ont pas été importées';
+  }
+
+  @override
+  String get help => 'Aide';
+
+  @override
+  String get importHelpText =>
+      'Guide d\'import :\n\n1. Téléchargez le template CSV\n2. Remplissez vos produits (Nom et Prix obligatoires)\n3. Enregistrez le fichier au format CSV ou Excel\n4. Importez le fichier dans l\'application\n5. Vérifiez les données avant de confirmer\n\nFormats supportés : CSV, XLSX, XLS\n\nConseils :\n- Les SKU doivent être uniques\n- Les prix et coûts sont en Ariary (nombres entiers)\n- Les catégories doivent déjà exister dans l\'application\n- Les lignes invalides seront signalées avant l\'import';
 }

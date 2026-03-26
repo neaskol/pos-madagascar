@@ -1087,6 +1087,79 @@ class AppLocalizationsMg extends AppLocalizations {
   }
 
   @override
+  String get inventoryExportPdf => 'Avoaka PDF';
+
+  @override
+  String get inventoryExportExcel => 'Avoaka Excel';
+
+  @override
+  String get inventoryExportShare => 'Zarao';
+
+  @override
+  String get inventoryExportPdfSuccess => 'Inventaire navoaka PDF';
+
+  @override
+  String get inventoryExportExcelSuccess => 'Inventaire navoaka Excel';
+
+  @override
+  String get inventoryExportPdfLoading => 'Mamorona PDF...';
+
+  @override
+  String get inventoryExportExcelLoading => 'Mamorona rakitra Excel...';
+
+  @override
+  String get inventoryExportPdfSubject => 'Inventaire - Famoahana PDF';
+
+  @override
+  String get inventoryExportExcelSubject => 'Inventaire - Famoahana Excel';
+
+  @override
+  String get inventoryExportStoreError =>
+      'Tsy afaka navoaka: tsy fantatra ny magazay';
+
+  @override
+  String get exportCsv => 'Avoaka CSV';
+
+  @override
+  String get exportPdf => 'Avoaka PDF';
+
+  @override
+  String get inventorySheet => 'Taratasy fanisana';
+
+  @override
+  String get printInventory => 'Printy famintinana';
+
+  @override
+  String get exportSuccess => 'Avoaka soa aman-tsara';
+
+  @override
+  String get totalItems => 'Vokatra rehetra';
+
+  @override
+  String get totalStockValue => 'Sandan\'ny stock (vidiny)';
+
+  @override
+  String get totalRetailValue => 'Sandan\'ny fivarotana';
+
+  @override
+  String get profitPotential => 'Tombony azo';
+
+  @override
+  String get exportingInventory => 'Mamoaka...';
+
+  @override
+  String get printingInventory => 'Manonta printy...';
+
+  @override
+  String get printerNotConnected => 'Tsy misy printy mifandray';
+
+  @override
+  String get exportError => 'Tsy nahomby ny famoahana';
+
+  @override
+  String get printError => 'Tsy nahomby ny printy';
+
+  @override
   String get salesHistory => 'Tantaran\'ny varotra';
 
   @override
@@ -1203,4 +1276,61 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get paymentOther => 'Hafa';
+
+  @override
+  String get importItems => 'Hampiditra vokatra';
+
+  @override
+  String get importItemsDescription =>
+      'Ampidiro ny vokatra avy amin\'ny rakitra CSV na Excel.\nAlao aloha ny template mba hahitana ny endrika takiana.';
+
+  @override
+  String get selectFile => 'Hisafidy rakitra';
+
+  @override
+  String get downloadTemplate => 'Hisintona ny template';
+
+  @override
+  String get fileFormat => 'Endrika ny rakitra';
+
+  @override
+  String get fileFormatDescription =>
+      'Ny rakitra dia tokony ahitana ireto tsanganana ireto: Anarana, SKU, Barcode, Sokajy, Vidiny, Vidin\'ny fividianana, Stock, Fetra fanairana, Famaritana.\nNy Anarana sy ny Vidiny ihany no tsy maintsy.';
+
+  @override
+  String get parsingFile => 'Mandinika ny rakitra...';
+
+  @override
+  String get valid => 'Marina';
+
+  @override
+  String get errors => 'Fahadisoana';
+
+  @override
+  String importValidRows(int count) {
+    return 'Hampiditra vokatra $count marina';
+  }
+
+  @override
+  String get importing => 'Fampidirana...';
+
+  @override
+  String get importComplete => 'Vita ny fampidirana';
+
+  @override
+  String importSuccessMessage(int success, int total) {
+    return 'Vokatra $success nampidirina tamin\'ny $total';
+  }
+
+  @override
+  String importErrorsMessage(int count) {
+    return 'Andalana $count misy fahadisoana tsy nampidirina';
+  }
+
+  @override
+  String get help => 'Fanampiana';
+
+  @override
+  String get importHelpText =>
+      'Torolalana fampidirana:\n\n1. Alao ny template CSV\n2. Fenoy ny vokatra (Anarana sy Vidiny tsy maintsy)\n3. Tehirizo ny rakitra amin\'ny endrika CSV na Excel\n4. Ampidiro ny rakitra ao amin\'ny application\n5. Jereo ny angon-drakitra alohan\'ny hanamafisana\n\nEndrika raisina: CSV, XLSX, XLS\n\nTorohevitra:\n- Ny SKU dia tokony tsy misy mitovy\n- Ny vidiny sy ny vidin\'ny fividianana dia amin\'ny Ariary (isa integer)\n- Ny sokajy dia tokony efa misy ao amin\'ny application\n- Ny andalana tsy marina dia ho ambara alohan\'ny fampidirana';
 }

@@ -48,8 +48,10 @@ dependencies:
   # Graphiques
   fl_chart: ^0.69.0
 
-  # Export
+  # Export & Import
   excel: ^4.0.0
+  csv: ^6.0.0
+  file_picker: ^8.0.0
 
   # Utils
   url_launcher: ^6.3.0

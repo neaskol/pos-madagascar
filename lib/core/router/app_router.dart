@@ -13,6 +13,7 @@ import '../../features/auth/presentation/screens/pin_screen.dart';
 import '../../features/products/presentation/screens/products_list_screen.dart';
 import '../../features/products/presentation/screens/product_form_screen.dart';
 import '../../features/products/presentation/screens/inventory_overview_screen.dart';
+import '../../features/products/presentation/screens/import_items_screen.dart';
 import '../../features/pos/presentation/screens/pos_screen.dart';
 import '../../features/customers/presentation/screens/customer_list_screen.dart';
 import '../../features/customers/presentation/screens/customer_form_screen.dart';
@@ -153,6 +154,12 @@ class AppRouter {
       GoRoute(
         path: '/products/new',
         builder: (context, state) => const ProductFormScreen(),
+      ),
+
+      // Products - Importer des produits CSV/Excel
+      GoRoute(
+        path: '/products/import',
+        builder: (context, state) => const ImportItemsScreen(),
       ),
 
       // Products - Éditer un produit
