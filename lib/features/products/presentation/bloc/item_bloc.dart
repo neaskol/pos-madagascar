@@ -1,14 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repositories/item_repository.dart';
+import '../../../../core/data/remote/sync_service.dart';
 import 'item_event.dart';
 import 'item_state.dart';
+import 'dart:developer' as developer;
 
 /// BLoC pour la gestion des items (produits)
 /// Pattern : Repository → BLoC → UI
 class ItemBloc extends Bloc<ItemEvent, ItemState> {
   final ItemRepository _repository;
+  final SyncService? _syncService;
 
-  ItemBloc(this._repository) : super(const ItemInitial()) {
+  ItemBloc(this._repository, [this._syncService]) : super(const ItemInitial()) {
     on<LoadStoreItemsEvent>(_onLoadStoreItems);
     on<LoadItemByIdEvent>(_onLoadItemById);
     on<LoadItemBySkuEvent>(_onLoadItemBySku);
@@ -175,6 +178,9 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
         averageCost: event.averageCost,
       );
       emit(const ItemOperationSuccess('Item créé avec succès'));
+
+      // Synchroniser immédiatement avec Supabase pour éviter la perte de données
+      _triggerImmediateSync();
     } catch (e) {
       emit(ItemError(e.toString()));
     }
@@ -208,6 +214,9 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
         averageCost: event.averageCost,
       );
       emit(const ItemOperationSuccess('Item mis à jour avec succès'));
+
+      // Synchroniser immédiatement avec Supabase
+      _triggerImmediateSync();
     } catch (e) {
       emit(ItemError(e.toString()));
     }
@@ -222,6 +231,9 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
       emit(const ItemLoading());
       await _repository.deleteItem(event.itemId);
       emit(const ItemOperationSuccess('Item supprimé avec succès'));
+
+      // Synchroniser immédiatement avec Supabase
+      _triggerImmediateSync();
     } catch (e) {
       emit(ItemError(e.toString()));
     }
@@ -266,6 +278,31 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
       emit(ItemsLoaded(items));
     } catch (e) {
       emit(ItemError(e.toString()));
+    }
+  }
+
+  /// Déclenche une synchronisation immédiate en arrière-plan
+  void _triggerImmediateSync() {
+    if (_syncService != null) {
+      _syncService.forceSyncNow().then((result) {
+        if (result.isSuccess) {
+          developer.log(
+            'Immediate sync completed: ${result.summary}',
+            name: 'ItemBloc',
+          );
+        } else if (result.hasErrors) {
+          developer.log(
+            'Immediate sync had errors: ${result.errors.join(", ")}',
+            name: 'ItemBloc',
+          );
+        }
+      }).catchError((e) {
+        developer.log(
+          'Immediate sync failed',
+          name: 'ItemBloc',
+          error: e,
+        );
+      });
     }
   }
 }

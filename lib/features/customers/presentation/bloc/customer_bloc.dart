@@ -1,14 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repositories/customer_repository.dart';
+import '../../../../core/data/remote/sync_service.dart';
 import 'customer_event.dart';
 import 'customer_state.dart';
+import 'dart:developer' as developer;
 
 /// BLoC pour la gestion des clients
 /// Pattern : Repository → BLoC → UI
 class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
   final CustomerRepository _repository;
+  final SyncService? _syncService;
 
-  CustomerBloc(this._repository) : super(const CustomerInitial()) {
+  CustomerBloc(this._repository, [this._syncService]) : super(const CustomerInitial()) {
     on<LoadCustomersEvent>(_onLoadCustomers);
     on<SearchCustomersEvent>(_onSearchCustomers);
     on<LoadCustomerByIdEvent>(_onLoadCustomerById);
@@ -88,6 +91,9 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
         createdBy: event.createdBy,
       );
       emit(const CustomerOperationSuccess('Client créé avec succès'));
+
+      // Synchroniser immédiatement avec Supabase
+      _triggerImmediateSync();
     } catch (e) {
       emit(CustomerError(e.toString()));
     }
@@ -109,6 +115,9 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
         notes: event.notes,
       );
       emit(const CustomerOperationSuccess('Client mis à jour'));
+
+      // Synchroniser immédiatement avec Supabase
+      _triggerImmediateSync();
     } catch (e) {
       emit(CustomerError(e.toString()));
     }
@@ -123,6 +132,9 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       emit(const CustomerLoading());
       await _repository.deleteCustomer(event.customerId);
       emit(const CustomerOperationSuccess('Client supprimé'));
+
+      // Synchroniser immédiatement avec Supabase
+      _triggerImmediateSync();
     } catch (e) {
       emit(CustomerError(e.toString()));
     }
@@ -142,6 +154,31 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
       emit(CustomersLoaded(customers));
     } catch (e) {
       emit(CustomerError(e.toString()));
+    }
+  }
+
+  /// Déclenche une synchronisation immédiate en arrière-plan
+  void _triggerImmediateSync() {
+    if (_syncService != null) {
+      _syncService.forceSyncNow().then((result) {
+        if (result.isSuccess) {
+          developer.log(
+            'Immediate sync completed: ${result.summary}',
+            name: 'CustomerBloc',
+          );
+        } else if (result.hasErrors) {
+          developer.log(
+            'Immediate sync had errors: ${result.errors.join(", ")}',
+            name: 'CustomerBloc',
+          );
+        }
+      }).catchError((e) {
+        developer.log(
+          'Immediate sync failed',
+          name: 'CustomerBloc',
+          error: e,
+        );
+      });
     }
   }
 }

@@ -18,6 +18,8 @@ import 'dart:developer' as developer;
 class SyncService {
   final AppDatabase _localDb;
   final SupabaseClient _supabase;
+  DateTime? _lastSyncAttempt;
+  static const _minSyncInterval = Duration(seconds: 10);
 
   SyncService(this._localDb, this._supabase);
 
@@ -26,10 +28,24 @@ class SyncService {
   /// This method pushes all records marked as `synced: false` to Supabase.
   /// On success, marks them as `synced: true` locally.
   /// On error, logs but doesn't throw (offline resilience).
-  Future<SyncResult> syncToRemote() async {
+  ///
+  /// [force] - If true, ignores the minimum sync interval throttling
+  Future<SyncResult> syncToRemote({bool force = false}) async {
     final result = SyncResult();
 
     try {
+      // Throttle : éviter les syncs trop fréquentes (sauf si forcé)
+      if (!force && _lastSyncAttempt != null) {
+        final timeSinceLastSync = DateTime.now().difference(_lastSyncAttempt!);
+        if (timeSinceLastSync < _minSyncInterval) {
+          developer.log('Sync throttled (too soon)', name: 'SyncService');
+          result.skipped = true;
+          return result;
+        }
+      }
+
+      _lastSyncAttempt = DateTime.now();
+
       // Vérifier la connexion internet
       if (!await _hasInternetConnection()) {
         developer.log('No internet connection - skipping sync', name: 'SyncService');
@@ -318,6 +334,15 @@ class SyncService {
   /// TODO: Implémenter les subscriptions Realtime pour sync bidirectionnelle
   Future<void> subscribeToChanges(String storeId) async {
     throw UnimplementedError('Realtime subscriptions not yet implemented');
+  }
+
+  /// Force immediate synchronization (bypasses throttling)
+  ///
+  /// Use this after critical operations (product creation, customer creation, etc.)
+  /// to ensure data is backed up to Supabase immediately.
+  Future<SyncResult> forceSyncNow() async {
+    developer.log('Force sync requested', name: 'SyncService');
+    return syncToRemote(force: true);
   }
 }
 

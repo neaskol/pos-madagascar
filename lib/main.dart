@@ -98,8 +98,8 @@ class _MyAppState extends State<MyApp> {
     // Synchroniser immédiatement au démarrage
     _performSync();
 
-    // Déclencher la synchronisation toutes les 5 minutes
-    _syncTimer = Timer.periodic(const Duration(minutes: 5), (_) {
+    // Déclencher la synchronisation toutes les 30 secondes (protection contre perte de données)
+    _syncTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       _performSync();
     });
   }
@@ -222,6 +222,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<ItemBloc>(
             create: (context) => ItemBloc(
               context.read<ItemRepository>(),
+              context.read<SyncService>(),
             ),
           ),
           // BLoC pour l'import d'items
@@ -252,6 +253,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<CustomerBloc>(
             create: (context) => CustomerBloc(
               context.read<CustomerRepository>(),
+              context.read<SyncService>(),
             ),
           ),
           // BLoC pour les crédits
