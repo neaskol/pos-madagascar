@@ -273,7 +273,7 @@ supabase
 
 ---
 
-## 📊 Résumé des Gaps (Mise à jour : 27 mars 2026, 11:30 AM)
+## 📊 Résumé des Gaps (Mise à jour : 27 mars 2026, 11:45 AM)
 
 | Gap | Sévérité | Impact | Effort Original | Statut |
 |-----|----------|--------|-----------------|--------|
@@ -284,13 +284,62 @@ supabase
 | #5 Méthodes upsert | 🔴 BLOQUANT PULL | Impossible pull sync | 4h | ✅ **RÉSOLU** (27/03 08:00 AM) |
 | #6 Push Sync Incomplet | 🟡 MOYEN | Données locales uniquement | 1 jour | ✅ **RÉSOLU** (27/03 11:30 AM) |
 | #7 Realtime | 🟢 FUTUR | Latence 30s | 3 jours | ⏸️ **0%** (MVP peut skip) |
+| **#8 Erreurs Compilation** | 🔴 **BLOQUANT PROD** | **Impossible build** | **30 min** | ✅ **RÉSOLU** (27/03 11:45 AM) |
 
-**Progrès global** : 5/7 gaps résolus (71%) — **4/5 gaps critiques résolus (80%)** 🎉
+**Progrès global** : 6/8 gaps résolus (75%) — **5/6 gaps critiques résolus (83%)** 🎉
 
-**Effort accompli** : ~12h (Phases 1-5)
+**Effort accompli** : ~12.5h (Phases 1-5 + compilation fixes)
 **Effort restant** : ~2 jours
 - Gap #2 (Gestion Conflits) : 1 jour (optionnel pour MVP)
 - Tests multi-device : 1 jour
+
+---
+
+## ❌ GAP #8 : Erreurs de Compilation (BLOQUANT PROD) — ✅ RÉSOLU
+
+### Problème
+Le fichier `lib/main.dart` contenait 3 erreurs de compilation bloquantes :
+1. **Conflit d'imports** : `AuthState` défini dans Supabase ET dans le BLoC local
+2. **État inexistant** : Utilisation de `AuthAuthenticated` qui n'existe pas
+3. **Getter manquant** : `authState.user` inaccessible car état incorrect
+
+### Impact
+**Scénario bloquant** :
+```bash
+flutter analyze lib/main.dart
+3 issues found.
+```
+- ❌ Impossible de builder l'app pour production
+- ❌ CI/CD bloqué
+- ❌ Tests automatisés non exécutables
+
+### Solution appliquée
+1. ✅ Ajout préfixe `as supabase` à l'import Supabase Flutter
+   ```dart
+   import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
+   ```
+
+2. ✅ Correction des états d'authentification
+   ```dart
+   // AVANT (incorrect)
+   if (authState is AuthAuthenticated) { ... }
+
+   // APRÈS (correct)
+   if (authState is AuthAuthenticatedWithStore) { ... }
+   else if (authState is AuthPinSessionActive) { ... }
+   ```
+
+### Résultat
+```bash
+flutter analyze lib/main.dart
+No issues found! (ran in 36.9s)
+```
+
+**Fichiers modifiés** :
+- `lib/main.dart` — 5 lignes changées
+
+**Commit** : `15e4e91`
+**Documentation** : [COMPILATION-FIXES.md](COMPILATION-FIXES.md)
 
 ---
 
