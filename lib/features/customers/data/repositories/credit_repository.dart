@@ -75,7 +75,7 @@ class CreditRepository {
     // Sync immédiat vers Supabase en arrière-plan (non-blocking)
     syncService?.forceSyncNow().catchError((e) {
       // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
-      print('Background sync failed after credit creation: $e');
+      return SyncResult()..errors.add(e.toString());
     });
 
     return id;
@@ -117,7 +117,7 @@ class CreditRepository {
     // Sync immédiat vers Supabase en arrière-plan (non-blocking)
     syncService?.forceSyncNow().catchError((e) {
       // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
-      print('Background sync failed after credit payment: $e');
+      return SyncResult()..errors.add(e.toString());
     });
 
     return id;

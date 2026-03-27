@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/data/local/app_database.dart' hide Sale;
@@ -76,7 +77,7 @@ class RefundRepository {
       // Sync immédiat vers Supabase en arrière-plan (non-blocking)
       syncService?.forceSyncNow().catchError((e) {
         // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
-        print('Background sync failed after refund creation: $e');
+        return SyncResult()..errors.add(e.toString());
       });
 
       return refundId;
@@ -160,7 +161,7 @@ class RefundRepository {
         await database.inventoryHistoryDao.insertMovement(movement);
       } catch (e) {
         // Log error mais continuer pour les autres items
-        print('Erreur mise à jour stock après refund: $e');
+        if (kDebugMode) debugPrint('Erreur mise à jour stock après refund: $e');
       }
     }
   }

@@ -104,7 +104,7 @@ class SaleRepository {
       // Sync immédiat vers Supabase en arrière-plan (non-blocking)
       syncService?.forceSyncNow().catchError((e) {
         // Log silencieux — ne pas bloquer si sync échoue (offline resilience)
-        print('Background sync failed after sale creation: $e');
+        return SyncResult()..errors.add(e.toString());
       });
 
       return sale;
