@@ -1221,7 +1221,7 @@ class AppLocalizationsMg extends AppLocalizations {
   String get refunded => 'Namerina vola';
 
   @override
-  String get noStoreSelected => 'Tsy misy fivarotana voafidy';
+  String get noStoreSelected => 'Tsy misy magazay voafantina';
 
   @override
   String get today => 'Anio';
@@ -1978,4 +1978,49 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get settingsDebugLogsDesc => 'Mitahiry logs ho an\'ny fanohanana';
+
+  @override
+  String get conflicts => 'Fifandonana amin\'ny sync';
+
+  @override
+  String get noConflicts => 'Tsy misy fifandonana';
+
+  @override
+  String get pending => 'Miandry';
+
+  @override
+  String get resolved => 'Voavaha';
+
+  @override
+  String get localValue => 'Sanda eto an-toerana';
+
+  @override
+  String get remoteValue => 'Sanda any an-cloud';
+
+  @override
+  String get localUpdatedAt => 'Novaina eto';
+
+  @override
+  String get remoteUpdatedAt => 'Novaina any';
+
+  @override
+  String get keepLocal => 'Tehirizo ny eto';
+
+  @override
+  String get keepRemote => 'Tehirizo ny any';
+
+  @override
+  String get conflictResolved => 'Voavaha ny fifandonana';
+
+  @override
+  String get resolvedAt => 'Voavaha ny';
+
+  @override
+  String get notes => 'Fanamarihana';
+
+  @override
+  String get status => 'Toe-javatra';
+
+  @override
+  String get unauthorized => 'Tsy manana fahazoan-dalana';
 }

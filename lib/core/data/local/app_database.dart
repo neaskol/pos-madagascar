@@ -111,7 +111,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -125,6 +125,10 @@ class AppDatabase extends _$AppDatabase {
           }
           if (from < 3) {
             // v3: Ajout de la table user_preferences
+            await m.createAll();
+          }
+          if (from < 4) {
+            // v4: Ajout de la table sync_conflicts pour la détection de conflits
             await m.createAll();
           }
         },

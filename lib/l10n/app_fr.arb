@@ -832,5 +832,22 @@
   "settingsDeveloperMode": "Mode développeur",
   "settingsDeveloperModeDesc": "Afficher les options de débogage",
   "settingsDebugLogs": "Logs de débogage",
-  "settingsDebugLogsDesc": "Enregistrer les logs pour le support technique"
+  "settingsDebugLogsDesc": "Enregistrer les logs pour le support technique",
+
+  "conflicts": "Conflits de synchronisation",
+  "noConflicts": "Aucun conflit détecté",
+  "pending": "En attente",
+  "resolved": "Résolus",
+  "localValue": "Valeur locale",
+  "remoteValue": "Valeur distante",
+  "localUpdatedAt": "Modifié localement",
+  "remoteUpdatedAt": "Modifié à distance",
+  "keepLocal": "Garder local",
+  "keepRemote": "Garder distant",
+  "conflictResolved": "Conflit résolu",
+  "resolvedAt": "Résolu le",
+  "notes": "Notes",
+  "status": "Statut",
+  "noStoreSelected": "Aucun magasin sélectionné",
+  "unauthorized": "Non autorisé"
 }

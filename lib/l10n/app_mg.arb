@@ -797,5 +797,22 @@
   "settingsDeveloperMode": "Mode mpamorona",
   "settingsDeveloperModeDesc": "Asehoy ny safidy debug",
   "settingsDebugLogs": "Logs debug",
-  "settingsDebugLogsDesc": "Mitahiry logs ho an'ny fanohanana"
+  "settingsDebugLogsDesc": "Mitahiry logs ho an'ny fanohanana",
+
+  "conflicts": "Fifandonana amin'ny sync",
+  "noConflicts": "Tsy misy fifandonana",
+  "pending": "Miandry",
+  "resolved": "Voavaha",
+  "localValue": "Sanda eto an-toerana",
+  "remoteValue": "Sanda any an-cloud",
+  "localUpdatedAt": "Novaina eto",
+  "remoteUpdatedAt": "Novaina any",
+  "keepLocal": "Tehirizo ny eto",
+  "keepRemote": "Tehirizo ny any",
+  "conflictResolved": "Voavaha ny fifandonana",
+  "resolvedAt": "Voavaha ny",
+  "notes": "Fanamarihana",
+  "status": "Toe-javatra",
+  "noStoreSelected": "Tsy misy magazay voafantina",
+  "unauthorized": "Tsy manana fahazoan-dalana"
 }

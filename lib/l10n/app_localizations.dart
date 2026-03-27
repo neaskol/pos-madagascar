@@ -3846,6 +3846,96 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Enregistrer les logs pour le support technique'**
   String get settingsDebugLogsDesc;
+
+  /// No description provided for @conflicts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conflits de synchronisation'**
+  String get conflicts;
+
+  /// No description provided for @noConflicts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun conflit détecté'**
+  String get noConflicts;
+
+  /// No description provided for @pending.
+  ///
+  /// In fr, this message translates to:
+  /// **'En attente'**
+  String get pending;
+
+  /// No description provided for @resolved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résolus'**
+  String get resolved;
+
+  /// No description provided for @localValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur locale'**
+  String get localValue;
+
+  /// No description provided for @remoteValue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valeur distante'**
+  String get remoteValue;
+
+  /// No description provided for @localUpdatedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifié localement'**
+  String get localUpdatedAt;
+
+  /// No description provided for @remoteUpdatedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifié à distance'**
+  String get remoteUpdatedAt;
+
+  /// No description provided for @keepLocal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garder local'**
+  String get keepLocal;
+
+  /// No description provided for @keepRemote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Garder distant'**
+  String get keepRemote;
+
+  /// No description provided for @conflictResolved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conflit résolu'**
+  String get conflictResolved;
+
+  /// No description provided for @resolvedAt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résolu le'**
+  String get resolvedAt;
+
+  /// No description provided for @notes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @status.
+  ///
+  /// In fr, this message translates to:
+  /// **'Statut'**
+  String get status;
+
+  /// No description provided for @unauthorized.
+  ///
+  /// In fr, this message translates to:
+  /// **'Non autorisé'**
+  String get unauthorized;
 }
 
 class _AppLocalizationsDelegate

@@ -30,6 +30,7 @@ import '../../features/inventory/presentation/screens/inventory_counts_screen.da
 import '../../features/inventory/presentation/screens/new_inventory_count_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_counting_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/conflicts/presentation/screens/conflict_screen.dart';
 import 'main_shell.dart';
 
 // Clés de navigation pour chaque branche
@@ -303,6 +304,10 @@ class AppRouter {
                     path: 'payment-types',
                     builder: (context, state) =>
                         const PaymentSettingsScreen(),
+                  ),
+                  GoRoute(
+                    path: 'conflicts',
+                    builder: (context, state) => const ConflictScreen(),
                   ),
                 ],
               ),

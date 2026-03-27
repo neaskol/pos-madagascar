@@ -1989,4 +1989,49 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get settingsDebugLogsDesc =>
       'Enregistrer les logs pour le support technique';
+
+  @override
+  String get conflicts => 'Conflits de synchronisation';
+
+  @override
+  String get noConflicts => 'Aucun conflit détecté';
+
+  @override
+  String get pending => 'En attente';
+
+  @override
+  String get resolved => 'Résolus';
+
+  @override
+  String get localValue => 'Valeur locale';
+
+  @override
+  String get remoteValue => 'Valeur distante';
+
+  @override
+  String get localUpdatedAt => 'Modifié localement';
+
+  @override
+  String get remoteUpdatedAt => 'Modifié à distance';
+
+  @override
+  String get keepLocal => 'Garder local';
+
+  @override
+  String get keepRemote => 'Garder distant';
+
+  @override
+  String get conflictResolved => 'Conflit résolu';
+
+  @override
+  String get resolvedAt => 'Résolu le';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get status => 'Statut';
+
+  @override
+  String get unauthorized => 'Non autorisé';
 }
