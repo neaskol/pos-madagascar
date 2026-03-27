@@ -61,4 +61,11 @@ class PosDeviceDao extends DatabaseAccessor<AppDatabase>
   /// Stream pour écouter les appareils d'un magasin
   Stream<List<PosDevice>> watchPosDevicesByStore(String storeId) =>
       getPosDevicesByStore(storeId).watch();
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un appareil POS depuis Supabase
+  Future<void> upsertPosDevice(PosDevicesCompanion device) async {
+    await into(posDevices).insertOnConflictUpdate(device);
+  }
 }

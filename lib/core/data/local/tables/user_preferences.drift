@@ -1,0 +1,34 @@
+-- User Preferences (thème, langue, notifications, etc.)
+CREATE TABLE user_preferences (
+  id TEXT PRIMARY KEY NOT NULL,
+  user_id TEXT NOT NULL,
+
+  -- Apparence
+  theme_mode TEXT NOT NULL DEFAULT 'system', -- 'light', 'dark', 'system'
+
+  -- Langue
+  locale TEXT NOT NULL DEFAULT 'fr', -- 'fr' ou 'mg'
+
+  -- Notifications
+  enable_notifications INTEGER NOT NULL DEFAULT 1,
+  enable_low_stock_alerts INTEGER NOT NULL DEFAULT 1,
+  enable_sales_sound INTEGER NOT NULL DEFAULT 1,
+  enable_vibration INTEGER NOT NULL DEFAULT 1,
+
+  -- POS Settings
+  auto_print_receipt INTEGER NOT NULL DEFAULT 0,
+  quick_checkout_mode INTEGER NOT NULL DEFAULT 0,
+  show_product_images INTEGER NOT NULL DEFAULT 1,
+
+  -- Display
+  font_scale REAL NOT NULL DEFAULT 1.0, -- 0.8 à 1.2
+  compact_view INTEGER NOT NULL DEFAULT 0,
+
+  -- Sync
+  auto_sync INTEGER NOT NULL DEFAULT 1,
+  sync_frequency_minutes INTEGER NOT NULL DEFAULT 30,
+
+  -- Metadata
+  updated_at INTEGER NOT NULL,
+  synced INTEGER NOT NULL DEFAULT 0
+) AS UserPreference;

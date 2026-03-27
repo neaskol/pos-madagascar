@@ -99,4 +99,16 @@ class ShiftDao extends DatabaseAccessor<AppDatabase> with _$ShiftDaoMixin {
     }
     return (payIn: payIn, payOut: payOut);
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un shift depuis Supabase
+  Future<void> upsertShift(ShiftsCompanion shift) async {
+    await into(shifts).insertOnConflictUpdate(shift);
+  }
+
+  /// Upsert un cash_movement depuis Supabase
+  Future<void> upsertCashMovement(CashMovementsCompanion movement) async {
+    await into(cashMovements).insertOnConflictUpdate(movement);
+  }
 }

@@ -313,4 +313,21 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
           ..orderBy([(g) => OrderingTerm.asc(g.position)]))
         .watch();
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) une page personnalisée depuis Supabase
+  Future<void> upsertCustomPage(CustomProductPagesCompanion page) async {
+    await into(customProductPages).insertOnConflictUpdate(page);
+  }
+
+  /// Upsert un custom_page_item depuis Supabase
+  Future<void> upsertCustomPageItem(CustomPageItemsCompanion item) async {
+    await into(customPageItems).insertOnConflictUpdate(item);
+  }
+
+  /// Upsert un custom_page_category_grid depuis Supabase
+  Future<void> upsertCustomPageCategoryGrid(CustomPageCategoryGridsCompanion grid) async {
+    await into(customPageCategoryGrids).insertOnConflictUpdate(grid);
+  }
 }

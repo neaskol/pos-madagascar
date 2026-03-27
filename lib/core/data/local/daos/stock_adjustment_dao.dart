@@ -53,4 +53,16 @@ class StockAdjustmentDao extends DatabaseAccessor<AppDatabase>
         .write(const StockAdjustmentItemsCompanion(synced: Value(1)));
     return rowsAffected > 0;
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un ajustement de stock depuis Supabase
+  Future<void> upsertStockAdjustment(StockAdjustmentsCompanion adjustment) async {
+    await into(stockAdjustments).insertOnConflictUpdate(adjustment);
+  }
+
+  /// Upsert un stock_adjustment_item depuis Supabase
+  Future<void> upsertStockAdjustmentItem(StockAdjustmentItemsCompanion item) async {
+    await into(stockAdjustmentItems).insertOnConflictUpdate(item);
+  }
 }

@@ -36,4 +36,11 @@ class InventoryHistoryDao extends DatabaseAccessor<AppDatabase>
         .write(const InventoryHistoryCompanion(synced: Value(1)));
     return rowsAffected > 0;
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un mouvement d'inventaire depuis Supabase
+  Future<void> upsertInventoryHistory(InventoryHistoryCompanion history) async {
+    await into(inventoryHistory).insertOnConflictUpdate(history);
+  }
 }

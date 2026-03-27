@@ -46,4 +46,11 @@ class OpenTicketDao extends DatabaseAccessor<AppDatabase>
     final tickets = await getOpenTicketsByStore(storeId).get();
     return tickets.length;
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un ticket ouvert depuis Supabase
+  Future<void> upsertOpenTicket(OpenTicketsCompanion ticket) async {
+    await into(openTickets).insertOnConflictUpdate(ticket);
+  }
 }

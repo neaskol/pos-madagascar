@@ -848,7 +848,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileMoneySettingsSaved => 'Réglages Mobile Money enregistrés';
 
   @override
-  String get settingsTitle => 'Réglages';
+  String get settingsTitle => 'Paramètres';
 
   @override
   String get settingsPaymentTypes => 'Types de paiement';
@@ -1728,4 +1728,265 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reportsComingSoon => 'Les rapports arrivent bientôt';
+
+  @override
+  String get settingsAppearance => 'Apparence';
+
+  @override
+  String get settingsTheme => 'Thème';
+
+  @override
+  String get settingsThemeLight => 'Clair';
+
+  @override
+  String get settingsThemeDark => 'Sombre';
+
+  @override
+  String get settingsThemeSystem => 'Système';
+
+  @override
+  String get settingsThemeDesc => 'Choisissez le thème de l\'application';
+
+  @override
+  String get settingsFontSize => 'Taille de police';
+
+  @override
+  String get settingsFontSizeSmall => 'Petit';
+
+  @override
+  String get settingsFontSizeNormal => 'Normal';
+
+  @override
+  String get settingsFontSizeLarge => 'Grand';
+
+  @override
+  String get settingsFontSizeDesc => 'Ajuster la taille du texte';
+
+  @override
+  String get settingsCompactView => 'Vue compacte';
+
+  @override
+  String get settingsCompactViewDesc =>
+      'Afficher plus d\'informations à l\'écran';
+
+  @override
+  String get settingsLanguage => 'Langue';
+
+  @override
+  String get settingsLanguageInterface => 'Langue de l\'interface';
+
+  @override
+  String get settingsLanguageInterfaceDesc =>
+      'Modifier la langue de l\'application';
+
+  @override
+  String get settingsLanguageFrench => 'Français';
+
+  @override
+  String get settingsLanguageMalagasy => 'Malagasy';
+
+  @override
+  String get settingsLanguageReceipt => 'Langue des reçus';
+
+  @override
+  String get settingsLanguageReceiptDesc =>
+      'Langue utilisée sur les reçus imprimés';
+
+  @override
+  String get settingsNotifications => 'Notifications';
+
+  @override
+  String get settingsEnableNotifications => 'Activer les notifications';
+
+  @override
+  String get settingsEnableNotificationsDesc =>
+      'Recevoir des alertes importantes';
+
+  @override
+  String get settingsLowStockAlerts => 'Alertes stock bas';
+
+  @override
+  String get settingsLowStockAlertsDesc =>
+      'Notification quand un produit est en rupture';
+
+  @override
+  String get settingsSalesSound => 'Son des ventes';
+
+  @override
+  String get settingsSalesSoundDesc => 'Jouer un son à chaque vente';
+
+  @override
+  String get settingsVibration => 'Vibration';
+
+  @override
+  String get settingsVibrationDesc => 'Vibrer lors des actions importantes';
+
+  @override
+  String get settingsPOS => 'Point de vente';
+
+  @override
+  String get settingsAutoPrintReceipt => 'Impression automatique';
+
+  @override
+  String get settingsAutoPrintReceiptDesc =>
+      'Imprimer le reçu après chaque vente';
+
+  @override
+  String get settingsQuickCheckout => 'Paiement rapide';
+
+  @override
+  String get settingsQuickCheckoutDesc =>
+      'Éviter l\'écran de confirmation de paiement';
+
+  @override
+  String get settingsShowProductImages => 'Photos des produits';
+
+  @override
+  String get settingsShowProductImagesDesc =>
+      'Afficher les images dans la grille de caisse';
+
+  @override
+  String get settingsSync => 'Synchronisation';
+
+  @override
+  String get settingsAutoSync => 'Synchronisation automatique';
+
+  @override
+  String get settingsAutoSyncDesc =>
+      'Synchroniser automatiquement avec le cloud';
+
+  @override
+  String get settingsSyncFrequency => 'Fréquence de synchronisation';
+
+  @override
+  String get settingsSyncFrequency1min => 'Toutes les minutes';
+
+  @override
+  String get settingsSyncFrequency5min => 'Toutes les 5 minutes';
+
+  @override
+  String get settingsSyncFrequency30min => 'Toutes les 30 minutes';
+
+  @override
+  String get settingsSyncFrequency1hour => 'Toutes les heures';
+
+  @override
+  String get settingsSyncNow => 'Synchroniser maintenant';
+
+  @override
+  String get settingsSyncInProgress => 'Synchronisation en cours...';
+
+  @override
+  String get settingsSyncSuccess => 'Synchronisation réussie';
+
+  @override
+  String get settingsSyncError => 'Erreur de synchronisation';
+
+  @override
+  String settingsLastSync(String time) {
+    return 'Dernière synchro : $time';
+  }
+
+  @override
+  String get settingsAbout => 'À propos';
+
+  @override
+  String get settingsVersion => 'Version';
+
+  @override
+  String get settingsBuildNumber => 'Build';
+
+  @override
+  String get settingsPrivacyPolicy => 'Politique de confidentialité';
+
+  @override
+  String get settingsTermsOfService => 'Conditions d\'utilisation';
+
+  @override
+  String get settingsLicenses => 'Licences open source';
+
+  @override
+  String get settingsRateApp => 'Évaluer l\'application';
+
+  @override
+  String get settingsShareApp => 'Partager l\'application';
+
+  @override
+  String get settingsContactSupport => 'Contacter le support';
+
+  @override
+  String get settingsAccount => 'Compte';
+
+  @override
+  String get settingsEditProfile => 'Modifier le profil';
+
+  @override
+  String get settingsChangePassword => 'Changer le mot de passe';
+
+  @override
+  String get settingsLogout => 'Se déconnecter';
+
+  @override
+  String get settingsLogoutConfirm =>
+      'Êtes-vous sûr de vouloir vous déconnecter ?';
+
+  @override
+  String get settingsDeleteAccount => 'Supprimer le compte';
+
+  @override
+  String get settingsDeleteAccountWarning =>
+      'Cette action est irréversible. Toutes vos données seront supprimées.';
+
+  @override
+  String get settingsData => 'Données';
+
+  @override
+  String get settingsExportData => 'Exporter les données';
+
+  @override
+  String get settingsExportDataDesc => 'Télécharger toutes vos données en CSV';
+
+  @override
+  String get settingsClearCache => 'Vider le cache';
+
+  @override
+  String get settingsClearCacheDesc => 'Libérer de l\'espace de stockage';
+
+  @override
+  String get settingsClearCacheSuccess => 'Cache vidé avec succès';
+
+  @override
+  String get settingsSecurity => 'Sécurité';
+
+  @override
+  String get settingsRequirePin => 'Exiger le code PIN';
+
+  @override
+  String get settingsRequirePinDesc =>
+      'Demander le PIN à chaque ouverture de l\'app';
+
+  @override
+  String get settingsChangePin => 'Changer le code PIN';
+
+  @override
+  String get settingsBiometric => 'Déverrouillage biométrique';
+
+  @override
+  String get settingsBiometricDesc => 'Utiliser l\'empreinte ou Face ID';
+
+  @override
+  String get settingsAdvanced => 'Avancé';
+
+  @override
+  String get settingsDeveloperMode => 'Mode développeur';
+
+  @override
+  String get settingsDeveloperModeDesc => 'Afficher les options de débogage';
+
+  @override
+  String get settingsDebugLogs => 'Logs de débogage';
+
+  @override
+  String get settingsDebugLogsDesc =>
+      'Enregistrer les logs pour le support technique';
 }

@@ -67,4 +67,11 @@ class DiningOptionDao extends DatabaseAccessor<AppDatabase>
   /// Stream pour écouter les options d'un magasin
   Stream<List<DiningOption>> watchDiningOptionsByStore(String storeId) =>
       getDiningOptionsByStore(storeId).watch();
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) une option de service depuis Supabase
+  Future<void> upsertDiningOption(DiningOptionsCompanion option) async {
+    await into(diningOptions).insertOnConflictUpdate(option);
+  }
 }

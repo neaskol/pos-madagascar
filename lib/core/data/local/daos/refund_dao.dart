@@ -55,4 +55,16 @@ class RefundDao extends DatabaseAccessor<AppDatabase> with _$RefundDaoMixin {
         .write(const RefundItemsCompanion(synced: Value(1)));
     return rowsAffected > 0;
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un remboursement depuis Supabase
+  Future<void> upsertRefund(RefundsCompanion refund) async {
+    await into(refunds).insertOnConflictUpdate(refund);
+  }
+
+  /// Upsert un refund_item depuis Supabase
+  Future<void> upsertRefundItem(RefundItemsCompanion item) async {
+    await into(refundItems).insertOnConflictUpdate(item);
+  }
 }

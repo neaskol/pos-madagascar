@@ -1724,4 +1724,258 @@ class AppLocalizationsMg extends AppLocalizations {
 
   @override
   String get reportsComingSoon => 'Ho avy tsy ho ela ny tatitra';
+
+  @override
+  String get settingsAppearance => 'Endrika';
+
+  @override
+  String get settingsTheme => 'Loko';
+
+  @override
+  String get settingsThemeLight => 'Mazava';
+
+  @override
+  String get settingsThemeDark => 'Maizina';
+
+  @override
+  String get settingsThemeSystem => 'Rafitra';
+
+  @override
+  String get settingsThemeDesc => 'Safidio ny loko an\'ny fampiharana';
+
+  @override
+  String get settingsFontSize => 'Haben\'ny litera';
+
+  @override
+  String get settingsFontSizeSmall => 'Kely';
+
+  @override
+  String get settingsFontSizeNormal => 'Antonony';
+
+  @override
+  String get settingsFontSizeLarge => 'Lehibe';
+
+  @override
+  String get settingsFontSizeDesc => 'Ovao ny haben\'ny soratra';
+
+  @override
+  String get settingsCompactView => 'Fijery voafehy';
+
+  @override
+  String get settingsCompactViewDesc => 'Asehoy bebe kokoa ny fampahalalana';
+
+  @override
+  String get settingsLanguage => 'Fiteny';
+
+  @override
+  String get settingsLanguageInterface => 'Fiteny fampiharana';
+
+  @override
+  String get settingsLanguageInterfaceDesc => 'Ovao ny fiteny ampiasaina';
+
+  @override
+  String get settingsLanguageFrench => 'Frantsay';
+
+  @override
+  String get settingsLanguageMalagasy => 'Malagasy';
+
+  @override
+  String get settingsLanguageReceipt => 'Fiteny amin\'ny tapakila';
+
+  @override
+  String get settingsLanguageReceiptDesc =>
+      'Fiteny ampiasaina amin\'ny fanontana';
+
+  @override
+  String get settingsNotifications => 'Fampandrenesana';
+
+  @override
+  String get settingsEnableNotifications => 'Hamela ny fampandrenesana';
+
+  @override
+  String get settingsEnableNotificationsDesc =>
+      'Handray fampandrenesana manan-danja';
+
+  @override
+  String get settingsLowStockAlerts => 'Fampandrenesana tahiry';
+
+  @override
+  String get settingsLowStockAlertsDesc =>
+      'Fampandrenesana rehefa lany ny entana';
+
+  @override
+  String get settingsSalesSound => 'Feon\'ny varotra';
+
+  @override
+  String get settingsSalesSoundDesc => 'Hampanenoana feo isaky ny varotra';
+
+  @override
+  String get settingsVibration => 'Hovitrovitra';
+
+  @override
+  String get settingsVibrationDesc => 'Hovitrovitra amin\'nyasa lehibe';
+
+  @override
+  String get settingsPOS => 'Toeram-barotra';
+
+  @override
+  String get settingsAutoPrintReceipt => 'Fanontana mandeha ho azy';
+
+  @override
+  String get settingsAutoPrintReceiptDesc =>
+      'Manonta tapakila aorian\'ny varotra';
+
+  @override
+  String get settingsQuickCheckout => 'Fandoavam-bola haingana';
+
+  @override
+  String get settingsQuickCheckoutDesc => 'Tsy mila fanamafisana';
+
+  @override
+  String get settingsShowProductImages => 'Sarin\'ny entana';
+
+  @override
+  String get settingsShowProductImagesDesc =>
+      'Asehoy ny sary ao amin\'ny varotra';
+
+  @override
+  String get settingsSync => 'Fampifanarahana';
+
+  @override
+  String get settingsAutoSync => 'Fampifanarahana mandeha ho azy';
+
+  @override
+  String get settingsAutoSyncDesc => 'Mifanaraka ho azy amin\'ny rahona';
+
+  @override
+  String get settingsSyncFrequency => 'Fahatsiana fampifanarahana';
+
+  @override
+  String get settingsSyncFrequency1min => 'Isaky ny minitra';
+
+  @override
+  String get settingsSyncFrequency5min => 'Isaky ny 5 minitra';
+
+  @override
+  String get settingsSyncFrequency30min => 'Isaky ny 30 minitra';
+
+  @override
+  String get settingsSyncFrequency1hour => 'Isaky ny ora';
+
+  @override
+  String get settingsSyncNow => 'Mifanaraha izao';
+
+  @override
+  String get settingsSyncInProgress => 'Eo am-pifanarahana...';
+
+  @override
+  String get settingsSyncSuccess => 'Vita ny fampifanarahana';
+
+  @override
+  String get settingsSyncError => 'Nisy olana';
+
+  @override
+  String settingsLastSync(String time) {
+    return 'Fampifanarahana farany : $time';
+  }
+
+  @override
+  String get settingsAbout => 'Momba';
+
+  @override
+  String get settingsVersion => 'Version';
+
+  @override
+  String get settingsBuildNumber => 'Build';
+
+  @override
+  String get settingsPrivacyPolicy => 'Politika momba ny tsiambaratelo';
+
+  @override
+  String get settingsTermsOfService => 'Fepetra fampiasana';
+
+  @override
+  String get settingsLicenses => 'Lisansa misokatra';
+
+  @override
+  String get settingsRateApp => 'Omeo naoty';
+
+  @override
+  String get settingsShareApp => 'Zarao ny fampiharana';
+
+  @override
+  String get settingsContactSupport => 'Mifandraisa amin\'ny fanohanana';
+
+  @override
+  String get settingsAccount => 'Kaonty';
+
+  @override
+  String get settingsEditProfile => 'Hanova ny mombamomba';
+
+  @override
+  String get settingsChangePassword => 'Hanova ny teny miafina';
+
+  @override
+  String get settingsLogout => 'Hivoaka';
+
+  @override
+  String get settingsLogoutConfirm => 'Azo antoka ve fa te hivoaka ianao?';
+
+  @override
+  String get settingsDeleteAccount => 'Hamafa ny kaonty';
+
+  @override
+  String get settingsDeleteAccountWarning =>
+      'Tsy azo averina izany. Ho fafana ny angona rehetra.';
+
+  @override
+  String get settingsData => 'Angona';
+
+  @override
+  String get settingsExportData => 'Avoaka ny angona';
+
+  @override
+  String get settingsExportDataDesc => 'Alao ny angona rehetra CSV';
+
+  @override
+  String get settingsClearCache => 'Fanadio ny cache';
+
+  @override
+  String get settingsClearCacheDesc => 'Manafaka toerana';
+
+  @override
+  String get settingsClearCacheSuccess => 'Voafafa ny cache';
+
+  @override
+  String get settingsSecurity => 'Fiarovana';
+
+  @override
+  String get settingsRequirePin => 'Mitaky kaody PIN';
+
+  @override
+  String get settingsRequirePinDesc => 'Mangataka PIN isaky ny misokatra';
+
+  @override
+  String get settingsChangePin => 'Hanova ny kaody PIN';
+
+  @override
+  String get settingsBiometric => 'Fanokafana biolojika';
+
+  @override
+  String get settingsBiometricDesc => 'Mampiasa fingerprint na Face ID';
+
+  @override
+  String get settingsAdvanced => 'Avo lenta';
+
+  @override
+  String get settingsDeveloperMode => 'Mode mpamorona';
+
+  @override
+  String get settingsDeveloperModeDesc => 'Asehoy ny safidy debug';
+
+  @override
+  String get settingsDebugLogs => 'Logs debug';
+
+  @override
+  String get settingsDebugLogsDesc => 'Mitahiry logs ho an\'ny fanohanana';
 }

@@ -1721,7 +1721,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Réglages'**
+  /// **'Paramètres'**
   String get settingsTitle;
 
   /// No description provided for @settingsPaymentTypes.
@@ -3354,6 +3354,498 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Les rapports arrivent bientôt'**
   String get reportsComingSoon;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In fr, this message translates to:
+  /// **'Apparence'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsTheme.
+  ///
+  /// In fr, this message translates to:
+  /// **'Thème'**
+  String get settingsTheme;
+
+  /// No description provided for @settingsThemeLight.
+  ///
+  /// In fr, this message translates to:
+  /// **'Clair'**
+  String get settingsThemeLight;
+
+  /// No description provided for @settingsThemeDark.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sombre'**
+  String get settingsThemeDark;
+
+  /// No description provided for @settingsThemeSystem.
+  ///
+  /// In fr, this message translates to:
+  /// **'Système'**
+  String get settingsThemeSystem;
+
+  /// No description provided for @settingsThemeDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisissez le thème de l\'application'**
+  String get settingsThemeDesc;
+
+  /// No description provided for @settingsFontSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'Taille de police'**
+  String get settingsFontSize;
+
+  /// No description provided for @settingsFontSizeSmall.
+  ///
+  /// In fr, this message translates to:
+  /// **'Petit'**
+  String get settingsFontSizeSmall;
+
+  /// No description provided for @settingsFontSizeNormal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Normal'**
+  String get settingsFontSizeNormal;
+
+  /// No description provided for @settingsFontSizeLarge.
+  ///
+  /// In fr, this message translates to:
+  /// **'Grand'**
+  String get settingsFontSizeLarge;
+
+  /// No description provided for @settingsFontSizeDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajuster la taille du texte'**
+  String get settingsFontSizeDesc;
+
+  /// No description provided for @settingsCompactView.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vue compacte'**
+  String get settingsCompactView;
+
+  /// No description provided for @settingsCompactViewDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher plus d\'informations à l\'écran'**
+  String get settingsCompactViewDesc;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Langue'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsLanguageInterface.
+  ///
+  /// In fr, this message translates to:
+  /// **'Langue de l\'interface'**
+  String get settingsLanguageInterface;
+
+  /// No description provided for @settingsLanguageInterfaceDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier la langue de l\'application'**
+  String get settingsLanguageInterfaceDesc;
+
+  /// No description provided for @settingsLanguageFrench.
+  ///
+  /// In fr, this message translates to:
+  /// **'Français'**
+  String get settingsLanguageFrench;
+
+  /// No description provided for @settingsLanguageMalagasy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Malagasy'**
+  String get settingsLanguageMalagasy;
+
+  /// No description provided for @settingsLanguageReceipt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Langue des reçus'**
+  String get settingsLanguageReceipt;
+
+  /// No description provided for @settingsLanguageReceiptDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Langue utilisée sur les reçus imprimés'**
+  String get settingsLanguageReceiptDesc;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notifications'**
+  String get settingsNotifications;
+
+  /// No description provided for @settingsEnableNotifications.
+  ///
+  /// In fr, this message translates to:
+  /// **'Activer les notifications'**
+  String get settingsEnableNotifications;
+
+  /// No description provided for @settingsEnableNotificationsDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevoir des alertes importantes'**
+  String get settingsEnableNotificationsDesc;
+
+  /// No description provided for @settingsLowStockAlerts.
+  ///
+  /// In fr, this message translates to:
+  /// **'Alertes stock bas'**
+  String get settingsLowStockAlerts;
+
+  /// No description provided for @settingsLowStockAlertsDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Notification quand un produit est en rupture'**
+  String get settingsLowStockAlertsDesc;
+
+  /// No description provided for @settingsSalesSound.
+  ///
+  /// In fr, this message translates to:
+  /// **'Son des ventes'**
+  String get settingsSalesSound;
+
+  /// No description provided for @settingsSalesSoundDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jouer un son à chaque vente'**
+  String get settingsSalesSoundDesc;
+
+  /// No description provided for @settingsVibration.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vibration'**
+  String get settingsVibration;
+
+  /// No description provided for @settingsVibrationDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vibrer lors des actions importantes'**
+  String get settingsVibrationDesc;
+
+  /// No description provided for @settingsPOS.
+  ///
+  /// In fr, this message translates to:
+  /// **'Point de vente'**
+  String get settingsPOS;
+
+  /// No description provided for @settingsAutoPrintReceipt.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impression automatique'**
+  String get settingsAutoPrintReceipt;
+
+  /// No description provided for @settingsAutoPrintReceiptDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Imprimer le reçu après chaque vente'**
+  String get settingsAutoPrintReceiptDesc;
+
+  /// No description provided for @settingsQuickCheckout.
+  ///
+  /// In fr, this message translates to:
+  /// **'Paiement rapide'**
+  String get settingsQuickCheckout;
+
+  /// No description provided for @settingsQuickCheckoutDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Éviter l\'écran de confirmation de paiement'**
+  String get settingsQuickCheckoutDesc;
+
+  /// No description provided for @settingsShowProductImages.
+  ///
+  /// In fr, this message translates to:
+  /// **'Photos des produits'**
+  String get settingsShowProductImages;
+
+  /// No description provided for @settingsShowProductImagesDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher les images dans la grille de caisse'**
+  String get settingsShowProductImagesDesc;
+
+  /// No description provided for @settingsSync.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation'**
+  String get settingsSync;
+
+  /// No description provided for @settingsAutoSync.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation automatique'**
+  String get settingsAutoSync;
+
+  /// No description provided for @settingsAutoSyncDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchroniser automatiquement avec le cloud'**
+  String get settingsAutoSyncDesc;
+
+  /// No description provided for @settingsSyncFrequency.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fréquence de synchronisation'**
+  String get settingsSyncFrequency;
+
+  /// No description provided for @settingsSyncFrequency1min.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les minutes'**
+  String get settingsSyncFrequency1min;
+
+  /// No description provided for @settingsSyncFrequency5min.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les 5 minutes'**
+  String get settingsSyncFrequency5min;
+
+  /// No description provided for @settingsSyncFrequency30min.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les 30 minutes'**
+  String get settingsSyncFrequency30min;
+
+  /// No description provided for @settingsSyncFrequency1hour.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toutes les heures'**
+  String get settingsSyncFrequency1hour;
+
+  /// No description provided for @settingsSyncNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchroniser maintenant'**
+  String get settingsSyncNow;
+
+  /// No description provided for @settingsSyncInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation en cours...'**
+  String get settingsSyncInProgress;
+
+  /// No description provided for @settingsSyncSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Synchronisation réussie'**
+  String get settingsSyncSuccess;
+
+  /// No description provided for @settingsSyncError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur de synchronisation'**
+  String get settingsSyncError;
+
+  /// No description provided for @settingsLastSync.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière synchro : {time}'**
+  String settingsLastSync(String time);
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In fr, this message translates to:
+  /// **'À propos'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsVersion.
+  ///
+  /// In fr, this message translates to:
+  /// **'Version'**
+  String get settingsVersion;
+
+  /// No description provided for @settingsBuildNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'Build'**
+  String get settingsBuildNumber;
+
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In fr, this message translates to:
+  /// **'Politique de confidentialité'**
+  String get settingsPrivacyPolicy;
+
+  /// No description provided for @settingsTermsOfService.
+  ///
+  /// In fr, this message translates to:
+  /// **'Conditions d\'utilisation'**
+  String get settingsTermsOfService;
+
+  /// No description provided for @settingsLicenses.
+  ///
+  /// In fr, this message translates to:
+  /// **'Licences open source'**
+  String get settingsLicenses;
+
+  /// No description provided for @settingsRateApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Évaluer l\'application'**
+  String get settingsRateApp;
+
+  /// No description provided for @settingsShareApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager l\'application'**
+  String get settingsShareApp;
+
+  /// No description provided for @settingsContactSupport.
+  ///
+  /// In fr, this message translates to:
+  /// **'Contacter le support'**
+  String get settingsContactSupport;
+
+  /// No description provided for @settingsAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte'**
+  String get settingsAccount;
+
+  /// No description provided for @settingsEditProfile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modifier le profil'**
+  String get settingsEditProfile;
+
+  /// No description provided for @settingsChangePassword.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer le mot de passe'**
+  String get settingsChangePassword;
+
+  /// No description provided for @settingsLogout.
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get settingsLogout;
+
+  /// No description provided for @settingsLogoutConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Êtes-vous sûr de vouloir vous déconnecter ?'**
+  String get settingsLogoutConfirm;
+
+  /// No description provided for @settingsDeleteAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer le compte'**
+  String get settingsDeleteAccount;
+
+  /// No description provided for @settingsDeleteAccountWarning.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette action est irréversible. Toutes vos données seront supprimées.'**
+  String get settingsDeleteAccountWarning;
+
+  /// No description provided for @settingsData.
+  ///
+  /// In fr, this message translates to:
+  /// **'Données'**
+  String get settingsData;
+
+  /// No description provided for @settingsExportData.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exporter les données'**
+  String get settingsExportData;
+
+  /// No description provided for @settingsExportDataDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Télécharger toutes vos données en CSV'**
+  String get settingsExportDataDesc;
+
+  /// No description provided for @settingsClearCache.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vider le cache'**
+  String get settingsClearCache;
+
+  /// No description provided for @settingsClearCacheDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Libérer de l\'espace de stockage'**
+  String get settingsClearCacheDesc;
+
+  /// No description provided for @settingsClearCacheSuccess.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cache vidé avec succès'**
+  String get settingsClearCacheSuccess;
+
+  /// No description provided for @settingsSecurity.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sécurité'**
+  String get settingsSecurity;
+
+  /// No description provided for @settingsRequirePin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Exiger le code PIN'**
+  String get settingsRequirePin;
+
+  /// No description provided for @settingsRequirePinDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demander le PIN à chaque ouverture de l\'app'**
+  String get settingsRequirePinDesc;
+
+  /// No description provided for @settingsChangePin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer le code PIN'**
+  String get settingsChangePin;
+
+  /// No description provided for @settingsBiometric.
+  ///
+  /// In fr, this message translates to:
+  /// **'Déverrouillage biométrique'**
+  String get settingsBiometric;
+
+  /// No description provided for @settingsBiometricDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser l\'empreinte ou Face ID'**
+  String get settingsBiometricDesc;
+
+  /// No description provided for @settingsAdvanced.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avancé'**
+  String get settingsAdvanced;
+
+  /// No description provided for @settingsDeveloperMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mode développeur'**
+  String get settingsDeveloperMode;
+
+  /// No description provided for @settingsDeveloperModeDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Afficher les options de débogage'**
+  String get settingsDeveloperModeDesc;
+
+  /// No description provided for @settingsDebugLogs.
+  ///
+  /// In fr, this message translates to:
+  /// **'Logs de débogage'**
+  String get settingsDebugLogs;
+
+  /// No description provided for @settingsDebugLogsDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrer les logs pour le support technique'**
+  String get settingsDebugLogsDesc;
 }
 
 class _AppLocalizationsDelegate

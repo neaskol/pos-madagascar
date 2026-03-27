@@ -29,6 +29,7 @@ import '../../features/inventory/presentation/screens/adjustment_list_screen.dar
 import '../../features/inventory/presentation/screens/inventory_counts_screen.dart';
 import '../../features/inventory/presentation/screens/new_inventory_count_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_counting_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 import 'main_shell.dart';
 
 // Clés de navigation pour chaque branche
@@ -296,7 +297,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/settings',
-                builder: (context, state) => const _SettingsScreen(),
+                builder: (context, state) => const SettingsScreen(),
                 routes: [
                   GoRoute(
                     path: 'payment-types',
@@ -342,31 +343,6 @@ class _ReportsPlaceholder extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Placeholder pour les Réglages (Sprint 6)
-class _SettingsScreen extends StatelessWidget {
-  const _SettingsScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Réglages'),
-      ),
-      body: ListView(
-        children: [
-          ListTile(
-            leading: const Icon(Icons.payment),
-            title: const Text('Types de paiement'),
-            subtitle: const Text('MVola, Orange Money, Espèces'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => context.push('/settings/payment-types'),
-          ),
-        ],
       ),
     );
   }

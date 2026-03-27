@@ -24,6 +24,7 @@ import 'daos/pos_device_dao.dart';
 import 'daos/stock_adjustment_dao.dart';
 import 'daos/inventory_history_dao.dart';
 import 'daos/inventory_count_dao.dart';
+import 'daos/user_preferences_dao.dart';
 
 // Export DAOs for use in repositories
 export 'daos/store_dao.dart';
@@ -45,6 +46,7 @@ export 'daos/pos_device_dao.dart';
 export 'daos/stock_adjustment_dao.dart';
 export 'daos/inventory_history_dao.dart';
 export 'daos/inventory_count_dao.dart';
+export 'daos/user_preferences_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -76,6 +78,7 @@ part 'app_database.g.dart';
     'tables/inventory_history.drift',
     'tables/inventory_counts.drift',
     'tables/inventory_count_items.drift',
+    'tables/user_preferences.drift',
   },
   daos: [
     StoreDao,
@@ -97,13 +100,14 @@ part 'app_database.g.dart';
     StockAdjustmentDao,
     InventoryHistoryDao,
     InventoryCountDao,
+    UserPreferencesDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -113,6 +117,10 @@ class AppDatabase extends _$AppDatabase {
         onUpgrade: (Migrator m, int from, int to) async {
           if (from < 2) {
             // v2: Ajout des tables ventes, shifts, tickets, remboursements, dining, pos_devices
+            await m.createAll();
+          }
+          if (from < 3) {
+            // v3: Ajout de la table user_preferences
             await m.createAll();
           }
         },

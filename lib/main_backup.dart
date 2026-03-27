@@ -42,7 +42,6 @@ import 'features/inventory/data/repositories/stock_adjustment_repository.dart';
 import 'features/inventory/presentation/bloc/stock_adjustment_bloc.dart';
 import 'features/inventory/data/repositories/inventory_count_repository.dart';
 import 'features/inventory/presentation/bloc/inventory_count_bloc.dart';
-import 'features/settings/presentation/bloc/settings_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -223,13 +222,6 @@ class _MyAppState extends State<MyApp> {
               syncService: context.read<SyncService>(),
             )..add(AuthCheckRequested()),
           ),
-          // BLoC pour les paramètres utilisateur
-          BlocProvider<SettingsBloc>(
-            create: (context) => SettingsBloc(
-              preferencesDao: widget.database.userPreferencesDao,
-              syncService: context.read<SyncService>(),
-            ),
-          ),
           // BLoC pour les catégories
           BlocProvider<CategoryBloc>(
             create: (context) => CategoryBloc(
@@ -314,62 +306,29 @@ class _MyAppState extends State<MyApp> {
             },
           ),
         ],
-        child: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, authState) {
-            // Charger les préférences utilisateur si authentifié
-            if (authState is AuthAuthenticated) {
-              final settingsBloc = context.read<SettingsBloc>();
-              if (settingsBloc.state is SettingsInitial) {
-                settingsBloc.add(LoadSettings(authState.user.id));
-              }
-            }
+        child: MaterialApp.router(
+          title: 'POS Madagascar',
+          debugShowCheckedModeBanner: false,
 
-            return BlocBuilder<SettingsBloc, SettingsState>(
-              builder: (context, settingsState) {
-                // Déterminer le thème et la langue depuis les préférences
-                ThemeMode themeMode = ThemeMode.system;
-                Locale locale = const Locale('fr');
+          // Thème
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: ThemeMode.system,
 
-                if (settingsState is SettingsLoaded) {
-                  // Appliquer le thème sélectionné
-                  themeMode = settingsState.preferences.themeMode == 'light'
-                      ? ThemeMode.light
-                      : settingsState.preferences.themeMode == 'dark'
-                          ? ThemeMode.dark
-                          : ThemeMode.system;
+          // Localisation
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('fr'), // Français
+            Locale('mg'), // Malagasy
+          ],
 
-                  // Appliquer la langue sélectionnée
-                  locale = Locale(settingsState.preferences.locale);
-                }
-
-                return MaterialApp.router(
-                  title: 'POS Madagascar',
-                  debugShowCheckedModeBanner: false,
-
-                  // Thème dynamique
-                  theme: AppTheme.light,
-                  darkTheme: AppTheme.dark,
-                  themeMode: themeMode,
-
-                  // Localisation dynamique
-                  locale: locale,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: const [
-                    Locale('fr'), // Français
-                    Locale('mg'), // Malagasy
-                  ],
-
-                  // Router
-                  routerConfig: AppRouter.router,
-                );
-              },
-            );
-          },
+          // Router
+          routerConfig: AppRouter.router,
         ),
       ),
     );

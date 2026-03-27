@@ -165,4 +165,16 @@ class CreditDao extends DatabaseAccessor<AppDatabase> with _$CreditDaoMixin {
     final payments = await getCreditPayments(creditId);
     return payments.fold<int>(0, (sum, p) => sum + p.amount);
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un crédit depuis Supabase
+  Future<void> upsertCredit(CreditsCompanion credit) async {
+    await into(credits).insertOnConflictUpdate(credit);
+  }
+
+  /// Upsert un credit_payment depuis Supabase
+  Future<void> upsertCreditPayment(CreditPaymentsCompanion payment) async {
+    await into(creditPayments).insertOnConflictUpdate(payment);
+  }
 }

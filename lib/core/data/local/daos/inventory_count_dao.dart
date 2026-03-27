@@ -246,6 +246,18 @@ class InventoryCountDao extends DatabaseAccessor<AppDatabase>
       const InventoryCountItemsCompanion(synced: Value(1)),
     );
   }
+
+  // ─── UPSERT (SYNC) ────────────────────────────────────
+
+  /// Upsert (insert ou update) un comptage d'inventaire depuis Supabase
+  Future<void> upsertInventoryCount(InventoryCountsCompanion count) async {
+    await into(inventoryCounts).insertOnConflictUpdate(count);
+  }
+
+  /// Upsert un inventory_count_item depuis Supabase
+  Future<void> upsertInventoryCountItem(InventoryCountItemsCompanion item) async {
+    await into(inventoryCountItems).insertOnConflictUpdate(item);
+  }
 }
 
 /// Summary data for inventory count
