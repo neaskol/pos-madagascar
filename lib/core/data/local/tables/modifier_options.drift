@@ -24,3 +24,6 @@ CREATE TABLE modifier_options (
 CREATE INDEX idx_modifier_options_modifier_id ON modifier_options(modifier_id);
 CREATE INDEX idx_modifier_options_sort ON modifier_options(modifier_id, sort_order);
 CREATE INDEX idx_modifier_options_synced ON modifier_options(synced) WHERE synced = 0;
+
+-- Queries
+getUnsyncedModifierOptions: SELECT * FROM modifier_options WHERE synced = 0;

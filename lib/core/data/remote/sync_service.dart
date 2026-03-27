@@ -55,12 +55,36 @@ class SyncService {
       }
 
       // Synchroniser chaque table dans l'ordre (respect des foreign keys)
+      // 1. Tables de base
       await _syncStores(result);
       await _syncUsers(result);
       await _syncStoreSettings(result);
       await _syncCategories(result);
-      await _syncItems(result);
       await _syncCustomers(result);
+      await _syncDiningOptions(result);
+      await _syncPosDevices(result);
+
+      // 2. Produits et variants
+      await _syncItems(result);
+      await _syncItemVariants(result);
+      await _syncModifiers(result);
+
+      // 3. Ventes, remboursements, crédits
+      await _syncSales(result);
+      await _syncRefunds(result);
+      await _syncCredits(result);
+
+      // 4. Inventaire
+      await _syncStockAdjustments(result);
+      await _syncInventoryCounts(result);
+      await _syncInventoryHistory(result);
+
+      // 5. POS (shifts, tickets)
+      await _syncShifts(result);
+      await _syncOpenTickets(result);
+
+      // 6. Custom pages
+      await _syncCustomPages(result);
 
       developer.log('Sync completed: ${result.summary}', name: 'SyncService');
     } catch (e, stack) {
@@ -303,6 +327,708 @@ class SyncService {
     } catch (e) {
       developer.log('Failed to sync customers', name: 'SyncService', error: e);
       result.errors.add('Customers: $e');
+    }
+  }
+
+  /// Synchronise les options de service
+  Future<void> _syncDiningOptions(SyncResult result) async {
+    try {
+      final unsyncedDiningOptions = await _localDb.diningOptionDao.getUnsyncedDiningOptions().get();
+
+      for (final option in unsyncedDiningOptions) {
+        try {
+          final optionData = {
+            'id': option.id,
+            'store_id': option.storeId,
+            'name': option.name,
+            'sort_order': option.sortOrder,
+            'is_default': option.isDefault,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(option.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(option.updatedAt).toIso8601String(),
+            'deleted_at': option.deletedAt != null
+                ? DateTime.fromMillisecondsSinceEpoch(option.deletedAt!).toIso8601String()
+                : null,
+          };
+
+          await _supabase.from('dining_options').upsert(optionData);
+          await _localDb.diningOptionDao.markDiningOptionSynced(option.id);
+        } catch (e) {
+          developer.log('Failed to sync dining option ${option.id}', name: 'SyncService', error: e);
+          result.errors.add('DiningOption ${option.name}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync dining options', name: 'SyncService', error: e);
+      result.errors.add('DiningOptions: $e');
+    }
+  }
+
+  /// Synchronise les appareils POS
+  Future<void> _syncPosDevices(SyncResult result) async {
+    try {
+      final unsyncedPosDevices = await _localDb.posDeviceDao.getUnsyncedPosDevices().get();
+
+      for (final device in unsyncedPosDevices) {
+        try {
+          final deviceData = {
+            'id': device.id,
+            'store_id': device.storeId,
+            'name': device.name,
+            'active': device.active,
+            'last_seen_at': device.lastSeenAt != null
+                ? DateTime.fromMillisecondsSinceEpoch(device.lastSeenAt!).toIso8601String()
+                : null,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(device.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(device.updatedAt).toIso8601String(),
+            'created_by': device.createdBy,
+          };
+
+          await _supabase.from('pos_devices').upsert(deviceData);
+          await _localDb.posDeviceDao.markPosDeviceSynced(device.id);
+        } catch (e) {
+          developer.log('Failed to sync POS device ${device.id}', name: 'SyncService', error: e);
+          result.errors.add('PosDevice ${device.name}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync POS devices', name: 'SyncService', error: e);
+      result.errors.add('PosDevices: $e');
+    }
+  }
+
+  /// Synchronise les variants d'items
+  Future<void> _syncItemVariants(SyncResult result) async {
+    try {
+      final unsyncedVariants = await _localDb.itemVariantDao.getUnsyncedVariants();
+
+      for (final variant in unsyncedVariants) {
+        try {
+          final variantData = {
+            'id': variant.id,
+            'item_id': variant.itemId,
+            'store_id': variant.storeId,
+            'option1_name': variant.option1Name,
+            'option1_value': variant.option1Value,
+            'option2_name': variant.option2Name,
+            'option2_value': variant.option2Value,
+            'option3_name': variant.option3Name,
+            'option3_value': variant.option3Value,
+            'sku': variant.sku,
+            'barcode': variant.barcode,
+            'price': variant.price,
+            'cost': variant.cost,
+            'in_stock': variant.inStock,
+            'low_stock_threshold': variant.lowStockThreshold,
+            'image_url': variant.imageUrl,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(variant.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(variant.updatedAt).toIso8601String(),
+            'created_by': variant.createdBy,
+          };
+
+          await _supabase.from('item_variants').upsert(variantData);
+          await _localDb.itemVariantDao.markAsSynced(variant.id);
+        } catch (e) {
+          developer.log('Failed to sync item variant ${variant.id}', name: 'SyncService', error: e);
+          result.errors.add('ItemVariant ${variant.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync item variants', name: 'SyncService', error: e);
+      result.errors.add('ItemVariants: $e');
+    }
+  }
+
+  /// Synchronise les modifiers et leurs options
+  Future<void> _syncModifiers(SyncResult result) async {
+    try {
+      // D'abord sync les modifiers
+      final unsyncedModifiers = await _localDb.modifierDao.getUnsyncedModifiers().get();
+
+      for (final modifier in unsyncedModifiers) {
+        try {
+          final modifierData = {
+            'id': modifier.id,
+            'store_id': modifier.storeId,
+            'name': modifier.name,
+            'is_required': modifier.isRequired,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(modifier.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(modifier.updatedAt).toIso8601String(),
+            'created_by': modifier.createdBy,
+          };
+
+          await _supabase.from('modifiers').upsert(modifierData);
+          await _localDb.modifierDao.markModifierAsSynced(modifier.id);
+        } catch (e) {
+          developer.log('Failed to sync modifier ${modifier.id}', name: 'SyncService', error: e);
+          result.errors.add('Modifier ${modifier.name}: $e');
+        }
+      }
+
+      // Ensuite sync les modifier_options
+      final unsyncedOptions = await _localDb.modifierDao.getUnsyncedModifierOptions().get();
+
+      for (final option in unsyncedOptions) {
+        try {
+          final optionData = {
+            'id': option.id,
+            'modifier_id': option.modifierId,
+            'name': option.name,
+            'price_addition': option.priceAddition,
+            'sort_order': option.sortOrder,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(option.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(option.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('modifier_options').upsert(optionData);
+          await _localDb.modifierDao.markOptionAsSynced(option.id);
+        } catch (e) {
+          developer.log('Failed to sync modifier option ${option.id}', name: 'SyncService', error: e);
+          result.errors.add('ModifierOption ${option.name}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync modifiers', name: 'SyncService', error: e);
+      result.errors.add('Modifiers: $e');
+    }
+  }
+
+  /// Synchronise les ventes (sales + sale_items + sale_payments)
+  Future<void> _syncSales(SyncResult result) async {
+    try {
+      // D'abord sync les sales
+      final unsyncedSales = await _localDb.saleDao.getUnsyncedSales().get();
+
+      for (final sale in unsyncedSales) {
+        try {
+          final saleData = {
+            'id': sale.id,
+            'store_id': sale.storeId,
+            'pos_device_id': sale.posDeviceId,
+            'receipt_number': sale.receiptNumber,
+            'employee_id': sale.employeeId,
+            'customer_id': sale.customerId,
+            'dining_option_id': sale.diningOptionId,
+            'subtotal': sale.subtotal,
+            'tax_amount': sale.taxAmount,
+            'discount_amount': sale.discountAmount,
+            'total': sale.total,
+            'change_due': sale.changeDue,
+            'note': sale.note,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(sale.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(sale.updatedAt).toIso8601String(),
+            'created_by': sale.createdBy,
+            'deleted_at': sale.deletedAt != null
+                ? DateTime.fromMillisecondsSinceEpoch(sale.deletedAt!).toIso8601String()
+                : null,
+          };
+
+          await _supabase.from('sales').upsert(saleData);
+          await _localDb.saleDao.markSaleSynced(sale.id);
+        } catch (e) {
+          developer.log('Failed to sync sale ${sale.id}', name: 'SyncService', error: e);
+          result.errors.add('Sale ${sale.receiptNumber}: $e');
+        }
+      }
+
+      // Ensuite sync les sale_items
+      final unsyncedSaleItems = await _localDb.saleDao.getUnsyncedSaleItems().get();
+
+      for (final item in unsyncedSaleItems) {
+        try {
+          final itemData = {
+            'id': item.id,
+            'sale_id': item.saleId,
+            'item_id': item.itemId,
+            'item_variant_id': item.itemVariantId,
+            'item_name': item.itemName,
+            'quantity': item.quantity,
+            'unit_price': item.unitPrice,
+            'cost': item.cost,
+            'discount_amount': item.discountAmount,
+            'tax_amount': item.taxAmount,
+            'total': item.total,
+            'modifiers': item.modifiers,
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(item.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('sale_items').upsert(itemData);
+          await _localDb.saleDao.markSaleItemSynced(item.id);
+        } catch (e) {
+          developer.log('Failed to sync sale item ${item.id}', name: 'SyncService', error: e);
+          result.errors.add('SaleItem ${item.itemName}: $e');
+        }
+      }
+
+      // Ensuite sync les sale_payments
+      final unsyncedPayments = await _localDb.saleDao.getUnsyncedSalePayments().get();
+
+      for (final payment in unsyncedPayments) {
+        try {
+          final paymentData = {
+            'id': payment.id,
+            'sale_id': payment.saleId,
+            'payment_type': payment.paymentType,
+            'payment_type_name': payment.paymentTypeName,
+            'amount': payment.amount,
+            'payment_reference': payment.paymentReference,
+            'payment_status': payment.paymentStatus,
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(payment.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('sale_payments').upsert(paymentData);
+          await _localDb.saleDao.markSalePaymentSynced(payment.id);
+        } catch (e) {
+          developer.log('Failed to sync sale payment ${payment.id}', name: 'SyncService', error: e);
+          result.errors.add('SalePayment ${payment.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync sales', name: 'SyncService', error: e);
+      result.errors.add('Sales: $e');
+    }
+  }
+
+  /// Synchronise les remboursements (refunds + refund_items)
+  Future<void> _syncRefunds(SyncResult result) async {
+    try {
+      // D'abord sync les refunds
+      final unsyncedRefunds = await _localDb.refundDao.getUnsyncedRefunds().get();
+
+      for (final refund in unsyncedRefunds) {
+        try {
+          final refundData = {
+            'id': refund.id,
+            'sale_id': refund.saleId,
+            'store_id': refund.storeId,
+            'employee_id': refund.employeeId,
+            'total': refund.total,
+            'reason': refund.reason,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(refund.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(refund.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('refunds').upsert(refundData);
+          await _localDb.refundDao.markRefundSynced(refund.id);
+        } catch (e) {
+          developer.log('Failed to sync refund ${refund.id}', name: 'SyncService', error: e);
+          result.errors.add('Refund ${refund.id}: $e');
+        }
+      }
+
+      // Ensuite sync les refund_items
+      final unsyncedRefundItems = await _localDb.refundDao.getUnsyncedRefundItems().get();
+
+      for (final item in unsyncedRefundItems) {
+        try {
+          final itemData = {
+            'id': item.id,
+            'refund_id': item.refundId,
+            'sale_item_id': item.saleItemId,
+            'quantity': item.quantity,
+            'amount': item.amount,
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(item.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('refund_items').upsert(itemData);
+          await _localDb.refundDao.markRefundItemSynced(item.id);
+        } catch (e) {
+          developer.log('Failed to sync refund item ${item.id}', name: 'SyncService', error: e);
+          result.errors.add('RefundItem ${item.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync refunds', name: 'SyncService', error: e);
+      result.errors.add('Refunds: $e');
+    }
+  }
+
+  /// Synchronise les crédits (credits + credit_payments)
+  Future<void> _syncCredits(SyncResult result) async {
+    try {
+      // D'abord sync les credits
+      final unsyncedCredits = await _localDb.creditDao.getUnsyncedCredits().get();
+
+      for (final credit in unsyncedCredits) {
+        try {
+          final creditData = {
+            'id': credit.id,
+            'store_id': credit.storeId,
+            'customer_id': credit.customerId,
+            'sale_id': credit.saleId,
+            'amount_total': credit.amountTotal,
+            'amount_paid': credit.amountPaid,
+            'amount_remaining': credit.amountRemaining,
+            'due_date': credit.dueDate != null
+                ? DateTime.fromMillisecondsSinceEpoch(credit.dueDate!).toIso8601String()
+                : null,
+            'status': credit.status,
+            'notes': credit.notes,
+            'created_by': credit.createdBy,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(credit.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(credit.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('credits').upsert(creditData);
+          await _localDb.creditDao.markCreditAsSynced(credit.id);
+        } catch (e) {
+          developer.log('Failed to sync credit ${credit.id}', name: 'SyncService', error: e);
+          result.errors.add('Credit ${credit.id}: $e');
+        }
+      }
+
+      // Ensuite sync les credit_payments
+      final unsyncedCreditPayments = await _localDb.creditDao.getUnsyncedCreditPayments().get();
+
+      for (final payment in unsyncedCreditPayments) {
+        try {
+          final paymentData = {
+            'id': payment.id,
+            'credit_id': payment.creditId,
+            'amount': payment.amount,
+            'payment_type': payment.paymentType,
+            'notes': payment.notes,
+            'created_by': payment.createdBy,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(payment.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(payment.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('credit_payments').upsert(paymentData);
+          await _localDb.creditDao.markCreditPaymentAsSynced(payment.id);
+        } catch (e) {
+          developer.log('Failed to sync credit payment ${payment.id}', name: 'SyncService', error: e);
+          result.errors.add('CreditPayment ${payment.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync credits', name: 'SyncService', error: e);
+      result.errors.add('Credits: $e');
+    }
+  }
+
+  /// Synchronise les ajustements de stock (stock_adjustments + stock_adjustment_items)
+  Future<void> _syncStockAdjustments(SyncResult result) async {
+    try {
+      // D'abord sync les stock_adjustments
+      final unsyncedAdjustments = await _localDb.stockAdjustmentDao.getUnsyncedStockAdjustments().get();
+
+      for (final adjustment in unsyncedAdjustments) {
+        try {
+          final adjustmentData = {
+            'id': adjustment.id,
+            'store_id': adjustment.storeId,
+            'reason': adjustment.reason,
+            'notes': adjustment.notes,
+            'created_by': adjustment.createdBy,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(adjustment.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(adjustment.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('stock_adjustments').upsert(adjustmentData);
+          await _localDb.stockAdjustmentDao.markSynced(adjustment.id);
+        } catch (e) {
+          developer.log('Failed to sync stock adjustment ${adjustment.id}', name: 'SyncService', error: e);
+          result.errors.add('StockAdjustment ${adjustment.id}: $e');
+        }
+      }
+
+      // Ensuite sync les stock_adjustment_items
+      final unsyncedAdjustmentItems = await _localDb.stockAdjustmentDao.getUnsyncedStockAdjustmentItems().get();
+
+      for (final item in unsyncedAdjustmentItems) {
+        try {
+          final itemData = {
+            'id': item.id,
+            'adjustment_id': item.adjustmentId,
+            'item_id': item.itemId,
+            'item_variant_id': item.itemVariantId,
+            'quantity_before': item.quantityBefore,
+            'quantity_change': item.quantityChange,
+            'quantity_after': item.quantityAfter,
+            'cost': item.cost,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(item.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(item.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('stock_adjustment_items').upsert(itemData);
+          await _localDb.stockAdjustmentDao.markItemSynced(item.id);
+        } catch (e) {
+          developer.log('Failed to sync stock adjustment item ${item.id}', name: 'SyncService', error: e);
+          result.errors.add('StockAdjustmentItem ${item.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync stock adjustments', name: 'SyncService', error: e);
+      result.errors.add('StockAdjustments: $e');
+    }
+  }
+
+  /// Synchronise les comptages d'inventaire (inventory_counts + inventory_count_items)
+  Future<void> _syncInventoryCounts(SyncResult result) async {
+    try {
+      // D'abord sync les inventory_counts
+      final unsyncedCounts = await _localDb.inventoryCountDao.getUnsyncedInventoryCounts().get();
+
+      for (final count in unsyncedCounts) {
+        try {
+          final countData = {
+            'id': count.id,
+            'store_id': count.storeId,
+            'type': count.type,
+            'status': count.status,
+            'notes': count.notes,
+            'created_by': count.createdBy,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(count.createdAt).toIso8601String(),
+            'completed_at': count.completedAt != null
+                ? DateTime.fromMillisecondsSinceEpoch(count.completedAt!).toIso8601String()
+                : null,
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(count.updatedAt).toIso8601String(),
+            'deleted_at': count.deletedAt != null
+                ? DateTime.fromMillisecondsSinceEpoch(count.deletedAt!).toIso8601String()
+                : null,
+          };
+
+          await _supabase.from('inventory_counts').upsert(countData);
+          await _localDb.inventoryCountDao.markInventoryCountSynced(count.id);
+        } catch (e) {
+          developer.log('Failed to sync inventory count ${count.id}', name: 'SyncService', error: e);
+          result.errors.add('InventoryCount ${count.id}: $e');
+        }
+      }
+
+      // Ensuite sync les inventory_count_items
+      final unsyncedCountItems = await _localDb.inventoryCountDao.getUnsyncedCountItems().get();
+
+      for (final item in unsyncedCountItems) {
+        try {
+          final itemData = {
+            'id': item.id,
+            'count_id': item.countId,
+            'item_id': item.itemId,
+            'item_variant_id': item.itemVariantId,
+            'item_name': item.itemName,
+            'expected_stock': item.expectedStock,
+            'counted_stock': item.countedStock,
+            'difference': item.difference,
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(item.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('inventory_count_items').upsert(itemData);
+          // Note: markInventoryCountSynced marks both count and items as synced
+        } catch (e) {
+          developer.log('Failed to sync inventory count item ${item.id}', name: 'SyncService', error: e);
+          result.errors.add('InventoryCountItem ${item.itemName}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync inventory counts', name: 'SyncService', error: e);
+      result.errors.add('InventoryCounts: $e');
+    }
+  }
+
+  /// Synchronise l'historique d'inventaire
+  Future<void> _syncInventoryHistory(SyncResult result) async {
+    try {
+      final unsyncedHistory = await _localDb.inventoryHistoryDao.getUnsyncedInventoryHistory().get();
+
+      for (final history in unsyncedHistory) {
+        try {
+          final historyData = {
+            'id': history.id,
+            'store_id': history.storeId,
+            'item_id': history.itemId,
+            'item_variant_id': history.itemVariantId,
+            'reason': history.reason,
+            'reference_id': history.referenceId,
+            'quantity_change': history.quantityChange,
+            'quantity_after': history.quantityAfter,
+            'cost': history.cost,
+            'employee_id': history.employeeId,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(history.createdAt).toIso8601String(),
+          };
+
+          await _supabase.from('inventory_history').upsert(historyData);
+          await _localDb.inventoryHistoryDao.markSynced(history.id);
+        } catch (e) {
+          developer.log('Failed to sync inventory history ${history.id}', name: 'SyncService', error: e);
+          result.errors.add('InventoryHistory ${history.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync inventory history', name: 'SyncService', error: e);
+      result.errors.add('InventoryHistory: $e');
+    }
+  }
+
+  /// Synchronise les shifts (shifts + cash_movements)
+  Future<void> _syncShifts(SyncResult result) async {
+    try {
+      // D'abord sync les shifts
+      final unsyncedShifts = await _localDb.shiftDao.getUnsyncedShifts().get();
+
+      for (final shift in unsyncedShifts) {
+        try {
+          final shiftData = {
+            'id': shift.id,
+            'store_id': shift.storeId,
+            'pos_device_id': shift.posDeviceId,
+            'employee_id': shift.employeeId,
+            'opened_at': DateTime.fromMillisecondsSinceEpoch(shift.openedAt).toIso8601String(),
+            'closed_at': shift.closedAt != null
+                ? DateTime.fromMillisecondsSinceEpoch(shift.closedAt!).toIso8601String()
+                : null,
+            'opening_cash': shift.openingCash,
+            'expected_cash': shift.expectedCash,
+            'actual_cash': shift.actualCash,
+            'cash_difference': shift.cashDifference,
+            'status': shift.status,
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(shift.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('shifts').upsert(shiftData);
+          await _localDb.shiftDao.markShiftSynced(shift.id);
+        } catch (e) {
+          developer.log('Failed to sync shift ${shift.id}', name: 'SyncService', error: e);
+          result.errors.add('Shift ${shift.id}: $e');
+        }
+      }
+
+      // Ensuite sync les cash_movements
+      final unsyncedCashMovements = await _localDb.shiftDao.getUnsyncedCashMovements().get();
+
+      for (final movement in unsyncedCashMovements) {
+        try {
+          final movementData = {
+            'id': movement.id,
+            'shift_id': movement.shiftId,
+            'store_id': movement.storeId,
+            'type': movement.type,
+            'amount': movement.amount,
+            'note': movement.note,
+            'employee_id': movement.employeeId,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(movement.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(movement.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('cash_movements').upsert(movementData);
+          await _localDb.shiftDao.markCashMovementSynced(movement.id);
+        } catch (e) {
+          developer.log('Failed to sync cash movement ${movement.id}', name: 'SyncService', error: e);
+          result.errors.add('CashMovement ${movement.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync shifts', name: 'SyncService', error: e);
+      result.errors.add('Shifts: $e');
+    }
+  }
+
+  /// Synchronise les tickets ouverts
+  Future<void> _syncOpenTickets(SyncResult result) async {
+    try {
+      final unsyncedTickets = await _localDb.openTicketDao.getUnsyncedOpenTickets().get();
+
+      for (final ticket in unsyncedTickets) {
+        try {
+          final ticketData = {
+            'id': ticket.id,
+            'store_id': ticket.storeId,
+            'pos_device_id': ticket.posDeviceId,
+            'name': ticket.name,
+            'comment': ticket.comment,
+            'employee_id': ticket.employeeId,
+            'is_predefined': ticket.isPredefined,
+            'dining_option_id': ticket.diningOptionId,
+            'items': ticket.items,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(ticket.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(ticket.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('open_tickets').upsert(ticketData);
+          await _localDb.openTicketDao.markOpenTicketSynced(ticket.id);
+        } catch (e) {
+          developer.log('Failed to sync open ticket ${ticket.id}', name: 'SyncService', error: e);
+          result.errors.add('OpenTicket ${ticket.name}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync open tickets', name: 'SyncService', error: e);
+      result.errors.add('OpenTickets: $e');
+    }
+  }
+
+  /// Synchronise les pages personnalisées (custom_pages + custom_page_items + custom_page_category_grids)
+  Future<void> _syncCustomPages(SyncResult result) async {
+    try {
+      // D'abord sync les custom_product_pages
+      final unsyncedPages = await _localDb.customPageDao.getUnsyncedCustomPages().get();
+
+      for (final page in unsyncedPages) {
+        try {
+          final pageData = {
+            'id': page.id,
+            'store_id': page.storeId,
+            'name': page.name,
+            'sort_order': page.sortOrder,
+            'is_default': page.isDefault,
+            'created_by': page.createdBy,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(page.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(page.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('custom_product_pages').upsert(pageData);
+          await _localDb.customPageDao.markCustomPageSynced(page.id);
+        } catch (e) {
+          developer.log('Failed to sync custom page ${page.id}', name: 'SyncService', error: e);
+          result.errors.add('CustomPage ${page.name}: $e');
+        }
+      }
+
+      // Ensuite sync les custom_page_items
+      final unsyncedPageItems = await _localDb.customPageDao.getUnsyncedCustomPageItems().get();
+
+      for (final item in unsyncedPageItems) {
+        try {
+          final itemData = {
+            'id': item.id,
+            'page_id': item.pageId,
+            'item_id': item.itemId,
+            'position': item.position,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(item.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(item.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('custom_page_items').upsert(itemData);
+          await _localDb.customPageDao.markCustomPageItemSynced(item.id);
+        } catch (e) {
+          developer.log('Failed to sync custom page item ${item.id}', name: 'SyncService', error: e);
+          result.errors.add('CustomPageItem ${item.id}: $e');
+        }
+      }
+
+      // Ensuite sync les custom_page_category_grids
+      final unsyncedPageGrids = await _localDb.customPageDao.getUnsyncedCustomPageCategoryGrids().get();
+
+      for (final grid in unsyncedPageGrids) {
+        try {
+          final gridData = {
+            'id': grid.id,
+            'page_id': grid.pageId,
+            'category_id': grid.categoryId,
+            'position': grid.position,
+            'created_at': DateTime.fromMillisecondsSinceEpoch(grid.createdAt).toIso8601String(),
+            'updated_at': DateTime.fromMillisecondsSinceEpoch(grid.updatedAt).toIso8601String(),
+          };
+
+          await _supabase.from('custom_page_category_grids').upsert(gridData);
+          await _localDb.customPageDao.markCustomPageCategoryGridSynced(grid.id);
+        } catch (e) {
+          developer.log('Failed to sync custom page category grid ${grid.id}', name: 'SyncService', error: e);
+          result.errors.add('CustomPageCategoryGrid ${grid.id}: $e');
+        }
+      }
+    } catch (e) {
+      developer.log('Failed to sync custom pages', name: 'SyncService', error: e);
+      result.errors.add('CustomPages: $e');
     }
   }
 

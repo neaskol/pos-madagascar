@@ -98,14 +98,21 @@ class ModifierDao extends DatabaseAccessor<AppDatabase>
   }
 
   /// Récupère tous les modifiers non synchronisés
-  Future<List<Modifier>> getUnsyncedModifiers() {
-    return (select(modifiers)..where((m) => m.synced.equals(0))).get();
+  @override
+  Selectable<Modifier> getUnsyncedModifiers() {
+    return select(modifiers)..where((m) => m.synced.equals(0));
   }
 
   /// Marque un modifier comme synchronisé
   Future<void> markModifierAsSynced(String id) {
     return (update(modifiers)..where((m) => m.id.equals(id)))
         .write(const ModifiersCompanion(synced: Value(1)));
+  }
+
+  /// Récupère tous les options de modifiers non synchronisées
+  @override
+  Selectable<ModifierOption> getUnsyncedModifierOptions() {
+    return select(modifierOptions)..where((o) => o.synced.equals(0));
   }
 
   /// Marque une option comme synchronisée

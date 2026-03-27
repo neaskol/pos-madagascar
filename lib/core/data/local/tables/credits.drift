@@ -40,3 +40,7 @@ CREATE TABLE credit_payments (
   created_by TEXT,
   FOREIGN KEY (credit_id) REFERENCES credits(id) ON DELETE CASCADE
 );
+
+-- Queries
+getUnsyncedCredits: SELECT * FROM credits WHERE synced = 0;
+getUnsyncedCreditPayments: SELECT * FROM credit_payments WHERE synced = 0;

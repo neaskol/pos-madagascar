@@ -239,6 +239,41 @@ class CustomPageDao extends DatabaseAccessor<AppDatabase>
         .write(const CustomPageCategoryGridsCompanion(synced: Value(1)));
   }
 
+  /// Obtenir toutes les pages non synchronisées (tous magasins)
+  @override
+  Selectable<CustomProductPage> getUnsyncedCustomPages() {
+    return select(customProductPages)..where((p) => p.synced.equals(0));
+  }
+
+  /// Obtenir tous les page items non synchronisés
+  @override
+  Selectable<CustomPageItem> getUnsyncedCustomPageItems() {
+    return select(customPageItems)..where((i) => i.synced.equals(0));
+  }
+
+  /// Obtenir toutes les grilles de catégories non synchronisées
+  @override
+  Selectable<CustomPageCategoryGrid> getUnsyncedCustomPageCategoryGrids() {
+    return select(customPageCategoryGrids)..where((g) => g.synced.equals(0));
+  }
+
+  /// Marquer une page comme synchronisée (alias pour compatibilité sync)
+  Future<void> markCustomPageSynced(String pageId) async {
+    await markPageAsSynced(pageId);
+  }
+
+  /// Marquer un item de page comme synchronisé
+  Future<void> markCustomPageItemSynced(String itemId) async {
+    await (update(customPageItems)..where((i) => i.id.equals(itemId)))
+        .write(const CustomPageItemsCompanion(synced: Value(1)));
+  }
+
+  /// Marquer une grille de catégorie comme synchronisée
+  Future<void> markCustomPageCategoryGridSynced(String gridId) async {
+    await (update(customPageCategoryGrids)..where((g) => g.id.equals(gridId)))
+        .write(const CustomPageCategoryGridsCompanion(synced: Value(1)));
+  }
+
   // ========== QUERIES COMPLEXES ==========
 
   /// Obtenir le nombre d'items sur une page

@@ -47,3 +47,6 @@ CREATE TABLE item_variants (
 CREATE INDEX idx_item_variants_item_id ON item_variants(item_id);
 CREATE INDEX idx_item_variants_store_id ON item_variants(store_id);
 CREATE INDEX idx_item_variants_synced ON item_variants(synced) WHERE synced = 0;
+
+-- Queries
+getUnsyncedItemVariants: SELECT * FROM item_variants WHERE synced = 0;

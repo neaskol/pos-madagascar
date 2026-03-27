@@ -23,3 +23,4 @@ CREATE INDEX idx_stock_adjustment_items_adjustment_id ON stock_adjustment_items(
 CREATE INDEX idx_stock_adjustment_items_item_id ON stock_adjustment_items(item_id);
 
 getAdjustmentItemsByAdjustment: SELECT * FROM stock_adjustment_items WHERE adjustment_id = :adjustmentId;
+getUnsyncedStockAdjustmentItems: SELECT * FROM stock_adjustment_items WHERE synced = 0;

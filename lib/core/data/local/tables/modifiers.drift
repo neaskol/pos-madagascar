@@ -21,3 +21,6 @@ CREATE TABLE modifiers (
 -- Index pour performance
 CREATE INDEX idx_modifiers_store_id ON modifiers(store_id);
 CREATE INDEX idx_modifiers_synced ON modifiers(synced) WHERE synced = 0;
+
+-- Queries
+getUnsyncedModifiers: SELECT * FROM modifiers WHERE synced = 0;

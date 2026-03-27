@@ -118,8 +118,9 @@ class CreditDao extends DatabaseAccessor<AppDatabase> with _$CreditDaoMixin {
   }
 
   /// Get unsynced credits
-  Future<List<Credit>> getUnsyncedCredits() {
-    return (select(credits)..where((t) => t.synced.equals(0))).get();
+  @override
+  Selectable<Credit> getUnsyncedCredits() {
+    return select(credits)..where((t) => t.synced.equals(0));
   }
 
   /// Mark credit as synced
@@ -150,8 +151,9 @@ class CreditDao extends DatabaseAccessor<AppDatabase> with _$CreditDaoMixin {
   }
 
   /// Get unsynced credit payments
-  Future<List<CreditPayment>> getUnsyncedCreditPayments() {
-    return (select(creditPayments)..where((t) => t.synced.equals(0))).get();
+  @override
+  Selectable<CreditPayment> getUnsyncedCreditPayments() {
+    return select(creditPayments)..where((t) => t.synced.equals(0));
   }
 
   /// Mark credit payment as synced

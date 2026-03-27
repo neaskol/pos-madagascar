@@ -50,3 +50,8 @@ CREATE INDEX idx_custom_page_category_grids_page ON custom_page_category_grids(p
 -- Contraintes uniques
 CREATE UNIQUE INDEX unique_item_per_page ON custom_page_items(page_id, item_id);
 CREATE UNIQUE INDEX unique_category_per_page ON custom_page_category_grids(page_id, category_id);
+
+-- Queries
+getUnsyncedCustomPages: SELECT * FROM custom_product_pages WHERE synced = 0;
+getUnsyncedCustomPageItems: SELECT * FROM custom_page_items WHERE synced = 0;
+getUnsyncedCustomPageCategoryGrids: SELECT * FROM custom_page_category_grids WHERE synced = 0;
