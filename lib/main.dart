@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'core/theme/app_theme.dart';
 import 'core/data/remote/supabase_client.dart';
 import 'core/data/remote/sync_service.dart';
@@ -57,11 +57,11 @@ void main() async {
   final database = AppDatabase();
 
   // Initialiser le service de storage et s'assurer que les buckets existent
-  final storageService = StorageService(Supabase.instance.client);
+  final storageService = StorageService(supabase.Supabase.instance.client);
   await storageService.ensureBucketsExist();
 
   // Initialiser le service de synchronisation
-  final syncService = SyncService(database, Supabase.instance.client);
+  final syncService = SyncService(database, supabase.Supabase.instance.client);
 
   // Précharger la police Sora pour éviter le flash au premier lancement
   await GoogleFonts.pendingFonts([GoogleFonts.sora()]);
@@ -149,7 +149,7 @@ class _MyAppState extends State<MyApp> {
         // Repository pour l'authentification
         RepositoryProvider<AuthRepository>(
           create: (context) => AuthRepository(
-            supabase: Supabase.instance.client,
+            supabase: supabase.Supabase.instance.client,
             userDao: widget.database.userDao,
             storeDao: widget.database.storeDao,
           ),
@@ -187,7 +187,7 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<CustomPageRepositoryImpl>(
           create: (context) => CustomPageRepositoryImpl(
             database: widget.database,
-            supabase: Supabase.instance.client,
+            supabase: supabase.Supabase.instance.client,
           ),
         ),
         // Repository pour les clients
@@ -316,8 +316,13 @@ class _MyAppState extends State<MyApp> {
         ],
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, authState) {
-            // Charger les préférences utilisateur si authentifié
-            if (authState is AuthAuthenticated) {
+            // Charger les préférences utilisateur si authentifié avec magasin
+            if (authState is AuthAuthenticatedWithStore) {
+              final settingsBloc = context.read<SettingsBloc>();
+              if (settingsBloc.state is SettingsInitial) {
+                settingsBloc.add(LoadSettings(authState.user.id));
+              }
+            } else if (authState is AuthPinSessionActive) {
               final settingsBloc = context.read<SettingsBloc>();
               if (settingsBloc.state is SettingsInitial) {
                 settingsBloc.add(LoadSettings(authState.user.id));
