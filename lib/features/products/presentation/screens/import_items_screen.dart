@@ -87,7 +87,7 @@ class ImportItemsScreen extends StatelessWidget {
             Icon(
               Icons.file_upload_outlined,
               size: 96,
-              color: context.accent.withOpacity(0.3),
+              color: context.accent.withValues(alpha: 0.3),
             ),
             const SizedBox(height: AppDimensions.spacingLarge),
             Text(
@@ -147,7 +147,7 @@ class ImportItemsScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.paddingMedium),
       decoration: BoxDecoration(
-        color: context.accent.withOpacity(0.1),
+        color: context.accent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
       ),
       child: Column(
@@ -242,7 +242,7 @@ class ImportItemsScreen extends StatelessWidget {
             color: context.surface,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 4,
                 offset: const Offset(0, -2),
               ),

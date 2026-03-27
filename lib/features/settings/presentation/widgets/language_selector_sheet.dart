@@ -120,8 +120,8 @@ class _LanguageOption extends StatelessWidget {
               decoration: BoxDecoration(
                 color: selected
                     ? (context.isDark
-                        ? const Color(0xFFB8965A).withOpacity(0.15)
-                        : const Color(0xFF5C4F3A).withOpacity(0.15))
+                        ? const Color(0xFFB8965A).withValues(alpha: 0.15)
+                        : const Color(0xFF5C4F3A).withValues(alpha: 0.15))
                     : context.isDark
                         ? const Color(0xFF2E2520)
                         : const Color(0xFFF8F4ED),

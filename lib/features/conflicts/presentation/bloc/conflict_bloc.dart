@@ -110,8 +110,7 @@ class ConflictBloc extends Bloc<ConflictEvent, ConflictState> {
     try {
       emit(ConflictLoading());
 
-      final deletedCount = await _database.syncConflictDao
-          .deleteResolvedConflicts(event.storeId);
+      await _database.syncConflictDao.deleteResolvedConflicts(event.storeId);
 
       // Reload conflicts after deletion
       final conflicts = await _database.syncConflictDao

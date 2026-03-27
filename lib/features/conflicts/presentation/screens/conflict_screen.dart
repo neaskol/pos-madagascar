@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'dart:convert';
 import '../../../../core/data/local/app_database.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
@@ -25,19 +24,13 @@ class ConflictScreen extends StatelessWidget {
       );
     }
 
-    final authenticatedState = authState as auth.AuthAuthenticatedWithStore;
-    final storeId = authenticatedState.storeId;
-    if (storeId == null) {
-      return Scaffold(
-        appBar: AppBar(title: Text(l10n.conflicts)),
-        body: Center(child: Text(l10n.noStoreSelected)),
-      );
-    }
+    // authState is guaranteed to be AuthAuthenticatedWithStore here (type promotion)
+    final storeId = authState.storeId;
 
     return BlocProvider(
       create: (context) => ConflictBloc(context.read<AppDatabase>())
         ..add(LoadPendingConflicts(storeId)),
-      child: _ConflictView(storeId: storeId, userId: authenticatedState.user.id),
+      child: _ConflictView(storeId: storeId, userId: authState.user.id),
     );
   }
 }
@@ -226,7 +219,7 @@ class _ConflictCard extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.blue),
                   ),
@@ -247,7 +240,7 @@ class _ConflictCard extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.green),
                   ),
@@ -320,7 +313,7 @@ class _ConflictCard extends StatelessWidget {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.1),
+                      color: Colors.green.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(

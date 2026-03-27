@@ -182,10 +182,10 @@ class _CreditSaleDialogState extends State<CreditSaleDialog> {
                     vertical: AppSpacing.sm,
                   ),
                   decoration: BoxDecoration(
-                    color: context.accent.withOpacity(0.1),
+                    color: context.accent.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppRadius.input),
                     border: Border.all(
-                      color: context.accent.withOpacity(0.3),
+                      color: context.accent.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Row(

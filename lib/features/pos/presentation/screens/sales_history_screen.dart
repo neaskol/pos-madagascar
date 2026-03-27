@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/data/local/app_database.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/theme/theme_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
@@ -22,8 +20,6 @@ class SalesHistoryScreen extends StatefulWidget {
 class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _filterPeriod = 'all'; // 'all', 'today', 'week'
-  String? _filterEmployee;
-  String? _filterPayment;
 
   @override
   void dispose() {
@@ -254,8 +250,8 @@ class _SaleListItem extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   color: isRefunded
-                      ? AppColors.dangerLight.withOpacity(0.2)
-                      : AppColors.successLight.withOpacity(0.2),
+                      ? AppColors.dangerLight.withValues(alpha: 0.2)
+                      : AppColors.successLight.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
                 ),
                 child: Icon(

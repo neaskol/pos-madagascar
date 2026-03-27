@@ -211,10 +211,10 @@ class _PinScreenState extends State<PinScreen> {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: avatarColor.withOpacity(0.15),
+              color: avatarColor.withValues(alpha: 0.15),
               shape: BoxShape.circle,
               border: Border.all(
-                color: avatarColor.withOpacity(0.3),
+                color: avatarColor.withValues(alpha: 0.3),
                 width: 2,
               ),
             ),
@@ -277,10 +277,10 @@ class _PinScreenState extends State<PinScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: _getAvatarColor(_selectedEmployee!.id).withOpacity(0.15),
+              color: _getAvatarColor(_selectedEmployee!.id).withValues(alpha: 0.15),
               shape: BoxShape.circle,
               border: Border.all(
-                color: _getAvatarColor(_selectedEmployee!.id).withOpacity(0.3),
+                color: _getAvatarColor(_selectedEmployee!.id).withValues(alpha: 0.3),
                 width: 2,
               ),
             ),

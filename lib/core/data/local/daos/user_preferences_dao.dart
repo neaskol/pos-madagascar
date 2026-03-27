@@ -59,11 +59,6 @@ class UserPreferencesDao extends DatabaseAccessor<AppDatabase>
     bool? enableSalesSound,
     bool? enableVibration,
   }) async {
-    final companion = UserPreferencesCompanion(
-      updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
-      synced: const Value(0),
-    );
-
     await (update(userPreferences)
           ..where((p) => p.userId.equals(userId)))
         .write(UserPreferencesCompanion(

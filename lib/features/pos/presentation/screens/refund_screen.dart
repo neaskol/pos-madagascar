@@ -372,7 +372,7 @@ class _RefundScreenState extends State<RefundScreen> {
         padding: const EdgeInsets.all(AppDimensions.paddingMedium),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withOpacity(0.1)
+              ? AppColors.primary.withValues(alpha: 0.1)
               : AppColors.backgroundPrimary,
           borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
           border: Border.all(

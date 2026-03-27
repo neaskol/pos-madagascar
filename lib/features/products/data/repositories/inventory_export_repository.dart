@@ -76,7 +76,6 @@ class InventoryExportRepository {
     }
 
     // Données
-    final numberFormat = NumberFormat('#,###', 'fr');
     for (final item in filteredItems) {
       final status = item.inStock == 0
           ? 'Rupture'

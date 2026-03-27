@@ -168,7 +168,7 @@ class _ReceiptDetailScreenState extends State<ReceiptDetailScreen> {
               Container(
                 padding: const EdgeInsets.all(AppSpacing.sm),
                 decoration: BoxDecoration(
-                  color: AppColors.lightAccent.withOpacity(0.1),
+                  color: AppColors.lightAccent.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
                 child: const Icon(Icons.receipt_long, color: AppColors.lightAccent, size: 24),

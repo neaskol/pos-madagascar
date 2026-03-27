@@ -207,7 +207,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 color: Theme.of(context).colorScheme.surface,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 4,
                     offset: const Offset(0, -2),
                   ),
@@ -303,8 +303,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: _changeDue >= 0
-                    ? Colors.green.withOpacity(0.1)
-                    : Colors.red.withOpacity(0.1),
+                    ? Colors.green.withValues(alpha: 0.1)
+                    : Colors.red.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: _changeDue >= 0 ? Colors.green : Colors.red,
@@ -385,8 +385,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: _remainingAmount > 0
-                ? Colors.orange.withOpacity(0.1)
-                : Colors.green.withOpacity(0.1),
+                ? Colors.orange.withValues(alpha: 0.1)
+                : Colors.green.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: _remainingAmount > 0 ? Colors.orange : Colors.green,
@@ -733,15 +733,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
       return Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.blue.withOpacity(0.08),
+          color: Colors.blue.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.blue.withOpacity(0.3)),
+          border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundColor: Colors.blue.withOpacity(0.2),
+              backgroundColor: Colors.blue.withValues(alpha: 0.2),
               child: Text(
                 _selectedCustomer!.name.isNotEmpty
                     ? _selectedCustomer!.name[0].toUpperCase()

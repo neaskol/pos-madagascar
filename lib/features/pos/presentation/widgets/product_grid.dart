@@ -399,8 +399,8 @@ class _ProductCard extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: inStock! > 0
-                              ? Colors.green.withOpacity(0.9)
-                              : Colors.red.withOpacity(0.9),
+                              ? Colors.green.withValues(alpha: 0.9)
+                              : Colors.red.withValues(alpha: 0.9),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(

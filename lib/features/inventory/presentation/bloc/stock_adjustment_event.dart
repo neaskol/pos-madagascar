@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import '../../domain/enums/adjustment_reason.dart';
-import '../../../../core/data/local/app_database.dart';
 import '../../data/repositories/stock_adjustment_repository.dart';
 
 abstract class StockAdjustmentEvent extends Equatable {
