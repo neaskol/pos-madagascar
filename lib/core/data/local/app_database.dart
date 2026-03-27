@@ -25,6 +25,7 @@ import 'daos/stock_adjustment_dao.dart';
 import 'daos/inventory_history_dao.dart';
 import 'daos/inventory_count_dao.dart';
 import 'daos/user_preferences_dao.dart';
+import 'daos/sync_conflict_dao.dart';
 
 // Export DAOs for use in repositories
 export 'daos/store_dao.dart';
@@ -47,6 +48,7 @@ export 'daos/stock_adjustment_dao.dart';
 export 'daos/inventory_history_dao.dart';
 export 'daos/inventory_count_dao.dart';
 export 'daos/user_preferences_dao.dart';
+export 'daos/sync_conflict_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -79,6 +81,7 @@ part 'app_database.g.dart';
     'tables/inventory_counts.drift',
     'tables/inventory_count_items.drift',
     'tables/user_preferences.drift',
+    'tables/sync_conflicts.drift',
   },
   daos: [
     StoreDao,
@@ -101,6 +104,7 @@ part 'app_database.g.dart';
     InventoryHistoryDao,
     InventoryCountDao,
     UserPreferencesDao,
+    SyncConflictDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {

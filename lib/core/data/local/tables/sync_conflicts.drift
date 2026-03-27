@@ -1,0 +1,39 @@
+-- Table pour stocker les conflits de synchronisation détectés
+-- entre les données locales (Drift) et distantes (Supabase)
+
+import 'stores.drift';
+import 'users.drift';
+
+CREATE TABLE sync_conflicts (
+  id TEXT NOT NULL PRIMARY KEY,
+  store_id TEXT NOT NULL REFERENCES stores(id),
+
+  -- Identification du conflit
+  table_name TEXT NOT NULL,
+  record_id TEXT NOT NULL,
+  field_name TEXT, -- NULL si conflit sur plusieurs champs
+
+  -- Valeurs en conflit (JSON stringifié)
+  local_value TEXT NOT NULL,
+  remote_value TEXT NOT NULL,
+  local_updated_at INTEGER NOT NULL, -- Unix timestamp (milliseconds)
+  remote_updated_at INTEGER NOT NULL,
+
+  -- Résolution
+  status TEXT NOT NULL CHECK (status IN ('pending', 'resolved_local', 'resolved_remote', 'resolved_manual')),
+  resolved_at INTEGER, -- Unix timestamp (milliseconds)
+  resolved_by TEXT REFERENCES users(id),
+  resolution_notes TEXT,
+
+  -- Métadonnées
+  detected_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000),
+  created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000),
+  updated_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000),
+  synced INTEGER NOT NULL DEFAULT 0
+) AS SyncConflict;
+
+-- Queries pour récupérer les conflits
+getPendingConflicts: SELECT * FROM sync_conflicts WHERE status = 'pending' AND store_id = ? ORDER BY detected_at DESC;
+getConflictsByTable: SELECT * FROM sync_conflicts WHERE table_name = ? AND store_id = ? ORDER BY detected_at DESC;
+getConflictById: SELECT * FROM sync_conflicts WHERE id = ? LIMIT 1;
+getUnsyncedSyncConflicts: SELECT * FROM sync_conflicts WHERE synced = 0;

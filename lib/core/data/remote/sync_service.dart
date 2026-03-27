@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:drift/drift.dart';
 import '../local/app_database.dart';
 import 'dart:developer' as developer;
+import 'conflict_detector.dart';
 
 /// Handles bidirectional sync between Drift (local) and Supabase (remote)
 ///
