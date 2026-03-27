@@ -157,7 +157,7 @@ dart run build_runner build --delete-conflicting-outputs
 - [ ] Corriger dead code `conflict_screen.dart` (30min)
 - [ ] Supprimer variables inutilisées (15min)
 - [ ] Remplacer 15+ `withOpacity()` → `withValues()` (1h)
-- [ ] Corriger ambiguous imports `main_settings.dart` (15min)
+- [x] Corriger ambiguous imports `main_settings.dart` (15min) ✅ FAIT
 
 ---
 
