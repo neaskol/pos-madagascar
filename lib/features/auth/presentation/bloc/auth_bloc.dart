@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../../../core/data/remote/sync_service.dart';
@@ -141,38 +142,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthPinSetupRequested event,
     Emitter<AuthState> emit,
   ) async {
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    print('🔵 [AUTH BLOC] _onPinSetupRequested START');
-    print('🔵 [AUTH BLOC] User ID: ${event.userId}');
+    if (kDebugMode) debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    if (kDebugMode) debugPrint('🔵 [AUTH BLOC] _onPinSetupRequested START');
+    if (kDebugMode) debugPrint('🔵 [AUTH BLOC] User ID: ${event.userId}');
     emit(AuthLoading());
-    print('🔵 [AUTH BLOC] Emitted AuthLoading');
+    if (kDebugMode) debugPrint('🔵 [AUTH BLOC] Emitted AuthLoading');
     try {
-      print('🔵 [AUTH BLOC] Calling authRepository.setupPin()...');
+      if (kDebugMode) debugPrint('🔵 [AUTH BLOC] Calling authRepository.setupPin()...');
       await _authRepository.setupPin(
         userId: event.userId,
         pin: event.pin,
       );
-      print('✅ [AUTH BLOC] setupPin() completed');
+      if (kDebugMode) debugPrint('✅ [AUTH BLOC] setupPin() completed');
 
-      print('🔵 [AUTH BLOC] Fetching current user...');
+      if (kDebugMode) debugPrint('🔵 [AUTH BLOC] Fetching current user...');
       final user = await _authRepository.getCurrentUser();
-      print('🔵 [AUTH BLOC] Current user: ${user?.id}');
+      if (kDebugMode) debugPrint('🔵 [AUTH BLOC] Current user: ${user?.id}');
       if (user == null) {
-        print('❌ [AUTH BLOC] User not found after setupPin!');
+        if (kDebugMode) debugPrint('❌ [AUTH BLOC] User not found after setupPin!');
         emit(const AuthError(message: 'Utilisateur non trouvé'));
         return;
       }
 
-      print('✅ [AUTH BLOC] Emitting AuthPinSessionActive');
+      if (kDebugMode) debugPrint('✅ [AUTH BLOC] Emitting AuthPinSessionActive');
       emit(AuthPinSessionActive(user: user));
-      print('✅ [AUTH BLOC] AuthPinSessionActive emitted');
+      if (kDebugMode) debugPrint('✅ [AUTH BLOC] AuthPinSessionActive emitted');
     } catch (e, stackTrace) {
-      print('❌ [AUTH BLOC] Error in _onPinSetupRequested: $e');
-      print('❌ [AUTH BLOC] Stack: $stackTrace');
+      if (kDebugMode) debugPrint('❌ [AUTH BLOC] Error in _onPinSetupRequested: $e');
+      if (kDebugMode) debugPrint('❌ [AUTH BLOC] Stack: $stackTrace');
       emit(AuthError(message: _formatError(e.toString())));
     }
-    print('🔵 [AUTH BLOC] _onPinSetupRequested END');
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    if (kDebugMode) debugPrint('🔵 [AUTH BLOC] _onPinSetupRequested END');
+    if (kDebugMode) debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
   Future<void> _onSignOutRequested(

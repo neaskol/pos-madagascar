@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:drift/drift.dart';
 import '../local/app_database.dart';
@@ -55,7 +56,7 @@ class ConflictDetector {
       if (hasActualDifferences) {
         // Enregistrer comme conflit résolu automatiquement (last-write-wins)
         await _recordConflict(
-          tableName: tableName,
+          conflictTableName: tableName,
           recordId: recordId,
           localData: localData,
           remoteData: remoteData,
@@ -79,7 +80,7 @@ class ConflictDetector {
     if (hasActualDifferences) {
       // Conflit réel nécessitant attention
       await _recordConflict(
-        tableName: tableName,
+        conflictTableName: tableName,
         recordId: recordId,
         localData: localData,
         remoteData: remoteData,
@@ -144,7 +145,7 @@ class ConflictDetector {
 
   /// Enregistre un conflit dans la table sync_conflicts
   Future<void> _recordConflict({
-    required String tableName,
+    required String conflictTableName,
     required String recordId,
     required Map<String, dynamic> localData,
     required Map<String, dynamic> remoteData,
@@ -161,7 +162,7 @@ class ConflictDetector {
         SyncConflictsCompanion.insert(
           id: conflictId,
           storeId: _storeId,
-          tableName: tableName,
+          conflictTableName: conflictTableName,
           recordId: recordId,
           fieldName: const Value(null), // NULL = conflit sur plusieurs champs
           localValue: jsonEncode(localData),
@@ -174,15 +175,11 @@ class ConflictDetector {
           resolutionNotes: autoResolved
               ? const Value('Auto-résolu: last-write-wins')
               : const Value.absent(),
-          detectedAt: now,
-          createdAt: now,
-          updatedAt: now,
-          synced: 0, // Sync vers Supabase pour audit
         ),
       );
     } catch (e) {
       // Ne pas bloquer la sync si l'enregistrement du conflit échoue
-      print('[ConflictDetector] Failed to record conflict: $e');
+      if (kDebugMode) debugPrint('[ConflictDetector] Failed to record conflict: $e');
     }
   }
 }

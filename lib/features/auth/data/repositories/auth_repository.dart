@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase_auth;
 import 'package:drift/drift.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import '../../../../core/data/local/app_database.dart';
 import '../../../../core/data/local/daos/user_dao.dart';
 import '../../../../core/data/local/daos/store_dao.dart';
@@ -98,7 +99,7 @@ class AuthRepository {
     String? phone,
   }) async {
     try {
-      print('🔵 [AUTH SIGNUP] Starting signup for: $email');
+      if (kDebugMode) debugPrint('🔵 [AUTH SIGNUP] Starting signup for: $email');
 
       final response = await _supabase.auth.signUp(
         email: email,
@@ -106,13 +107,13 @@ class AuthRepository {
         data: {'name': name, 'phone': phone},
       );
 
-      print('🔵 [AUTH SIGNUP] Signup response user: ${response.user?.id}');
-      print('🔵 [AUTH SIGNUP] Session exists: ${response.session != null}');
-      print('🔵 [AUTH SIGNUP] Current user after signup: ${_supabase.auth.currentUser?.id}');
+      if (kDebugMode) debugPrint('🔵 [AUTH SIGNUP] Signup response user: ${response.user?.id}');
+      if (kDebugMode) debugPrint('🔵 [AUTH SIGNUP] Session exists: ${response.session != null}');
+      if (kDebugMode) debugPrint('🔵 [AUTH SIGNUP] Current user after signup: ${_supabase.auth.currentUser?.id}');
 
       return response.user;
     } catch (e) {
-      print('❌ [AUTH SIGNUP] Signup failed: $e');
+      if (kDebugMode) debugPrint('❌ [AUTH SIGNUP] Signup failed: $e');
       rethrow;
     }
   }
@@ -216,11 +217,11 @@ class AuthRepository {
     String timezone = 'Indian/Antananarivo',
   }) async {
     try {
-      print('🔵 [AUTH] Creating store: $name');
-      print('🔵 [AUTH] User ID: ${_supabase.auth.currentUser?.id}');
+      if (kDebugMode) debugPrint('🔵 [AUTH] Creating store: $name');
+      if (kDebugMode) debugPrint('🔵 [AUTH] User ID: ${_supabase.auth.currentUser?.id}');
 
       // Créer le magasin dans Supabase
-      print('🔵 [AUTH] Inserting into stores table...');
+      if (kDebugMode) debugPrint('🔵 [AUTH] Inserting into stores table...');
       final storeRecord = await _supabase.from('stores').insert({
         'name': name,
         'address': address,
@@ -230,7 +231,7 @@ class AuthRepository {
         'timezone': timezone,
       }).select().single();
 
-      print('✅ [AUTH] Store created: ${storeRecord['id']}');
+      if (kDebugMode) debugPrint('✅ [AUTH] Store created: ${storeRecord['id']}');
 
       // Sauvegarder localement
       final store = StoresCompanion.insert(
@@ -249,13 +250,13 @@ class AuthRepository {
       // Mettre à jour l'utilisateur avec le store_id
       final currentUser = _supabase.auth.currentUser;
       if (currentUser != null) {
-        print('🔵 [AUTH] Updating user ${currentUser.id} with store_id...');
+        if (kDebugMode) debugPrint('🔵 [AUTH] Updating user ${currentUser.id} with store_id...');
         await _supabase.from('users').update({
           'store_id': storeRecord['id'],
           'role': 'OWNER',
         }).eq('id', currentUser.id);
 
-        print('✅ [AUTH] User updated with store_id in Supabase');
+        if (kDebugMode) debugPrint('✅ [AUTH] User updated with store_id in Supabase');
 
         // Récupérer les données complètes depuis Supabase
         final userRecord = await _supabase
@@ -280,17 +281,17 @@ class AuthRepository {
             updatedAt: DateTime.now().millisecondsSinceEpoch,
           );
           await _userDao.upsertUser(userCompanion);
-          print('✅ [AUTH] User upserted locally with store_id');
+          if (kDebugMode) debugPrint('✅ [AUTH] User upserted locally with store_id');
         }
       }
 
-      print('✅ [AUTH] Store creation completed successfully');
+      if (kDebugMode) debugPrint('✅ [AUTH] Store creation completed successfully');
       return storeRecord['id'];
     } catch (e, stackTrace) {
-      print('❌ [AUTH] Store creation failed!');
-      print('❌ [AUTH] Error type: ${e.runtimeType}');
-      print('❌ [AUTH] Error: $e');
-      print('❌ [AUTH] Stack trace: $stackTrace');
+      if (kDebugMode) debugPrint('❌ [AUTH] Store creation failed!');
+      if (kDebugMode) debugPrint('❌ [AUTH] Error type: ${e.runtimeType}');
+      if (kDebugMode) debugPrint('❌ [AUTH] Error: $e');
+      if (kDebugMode) debugPrint('❌ [AUTH] Stack trace: $stackTrace');
       rethrow;
     }
   }
@@ -330,27 +331,27 @@ class AuthRepository {
 
   /// Configuration initiale du PIN (après setup wizard)
   Future<void> setupPin({required String userId, required String pin}) async {
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    print('🔵 [AUTH REPO] setupPin START');
-    print('🔵 [AUTH REPO] User ID: $userId');
+    if (kDebugMode) debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    if (kDebugMode) debugPrint('🔵 [AUTH REPO] setupPin START');
+    if (kDebugMode) debugPrint('🔵 [AUTH REPO] User ID: $userId');
     final pinHash = hashPin(pin);
-    print('🔵 [AUTH REPO] PIN hash generated');
+    if (kDebugMode) debugPrint('🔵 [AUTH REPO] PIN hash generated');
 
     // Mettre à jour en base
-    print('🔵 [AUTH REPO] Updating Supabase...');
+    if (kDebugMode) debugPrint('🔵 [AUTH REPO] Updating Supabase...');
     await _supabase
         .from('users')
         .update({'pin_hash': pinHash})
         .eq('id', userId);
-    print('✅ [AUTH REPO] Supabase updated');
+    if (kDebugMode) debugPrint('✅ [AUTH REPO] Supabase updated');
 
     // Récupérer l'utilisateur local actuel
-    print('🔵 [AUTH REPO] Fetching local user...');
+    if (kDebugMode) debugPrint('🔵 [AUTH REPO] Fetching local user...');
     final existingUser = await _userDao.getUserById(userId).getSingleOrNull();
-    print('🔵 [AUTH REPO] Local user found: ${existingUser != null}');
+    if (kDebugMode) debugPrint('🔵 [AUTH REPO] Local user found: ${existingUser != null}');
 
     if (existingUser != null) {
-      print('🔵 [AUTH REPO] Updating local Drift database...');
+      if (kDebugMode) debugPrint('🔵 [AUTH REPO] Updating local Drift database...');
       await _userDao.updateUser(
         UsersCompanion(
           id: Value(userId),
@@ -366,12 +367,12 @@ class AuthRepository {
           updatedAt: Value(DateTime.now().millisecondsSinceEpoch),
         ),
       );
-      print('✅ [AUTH REPO] Local database updated');
+      if (kDebugMode) debugPrint('✅ [AUTH REPO] Local database updated');
     } else {
-      print('⚠️ [AUTH REPO] User not found locally — PIN saved only to Supabase');
+      if (kDebugMode) debugPrint('⚠️ [AUTH REPO] User not found locally — PIN saved only to Supabase');
     }
-    print('🔵 [AUTH REPO] setupPin END');
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    if (kDebugMode) debugPrint('🔵 [AUTH REPO] setupPin END');
+    if (kDebugMode) debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
   /// Récupérer tous les employés d'un magasin (pour l'écran PIN)

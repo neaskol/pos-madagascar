@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -62,26 +63,26 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
   }
 
   void _verifyAndSavePin() {
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    print('🔵 [PIN SETUP] _verifyAndSavePin START');
-    print('🔵 [PIN SETUP] Comparing: _pin="$_pin" vs _confirmPin="$_confirmPin"');
+    if (kDebugMode) debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    if (kDebugMode) debugPrint('🔵 [PIN SETUP] _verifyAndSavePin START');
+    if (kDebugMode) debugPrint('🔵 [PIN SETUP] Comparing: _pin="$_pin" vs _confirmPin="$_confirmPin"');
     if (_pin == _confirmPin) {
-      print('✅ [PIN SETUP] PINs MATCH!');
+      if (kDebugMode) debugPrint('✅ [PIN SETUP] PINs MATCH!');
       final authState = context.read<AuthBloc>().state;
-      print('🔵 [PIN SETUP] Auth state type: ${authState.runtimeType}');
+      if (kDebugMode) debugPrint('🔵 [PIN SETUP] Auth state type: ${authState.runtimeType}');
       if (authState is AuthAuthenticatedWithStore) {
-        print('✅ [PIN SETUP] User ID: ${authState.user.id}');
-        print('🔵 [PIN SETUP] Dispatching AuthPinSetupRequested...');
+        if (kDebugMode) debugPrint('✅ [PIN SETUP] User ID: ${authState.user.id}');
+        if (kDebugMode) debugPrint('🔵 [PIN SETUP] Dispatching AuthPinSetupRequested...');
         context.read<AuthBloc>().add(
               AuthPinSetupRequested(
                 userId: authState.user.id,
                 pin: _pin,
               ),
             );
-        print('✅ [PIN SETUP] AuthPinSetupRequested dispatched');
+        if (kDebugMode) debugPrint('✅ [PIN SETUP] AuthPinSetupRequested dispatched');
       } else {
-        print('❌ [PIN SETUP] State is NOT AuthAuthenticatedWithStore!');
-        print('❌ [PIN SETUP] Actual state: $authState');
+        if (kDebugMode) debugPrint('❌ [PIN SETUP] State is NOT AuthAuthenticatedWithStore!');
+        if (kDebugMode) debugPrint('❌ [PIN SETUP] Actual state: $authState');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -91,7 +92,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
         );
       }
     } else {
-      print('❌ [PIN SETUP] PINs DO NOT MATCH!');
+      if (kDebugMode) debugPrint('❌ [PIN SETUP] PINs DO NOT MATCH!');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.pinMismatch),
@@ -106,8 +107,8 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
         _isConfirming = false;
       });
     }
-    print('🔵 [PIN SETUP] _verifyAndSavePin END');
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    if (kDebugMode) debugPrint('🔵 [PIN SETUP] _verifyAndSavePin END');
+    if (kDebugMode) debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 
   @override
@@ -116,7 +117,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final authState = context.watch<AuthBloc>().state;
 
-    print('🔵 [PIN SETUP] build() called, auth state: ${authState.runtimeType}');
+    if (kDebugMode) debugPrint('🔵 [PIN SETUP] build() called, auth state: ${authState.runtimeType}');
 
     String userName = 'Utilisateur';
     if (authState is AuthAuthenticatedWithStore) {
@@ -127,9 +128,9 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          print('🔵 [PIN SETUP] BlocListener received state: ${state.runtimeType}');
+          if (kDebugMode) debugPrint('🔵 [PIN SETUP] BlocListener received state: ${state.runtimeType}');
           if (state is AuthError) {
-            print('❌ [PIN SETUP] AuthError: ${state.message}');
+            if (kDebugMode) debugPrint('❌ [PIN SETUP] AuthError: ${state.message}');
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -139,7 +140,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
               ),
             );
           } else if (state is AuthPinSessionActive) {
-            print('✅ [PIN SETUP] AuthPinSessionActive! Navigating to /pos');
+            if (kDebugMode) debugPrint('✅ [PIN SETUP] AuthPinSessionActive! Navigating to /pos');
             context.go('/pos');
           }
         },
