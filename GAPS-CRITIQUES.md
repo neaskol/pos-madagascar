@@ -273,19 +273,24 @@ supabase
 
 ---
 
-## 📊 Résumé des Gaps
+## 📊 Résumé des Gaps (Mise à jour : 27 mars 2026, 10:00 AM)
 
-| Gap | Sévérité | Impact | Effort |
-|-----|----------|--------|--------|
-| #1 Pull Sync Incomplet | 🔴 CRITIQUE | Multi-device impossible | 2 jours |
-| #2 Gestion Conflits | 🔴 CRITIQUE | Perte données silencieuse | 1 jour |
-| #3 RLS Manquantes | 🔴 BLOQUANT PROD | Fuite données multi-tenant | 2h |
-| #4 Sync Sale/Refund | 🟡 MOYEN | Confusion UX | 1h |
-| #5 Méthodes upsert | 🔴 BLOQUANT PULL | Impossible pull sync | 4h |
-| #6 Push Sync Incomplet | 🟡 MOYEN | Données locales uniquement | 1 jour |
-| #7 Realtime | 🟢 FUTUR | Latence 30s | 3 jours |
+| Gap | Sévérité | Impact | Effort Original | Statut |
+|-----|----------|--------|-----------------|--------|
+| #1 Pull Sync Incomplet | 🔴 CRITIQUE | Multi-device impossible | 2 jours | ✅ **RÉSOLU** (27/03 10:00 AM) |
+| #2 Gestion Conflits | 🔴 CRITIQUE | Perte données silencieuse | 1 jour | ⏳ **10%** (migration créée, logique manquante) |
+| #3 RLS Manquantes | 🔴 BLOQUANT PROD | Fuite données multi-tenant | 2h | ✅ **RÉSOLU** (déjà présentes) |
+| #4 Sync Sale/Refund | 🟡 MOYEN | Confusion UX | 1h | ✅ **RÉSOLU** (27/03 09:00 AM) |
+| #5 Méthodes upsert | 🔴 BLOQUANT PULL | Impossible pull sync | 4h | ✅ **RÉSOLU** (27/03 08:00 AM) |
+| #6 Push Sync Incomplet | 🟡 MOYEN | Données locales uniquement | 1 jour | ⏸️ **0%** (à faire) |
+| #7 Realtime | 🟢 FUTUR | Latence 30s | 3 jours | ⏸️ **0%** (MVP peut skip) |
 
-**Total effort critique (Gaps 1-5)** : ~4 jours de dev.
+**Progrès global** : 4/7 gaps résolus (57%) — **3/5 gaps critiques résolus (60%)**
+
+**Effort restant** : ~2-3 jours
+- Gap #2 (Gestion Conflits) : 1 jour
+- Gap #6 (Push Sync Complet) : 1 jour
+- Tests multi-device : 1 jour
 
 ---
 
