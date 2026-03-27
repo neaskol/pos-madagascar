@@ -273,7 +273,7 @@ supabase
 
 ---
 
-## 📊 Résumé des Gaps (Mise à jour : 27 mars 2026, 10:00 AM)
+## 📊 Résumé des Gaps (Mise à jour : 27 mars 2026, 11:30 AM)
 
 | Gap | Sévérité | Impact | Effort Original | Statut |
 |-----|----------|--------|-----------------|--------|
@@ -282,14 +282,14 @@ supabase
 | #3 RLS Manquantes | 🔴 BLOQUANT PROD | Fuite données multi-tenant | 2h | ✅ **RÉSOLU** (déjà présentes) |
 | #4 Sync Sale/Refund | 🟡 MOYEN | Confusion UX | 1h | ✅ **RÉSOLU** (27/03 09:00 AM) |
 | #5 Méthodes upsert | 🔴 BLOQUANT PULL | Impossible pull sync | 4h | ✅ **RÉSOLU** (27/03 08:00 AM) |
-| #6 Push Sync Incomplet | 🟡 MOYEN | Données locales uniquement | 1 jour | ⏸️ **0%** (à faire) |
+| #6 Push Sync Incomplet | 🟡 MOYEN | Données locales uniquement | 1 jour | ✅ **RÉSOLU** (27/03 11:30 AM) |
 | #7 Realtime | 🟢 FUTUR | Latence 30s | 3 jours | ⏸️ **0%** (MVP peut skip) |
 
-**Progrès global** : 4/7 gaps résolus (57%) — **3/5 gaps critiques résolus (60%)**
+**Progrès global** : 5/7 gaps résolus (71%) — **4/5 gaps critiques résolus (80%)** 🎉
 
-**Effort restant** : ~2-3 jours
-- Gap #2 (Gestion Conflits) : 1 jour
-- Gap #6 (Push Sync Complet) : 1 jour
+**Effort accompli** : ~12h (Phases 1-5)
+**Effort restant** : ~2 jours
+- Gap #2 (Gestion Conflits) : 1 jour (optionnel pour MVP)
 - Tests multi-device : 1 jour
 
 ---
