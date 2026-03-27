@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'core/theme/app_theme.dart';
 import 'core/data/remote/supabase_client.dart';
 import 'core/data/remote/sync_service.dart';
@@ -16,7 +16,7 @@ import 'l10n/app_localizations.dart';
 import 'features/auth/data/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
-import 'features/auth/presentation/bloc/auth_state.dart';
+import 'features/auth/presentation/bloc/auth_state.dart' as auth;
 import 'features/products/data/repositories/category_repository.dart';
 import 'features/products/data/repositories/item_repository.dart';
 import 'features/products/data/repositories/item_import_repository.dart';
@@ -306,21 +306,22 @@ class _MyAppState extends State<MyApp> {
               );
               // Charger les pages au démarrage si store disponible
               final authBloc = context.read<AuthBloc>();
-              if (authBloc.state is AuthAuthenticatedWithStore) {
-                final storeId = (authBloc.state as AuthAuthenticatedWithStore).storeId;
+              if (authBloc.state is auth.AuthAuthenticatedWithStore) {
+                final storeId = (authBloc.state as auth.AuthAuthenticatedWithStore).storeId;
                 bloc.add(LoadStorePages(storeId));
               }
               return bloc;
             },
           ),
         ],
-        child: BlocBuilder<AuthBloc, AuthState>(
+        child: BlocBuilder<AuthBloc, auth.AuthState>(
           builder: (context, authState) {
             // Charger les préférences utilisateur si authentifié
-            if (authState is AuthAuthenticated) {
+            if (authState is auth.AuthAuthenticatedWithStore) {
+              final authenticatedState = authState as auth.AuthAuthenticatedWithStore;
               final settingsBloc = context.read<SettingsBloc>();
               if (settingsBloc.state is SettingsInitial) {
-                settingsBloc.add(LoadSettings(authState.user.id));
+                settingsBloc.add(LoadSettings(authenticatedState.user.id));
               }
             }
 
