@@ -113,19 +113,66 @@ await _pullCustomPages(storeId, result);
 
 ## 🔄 Phases En Cours
 
-### Phase 4 : Gestion des Conflits de Sync (1 jour) — ⏳ 10%
+### Phase 4 : Gestion des Conflits de Sync (1 jour) — ⏳ 40%
 
 **Objectif** : Détecter et résoudre les conflits quand 2 appareils modifient les mêmes données offline.
 
-**Progrès actuel** :
+**✅ Progrès accompli (27 mars 2026, 12:30 PM)** :
 - ✅ Migration SQL créée : `20260327000001_create_sync_conflicts_table.sql`
-- ❌ Migration non encore appliquée sur Supabase (port 5432 bloqué, Management API JWT échoue)
-- ❌ Logique de détection de conflits non implémentée
-- ❌ UI de résolution manuelle non créée
+- ✅ Migration appliquée sur Supabase via Management API (HTTPS 443)
+- ✅ Table Drift `sync_conflicts` créée et intégrée
+- ✅ DAO `SyncConflictDao` avec CRUD complet (create, resolve, delete)
+- ✅ `ConflictDetector` class avec stratégie last-write-wins
+- ✅ Détection automatique des différences de données
+- ✅ Enregistrement des conflits avec audit trail
 
-**Travail restant** :
+**❌ Travail restant** :
+- ❌ Intégrer `ConflictDetector` dans 16 méthodes `_pullXxx()`
+- ❌ Ajouter sync des conflits dans `_syncSyncConflicts()`
+- ❌ Créer `ConflictBloc` pour state management UI
+- ❌ UI de résolution manuelle (`lib/features/sync/presentation/screens/conflicts_screen.dart`)
+- ❌ Tests multi-device de conflits réels
 
-#### 4.1. Appliquer la migration `sync_conflicts` sur Supabase
+**Infrastructure créée** :
+
+**Fichiers créés** :
+- ✅ `lib/core/data/local/tables/sync_conflicts.drift` — Table Drift avec queries
+- ✅ `lib/core/data/local/daos/sync_conflict_dao.dart` — DAO avec 8 méthodes
+- ✅ `lib/core/data/remote/conflict_detector.dart` — Logique de détection (180 lignes)
+- ✅ `lib/core/data/remote/sync_service.dart` — Import de ConflictDetector
+
+**Méthodes du SyncConflictDao** :
+1. `getPendingConflictsForStore(storeId)` — Liste des conflits non résolus
+2. `getConflictsForTable(tableName, storeId)` — Conflits par table
+3. `getConflict(id)` — Conflit unique par ID
+4. `createConflict(SyncConflictsCompanion)` — Créer un conflit
+5. `resolveWithLocal(conflictId, resolvedBy, notes)` — Résoudre (garder local)
+6. `resolveWithRemote(conflictId, resolvedBy, notes)` — Résoudre (garder distant)
+7. `resolveManually(conflictId, resolvedBy, notes)` — Résolution manuelle
+8. `deleteResolvedConflicts(storeId)` — Nettoyage des conflits résolus
+
+**Logique du ConflictDetector** :
+```dart
+bool shouldApplyRemote({
+  required String tableName,
+  required String recordId,
+  required Map<String, dynamic> localData,
+  required Map<String, dynamic> remoteData,
+  required DateTime localUpdatedAt,
+  required DateTime remoteUpdatedAt,
+})
+```
+
+**Stratégie** :
+1. `localUpdatedAt > remoteUpdatedAt` → **Garder local** (pas de conflit)
+2. `remoteUpdatedAt > localUpdatedAt` + différences → **Enregistrer conflit auto-résolu**
+3. `updatedAt égaux` + différences → **Enregistrer conflit pending** (rare)
+
+**Commit** : `c99d2af`
+
+---
+
+#### ~~4.1. Appliquer la migration `sync_conflicts` sur Supabase~~ ✅ FAIT
 
 **Solution recommandée** : Utiliser le dashboard Supabase SQL Editor au lieu de l'API.
 
@@ -447,17 +494,19 @@ await _syncCustomPages(result);          // ⭐ NEW
 
 ---
 
-## 📊 Métriques de Succès (Mise à jour : 27 mars 2026, 11:45 AM)
+## 📊 Métriques de Succès (Mise à jour : 27 mars 2026, 12:30 PM)
 
 **Synchronisation bidirectionnelle considérée** :
 - ✅ Pull sync : 16/16 tables (100%) — **FAIT le 27/03 10:00 AM**
 - ✅ Push sync : 19/19 tables (100%) — **FAIT le 27/03 11:30 AM**
 - ✅ Compilation : 0 erreurs — **FAIT le 27/03 11:45 AM** (fix imports ambigus)
-- ⏳ Gestion conflits : 10% — **EN COURS** (migration créée, logique manquante)
+- ⏳ Gestion conflits : 40% — **EN COURS** (infrastructure prête, intégration manquante)
 - ⏸️ Tests multi-device : 0/5 scénarios — **À FAIRE**
 
-**Effort total accompli** : ~12h (Phases 1-5 + compilation fixes)
-**Effort restant** : ~2-3 jours (Phase 4 + Phase 6)
+**Effort total accompli** : ~13h (Phases 1-5 + compilation fixes + Phase 4 infrastructure)
+**Effort restant** : ~1.5-2 jours
+- Phase 4 completion (intégration + UI) : ~6h
+- Phase 6 (tests multi-device) : ~1 jour
 
 ---
 
