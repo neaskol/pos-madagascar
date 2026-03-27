@@ -97,7 +97,8 @@ DROP INDEX IF EXISTS idx_sync_conflicts_table_record;
 CREATE INDEX idx_sync_conflicts_table_record ON sync_conflicts(conflict_table_name, record_id);
 ```
 
-**⚠️ Migration Supabase non appliquée** - problème réseau lors de l'exécution. À appliquer manuellement via SQL Editor Supabase.
+**✅ Migration Supabase appliquée** - 27/03 12:50 PM via SQL Editor (port 5432 bloqué).
+Vérification: `conflict_table_name | text | NO`
 
 ### 3. Mise à jour du code Dart (5 fichiers)
 - [`lib/core/data/remote/conflict_detector.dart`](lib/core/data/remote/conflict_detector.dart) - Signature fonction + appels
@@ -151,7 +152,7 @@ dart run build_runner build --delete-conflicting-outputs
   - Sync offline → reconnexion → vérif Supabase
 
 ### Supabase
-- [ ] Appliquer migration `20260327000002_rename_tablename_column.sql` manuellement
+- [x] Appliquer migration `20260327000002_rename_tablename_column.sql` manuellement ✅ FAIT (27/03 12:50 PM)
 
 ### Polish (P1)
 - [ ] Corriger dead code `conflict_screen.dart` (30min)
