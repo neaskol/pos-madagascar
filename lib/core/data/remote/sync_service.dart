@@ -977,12 +977,13 @@ class SyncService {
           final companion = StockAdjustmentItemsCompanion(
             id: Value(itemData['id'] as String),
             adjustmentId: Value(itemData['adjustment_id'] as String),
-            itemId: Value(itemData['item_id'] as String?),
+            itemId: Value(itemData['item_id'] as String),
             itemVariantId: Value(itemData['item_variant_id'] as String?),
             quantityBefore: Value(itemData['quantity_before'] as double? ?? 0.0),
             quantityChange: Value(itemData['quantity_change'] as double? ?? 0.0),
             quantityAfter: Value(itemData['quantity_after'] as double? ?? 0.0),
             cost: Value(itemData['cost'] as int? ?? 0),
+            createdAt: Value(DateTime.parse(itemData['created_at'] as String).millisecondsSinceEpoch),
             updatedAt: Value(DateTime.parse(itemData['updated_at'] as String).millisecondsSinceEpoch),
             synced: const Value(1), // Marqué comme synchronisé
           );
@@ -1084,16 +1085,15 @@ class SyncService {
           final companion = InventoryHistoryCompanion(
             id: Value(historyData['id'] as String),
             storeId: Value(historyData['store_id'] as String),
-            itemId: Value(historyData['item_id'] as String?),
+            itemId: Value(historyData['item_id'] as String),
             itemVariantId: Value(historyData['item_variant_id'] as String?),
-            reason: Value(historyData['reason'] as String),
+            reason: Value(historyData['reason'] as int),
             referenceId: Value(historyData['reference_id'] as String?),
             quantityChange: Value(historyData['quantity_change'] as double? ?? 0.0),
             quantityAfter: Value(historyData['quantity_after'] as double? ?? 0.0),
             cost: Value(historyData['cost'] as int? ?? 0),
             employeeId: Value(historyData['employee_id'] as String?),
             createdAt: Value(DateTime.parse(historyData['created_at'] as String).millisecondsSinceEpoch),
-            updatedAt: Value(DateTime.parse(historyData['updated_at'] as String).millisecondsSinceEpoch),
             synced: const Value(1), // Marqué comme synchronisé
           );
 
@@ -1195,12 +1195,12 @@ class SyncService {
             id: Value(ticketData['id'] as String),
             storeId: Value(ticketData['store_id'] as String),
             posDeviceId: Value(ticketData['pos_device_id'] as String?),
-            name: Value(ticketData['name'] as String?),
+            name: Value(ticketData['name'] as String? ?? 'Ticket'),
             comment: Value(ticketData['comment'] as String?),
             employeeId: Value(ticketData['employee_id'] as String?),
             isPredefined: Value(ticketData['is_predefined'] as int? ?? 0),
             diningOptionId: Value(ticketData['dining_option_id'] as String?),
-            items: Value(ticketData['items'] as String?),
+            items: Value(ticketData['items'] as String? ?? '[]'),
             createdAt: Value(DateTime.parse(ticketData['created_at'] as String).millisecondsSinceEpoch),
             updatedAt: Value(DateTime.parse(ticketData['updated_at'] as String).millisecondsSinceEpoch),
             synced: const Value(1), // Marqué comme synchronisé
@@ -1236,11 +1236,9 @@ class SyncService {
             name: Value(pageData['name'] as String),
             sortOrder: Value(pageData['sort_order'] as int? ?? 0),
             isDefault: Value(pageData['is_default'] as int? ?? 0),
+            createdBy: Value(pageData['created_by'] as String?),
             createdAt: Value(DateTime.parse(pageData['created_at'] as String).millisecondsSinceEpoch),
             updatedAt: Value(DateTime.parse(pageData['updated_at'] as String).millisecondsSinceEpoch),
-            deletedAt: pageData['deleted_at'] != null
-                ? Value(DateTime.parse(pageData['deleted_at'] as String).millisecondsSinceEpoch)
-                : const Value(null),
             synced: const Value(1), // Marqué comme synchronisé
           );
 
