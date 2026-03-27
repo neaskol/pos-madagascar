@@ -9,7 +9,7 @@ CREATE TABLE sync_conflicts (
   store_id TEXT NOT NULL REFERENCES stores(id),
 
   -- Identification du conflit
-  table_name TEXT NOT NULL,
+  conflict_table_name TEXT NOT NULL, -- Renommé pour éviter conflit avec Table.tableName
   record_id TEXT NOT NULL,
   field_name TEXT, -- NULL si conflit sur plusieurs champs
 
@@ -34,6 +34,6 @@ CREATE TABLE sync_conflicts (
 
 -- Queries pour récupérer les conflits
 getPendingConflicts: SELECT * FROM sync_conflicts WHERE status = 'pending' AND store_id = ? ORDER BY detected_at DESC;
-getConflictsByTable: SELECT * FROM sync_conflicts WHERE table_name = ? AND store_id = ? ORDER BY detected_at DESC;
+getConflictsByTable: SELECT * FROM sync_conflicts WHERE conflict_table_name = ? AND store_id = ? ORDER BY detected_at DESC;
 getConflictById: SELECT * FROM sync_conflicts WHERE id = ? LIMIT 1;
 getUnsyncedSyncConflicts: SELECT * FROM sync_conflicts WHERE synced = 0;
